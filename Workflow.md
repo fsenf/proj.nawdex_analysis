@@ -37,3 +37,13 @@ For regridding of synsat data, two steps are needed.
 
 Step one seems to be easy. Step two is a bit more complicated. One could generate and store a nearest neighbor index for the coarser model grids, but for the finer grid an other method should be applied. If several model grid box centers fall into one SEVIRI pixel then all radiances should be averaged (similar to an rediation-based averaging a satellite sensor would do).
 
+## Observational Data (on TROPOS altair)
+### TOA Radiation fluxes
+TOA Radiation fluxes have been provided by Nicola Clerbaux (Belgium) as hdf5 files. The data are saved as `H5T_STD_I16BE` which means signed 16-bit integer (big endian). On TROPOS altair, TOA radiation data are saved under
+```
+/vols/talos/home/fabian/data/gerb-like
+```
+A NaN values seems to be set to -32767 (and need to be masked) and all other values have to be multiplied by 0.25 get to radiation fluxes with unit Wm**(-2).
+
+
+Functions to read and cutout TOA radiation flux data are available under `nawdex_analysis.io.obs_input`.
