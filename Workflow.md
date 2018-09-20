@@ -1,6 +1,6 @@
 # Typical Workflow
-## Simulation Data 
-### Georeference Mapping
+## Simulation Data (on mistral)
+### Georeference Mapping 
 A mapper has been written that generates the georeference file name based on the forecast / simulation filename.
 
 ### Synthetic Satellite Data Calculation
