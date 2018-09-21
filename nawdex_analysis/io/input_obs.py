@@ -4,18 +4,111 @@
 Tools for input of observation data.
 '''
 
-import os, sys
+import os, sys, copy
 import numpy as np
 import scipy.ndimage
 import datetime
 
 import tropy.io_tools.hdf as hio
 import tropy.analysis_tools.grid_and_interpolation as gi
+from tropy.l15_msevi.msevi import MSevi
 
-from nawdex_analysis.config import SEVIRI_cutout
+from nawdex_analysis.config import SEVIRI_cutout, NWCSAF_region
+from nawdex_analysis.io.tools import lonlat2azizen
+
+######################################################################
+# (1) SEVIRI BTs
+######################################################################
+
+
+def msevi_setting(t):
+
+    sett = {}
+    sett['time'] = t
+    sett['region'] =   SEVIRI_cutout
+    sett['nwcsaf_region'] =  NWCSAF_region
+    sett['scan_type'] = 'pzs'
+
+
+    return sett
+
+######################################################################
+######################################################################
+
+
+def read_msevi(t1, t2, dt = 60., zen_max = 75.):
+
+    
+    # read msevi georef ----------------------------------------------
+    sett = msevi_setting(t1)
+
+    s = MSevi(**sett)
+    s.lonlat()
+
+    slon = np.ma.masked_invalid(s.lon)
+    slat = np.ma.masked_invalid(s.lat)
+    nrow, ncol = slon.shape
+
+    azi, zen = lonlat2azizen(slon, slat)
+    zen = np.ma.masked_invalid(zen)    
+    zenmask = zen > 75.
+
+
+    d = dict(lon = slon, lat = slat, zen = zen)
+    # ================================================================
+
+    
+    # time length ----------------------------------------------------
+    d['time'] = []
+    ntime = 0
+    t = copy.copy(t1)
+    dt = datetime.timedelta(minutes = dt)
+    while t <= t2:
+        d['time'].append( t )
+        ntime += 1
+        t += dt
+    # ================================================================
+
+    # init chan arrays -----------------------------------------------
+    chanlist =  [  'IR_039', 'WV_062', 'WV_073', 'IR_087', 
+                   'IR_097', 'IR_108', 'IR_120', 'IR_134' ]
+    for chan in chanlist:
+        d[chan] = np.ma.zeros( (ntime, nrow, ncol) )
+
+    # ================================================================
+
+
+
+    # msevi channels -------------------------------------------------
+    t = copy.copy(t1)
+    n = 0
+    while t <= t2:
+        sett = msevi_setting(t)
+        s = MSevi(**sett)
+        s.load(chanlist)
+        s.rad2bt()
+
+        for chan in chanlist:
+            v = s.bt[chan]
+            vm = np.ma.masked_where(zenmask, v)
+
+            d[chan][n] = vm
+
+        
+
+        t += dt
+        n += 1
+
+    # ================================================================
+
+    d['msevi_region'] = sett['region']
+    d['nwcsaf_region'] = sett['nwcsaf_region']
+
+    return d
 
 
 ######################################################################
+# (2) TOA Radiation Fluxes
 ######################################################################
 
 def scale_radiation( rad_flux, factor = 0.25, Nan = -32767, n_repeat = 3):

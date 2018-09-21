@@ -18,9 +18,49 @@ import xarray as xr
 import datetime
 
 import tropy.analysis_tools.grid_and_interpolation as gi
+from tropy.standard_config import local_data_path
 
 from nawdex_analysis.io.tools import convert_time
 
+
+######################################################################
+# (1) SEVIRI BTs
+######################################################################
+
+
+def save_meteosat_tstack( date, outname = None ):    
+
+    '''
+    Saves full time stack of daily Meteosat BT data to netcdf file
+    for nawdex region.
+
+    
+    Parameters
+    ----------
+    date : str
+        date string as %Y%m%d
+
+    outname : str, optional, default = None
+        output file name, if None a local dir on altair is chosen
+
+
+    Returns
+    -------
+    None
+    '''
+
+    t = datetime.datetime.strptime( date, '%Y%m%d')
+    t2 = t + datetime.timedelta( hours = 23 )
+
+
+    d = read_msevi(t, t2)
+   
+    if outname is None:
+        outname = '%s/icon/nawdex/meteosat/msevi-nawdex-%s.nc' % (local_data_path,
+                                                            date)
+    save_bt2nc( outname, d)
+
+    return
 
 ######################################################################
 ######################################################################
@@ -161,3 +201,6 @@ def save_meteosat_bt2nc( outname, dset, fill_val = 0 ):
     ds_out.to_netcdf(outname, encoding = encoding)
 
     return 
+
+######################################################################
+######################################################################
