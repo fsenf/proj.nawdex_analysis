@@ -12,6 +12,9 @@ import datetime
 import tropy.io_tools.hdf as hio
 import tropy.analysis_tools.grid_and_interpolation as gi
 
+from nawdex_analysis.config import SEVIRI_cutout
+
+
 ######################################################################
 ######################################################################
 
@@ -59,7 +62,9 @@ def scale_radiation( rad_flux, factor = 0.25, Nan = -32767, n_repeat = 3):
 ######################################################################
 
 
-def read_radiation_fluxes(t, fdir = '/vols/talos/home/fabian/data/gerb-like/'):
+def read_radiation_fluxes(t, 
+                          fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                          do_cutout = True):
     
     '''
     Reads and scales radiation flux data based on GERB-like SEVIRI retrievals.
@@ -72,6 +77,9 @@ def read_radiation_fluxes(t, fdir = '/vols/talos/home/fabian/data/gerb-like/'):
         
     fdir : str, optional, default =  '/vols/talos/home/fabian/data/gerb-like/'
         file directory name
+
+    do_cutout : bool, optional, default = True
+        if SEVIRI cutout is applied
         
         
     Returns
@@ -100,8 +108,10 @@ def read_radiation_fluxes(t, fdir = '/vols/talos/home/fabian/data/gerb-like/'):
     swf_up = scale_radiation( sfflux_up )
     swf_net = swf_up  -  swf_down
 
-    
-    return lwf, swf_net
+    if do_cutout:
+        return gi.cutout_fields([lwf, swf_net], SEVIRI_cutout)
+    else:
+        return lwf, swf_net
 
 ######################################################################
 ######################################################################
