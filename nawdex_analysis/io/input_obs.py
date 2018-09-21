@@ -140,6 +140,7 @@ def scale_radiation( rad_flux, factor = 0.25, Nan = -32767, n_repeat = 3):
 
     # scaling
     rad_scaled = factor * np.ma.masked_equal( rad_flux, Nan )
+    rad_scaled.data[rad_scaled.mask] = 0
 
     # repeating
     rad_repeated = rad_scaled.repeat(n_repeat, axis = 0).repeat(n_repeat, axis = 1)
@@ -210,10 +211,10 @@ def read_radiation_fluxes(t,
 ######################################################################
 
 
-def read_radiation_fluxe_tstack(date, 
-                                fdir = '/vols/talos/home/fabian/data/gerb-like/',
-                                ntimes = 24,
-                                do_cutout = True):
+def read_radiation_flux_tstack(date, 
+                               fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                               ntimes = 24,
+                               do_cutout = True):
     
     '''
     Reads and scales radiation flux data based on GERB-like SEVIRI retrievals.
@@ -246,7 +247,7 @@ def read_radiation_fluxe_tstack(date,
 
     # set time ranges
     t1 = datetime.datetime.strptime( date, '%Y%m%d')
-    t2 = t + datetime.timedelta( hours = ntimes - 1 )
+    t2 = t1 + datetime.timedelta( hours = ntimes - 1 )
 
     dt = datetime.timedelta( hours = 1 )
 
@@ -266,8 +267,8 @@ def read_radiation_fluxe_tstack(date,
             
             nrows, ncols = lwf.shape
 
-            lwf_stack = np.zeros( ntimes, nrows, ncols )
-            swf_net_stack = np.zeros( ntimes, nrows, ncols )
+            lwf_stack = np.ma.zeros( (ntimes, nrows, ncols) )
+            swf_net_stack = np.ma.zeros( (ntimes, nrows, ncols) )
         # ============================================================
 
         lwf_stack[n] = lwf[:]
