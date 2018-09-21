@@ -10,6 +10,7 @@ import scipy.ndimage
 import datetime
 
 import tropy.io_tools.hdf as hio
+import tropy.io_tools.netcdf as ncio
 import tropy.analysis_tools.grid_and_interpolation as gi
 from tropy.l15_msevi.msevi import MSevi
 
@@ -148,7 +149,7 @@ def scale_radiation( rad_flux, factor = 0.25, Nan = -32767, n_repeat = 3):
     # smoothing
     rad_smoothed = scipy.ndimage.uniform_filter(rad_repeated.data, n_repeat)
     
-    rad_scaled = np.ma.masked_where( rad_repeated.mask, rad_smoothed)
+    rad_scaled = np.ma.masked_where( rad_repeated.mask, rad_smoothed )
     
     return rad_scaled
 
@@ -213,6 +214,7 @@ def read_radiation_fluxes(t,
 
 def read_radiation_flux_tstack(date, 
                                fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                               georef_file = None,
                                ntimes = 24,
                                do_cutout = True):
     
@@ -228,6 +230,9 @@ def read_radiation_flux_tstack(date,
     fdir : str, optional, default =  '/vols/talos/home/fabian/data/gerb-like/'
         file directory name
 
+    georef_file : str, optional, default = None
+        filename where lon and lat can be found
+
     ntimes : int, optional, default = 24
         number of time step included (starting at mid-night)
 
@@ -237,13 +242,10 @@ def read_radiation_flux_tstack(date,
         
     Returns
     -------
-    lwf : numpy array, 3dim
-        long-wave radiation flux
+    dset : dict of numpy arrays, 3dim
+        set of fields incl. long- and short-wave radiaton
         
-    swf_net : numpy array, 3dim
-        net short-wave radiation flux
     '''
-
 
     # set time ranges
     t1 = datetime.datetime.strptime( date, '%Y%m%d')
@@ -253,7 +255,7 @@ def read_radiation_flux_tstack(date,
 
 
      # stack data in time loop
-    
+    dset = dict( time = [] )
     t = copy.copy(t1)
     n = 0
     while t <= t2:
@@ -274,13 +276,28 @@ def read_radiation_flux_tstack(date,
         lwf_stack[n] = lwf[:]
         swf_net_stack[n] = swf_net[:]
 
-        
+        dset['time'] = copy.copy( t )
+
         t += dt
         n += 1
 
+    dset['lwf'] = lwf_stack
+    dset['swf_net'] = swf_net_stack
     # ================================================================
 
-    return lwf_stack, swf_net_stack
+
+    # read georef ----------------------------------------------------
+    if georef_file is None:
+
+        # hope that meteosat file is there
+        georef_file = '/vols/talos/home/fabian/data/icon/nawdex/meteosat/msevi-nawdex-20160923.nc'
+    
+    georef = ncio.read_icon_4d_data( georef_file, ['lon', 'lat'], itime = None)
+
+    dset.update( georef )
+    # ================================================================
+
+    return dset
 
 ######################################################################
 ######################################################################
