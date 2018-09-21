@@ -208,3 +208,78 @@ def read_radiation_fluxes(t,
 
 ######################################################################
 ######################################################################
+
+
+def read_radiation_fluxe_tstack(date, 
+                                fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                                ntimes = 24,
+                                do_cutout = True):
+    
+    '''
+    Reads and scales radiation flux data based on GERB-like SEVIRI retrievals.
+    
+    
+    Parameters
+    ----------
+    date : string
+        date string as %Y%m%d
+        
+    fdir : str, optional, default =  '/vols/talos/home/fabian/data/gerb-like/'
+        file directory name
+
+    ntimes : int, optional, default = 24
+        number of time step included (starting at mid-night)
+
+    do_cutout : bool, optional, default = True
+        if SEVIRI cutout is applied
+        
+        
+    Returns
+    -------
+    lwf : numpy array, 3dim
+        long-wave radiation flux
+        
+    swf_net : numpy array, 3dim
+        net short-wave radiation flux
+    '''
+
+
+    # set time ranges
+    t1 = datetime.datetime.strptime( date, '%Y%m%d')
+    t2 = t + datetime.timedelta( hours = ntimes - 1 )
+
+    dt = datetime.timedelta( hours = 1 )
+
+
+     # stack data in time loop
+    
+    t = copy.copy(t1)
+    n = 0
+    while t <= t2:
+        
+        lwf, swf_net = read_radiation_fluxes(t, 
+                                             fdir = fdir, 
+                                             do_cutout = do_cutout)
+
+        # initialize -------------------------------------------------
+        if n == 0:
+            
+            nrows, ncols = lwf.shape
+
+            lwf_stack = np.zeros( ntimes, nrows, ncols )
+            swf_net_stack = np.zeros( ntimes, nrows, ncols )
+        # ============================================================
+
+        lwf_stack[n] = lwf[:]
+        swf_net_stack[n] = swf_net[:]
+
+        
+        t += dt
+        n += 1
+
+    # ================================================================
+
+    return lwf_stack, swf_net_stack
+
+######################################################################
+######################################################################
