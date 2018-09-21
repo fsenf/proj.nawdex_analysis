@@ -276,7 +276,7 @@ def read_radiation_flux_tstack(date,
         lwf_stack[n] = lwf[:]
         swf_net_stack[n] = swf_net[:]
 
-        dset['time'] = copy.copy( t )
+        dset['time'] += [ copy.copy( t ) ]
 
         t += dt
         n += 1

@@ -281,7 +281,7 @@ def save_rad2nc( outname, dset, fill_val = 0 ):
     # Replacing NaN with FillValue
     rad = {}
 
-    for var_name in dset.keys():
+    for vname in dset.keys():
 
 
         if  vname in ['lwf', 'swf_net']:
@@ -337,7 +337,7 @@ def save_rad2nc( outname, dset, fill_val = 0 ):
     
     atts = copy.copy( att_rad ) 
     atts['long_name'] = copy.copy( long_name )
-    outset[vname] = (['time', 'rows', 'cols'], bts[vname], atts)
+    outset[vname] = (['time', 'rows', 'cols'], rad[vname], atts)
     encoding[vname] = {'zlib': True, 
                        '_FillValue': fill_val,
                        'dtype': 'int16', 
@@ -349,7 +349,7 @@ def save_rad2nc( outname, dset, fill_val = 0 ):
     
     atts = copy.copy( att_rad ) 
     atts['long_name'] = copy.copy( long_name )
-    outset[vname] = (['time', 'rows', 'cols'], bts[vname], atts)
+    outset[vname] = (['time', 'rows', 'cols'], rad[vname], atts)
     encoding[vname] = {'zlib': True, 
                        '_FillValue': fill_val,
                        'dtype': 'int16', 
