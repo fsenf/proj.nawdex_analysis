@@ -56,4 +56,8 @@ The calls
 read observed long-wave fluxes (`lwf`) and net short-wave flux (`swf_net`) scaled to SEVIRI grid.
 
 #### Cutout of data
-We only use a certain SEVIRI cutout for data analysis. This variable is saved under `nawdex_analysis.config`. 
+We only use a certain SEVIRI cutout for data analysis. This variable is saved under `nawdex_analysis.config`. An option to input cutted data on-the-fly is incorporated into `ioobs.read_radiation_fluxes( t )`.
+
+
+### SEVIRI BT data
+SEVIRI BT are directly read out of the TROPOS archive at altair using the `ioobs.read_msevi(t1,t2)` where `t1` and `t2` are start and end time of the BT data stack.
