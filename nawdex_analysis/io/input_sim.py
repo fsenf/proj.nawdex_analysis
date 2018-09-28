@@ -110,7 +110,7 @@ def read_georef( expname, mask_with_zen = True, zen_max = 75. ):
     if mask_with_zen:
         mask = (geo['zen'] <= zen_max)
 
-        if vname in geo.keys():
+        for vname in geo.keys():
             geo[vname] = geo[vname][mask]
 
     return geo
