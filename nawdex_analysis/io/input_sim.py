@@ -135,6 +135,7 @@ def read_georef( expname, mask_with_zen = True, zen_max = 75. ):
     clon, clat = geo['clon'], geo['clat']
     clon, clat = np.rad2deg( clon ), np.rad2deg( clat )
 
+    geo['lon'], geo['lat'] = clon, clat
     geo['azi'], geo['zen'] = lonlat2azizen(clon, clat)
     
 

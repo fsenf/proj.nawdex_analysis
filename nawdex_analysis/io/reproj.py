@@ -51,8 +51,8 @@ def get_vector2msevi_index( vgeo, msevi_georef_file = None ):
     # prepare the reprojection ---------------------------------------
     
     # reshape because gi - tools expects 2dim fields
-    vlon = vgeo['clon'].reshape(1, -1)
-    vlat = vgeo['clat'].reshape(1, -1)
+    vlon = vgeo['lon'].reshape(1, -1)
+    vlat = vgeo['lat'].reshape(1, -1)
 
     # tagret grid georef
     glon = msevi_georef['lon']
