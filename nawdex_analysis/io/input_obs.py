@@ -14,7 +14,7 @@ import tropy.io_tools.netcdf as ncio
 import tropy.analysis_tools.grid_and_interpolation as gi
 from tropy.l15_msevi.msevi import MSevi
 
-from nawdex_analysis.config import SEVIRI_cutout, NWCSAF_region
+from nawdex_analysis.config import SEVIRI_cutout, NWCSAF_region, meteosat_georef_file
 from nawdex_analysis.io.tools import lonlat2azizen
 
 ######################################################################
@@ -290,7 +290,7 @@ def read_radiation_flux_tstack(date,
     if georef_file is None:
 
         # hope that meteosat file is there
-        georef_file = '/vols/talos/home/fabian/data/icon/nawdex/meteosat/msevi-nawdex-20160923.nc'
+        georef_file = meteoset_georef_file
     
     georef = ncio.read_icon_4d_data( georef_file, ['lon', 'lat'], itime = None)
 
