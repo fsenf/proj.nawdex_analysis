@@ -290,7 +290,7 @@ def read_radiation_flux_tstack(date,
     if georef_file is None:
 
         # hope that meteosat file is there
-        georef_file = meteoset_georef_file
+        georef_file = meteosat_georef_file
     
     georef = ncio.read_icon_4d_data( georef_file, ['lon', 'lat'], itime = None)
 
