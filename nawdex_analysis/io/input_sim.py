@@ -112,7 +112,7 @@ def read_georef( expname, mask_with_zen = True, zen_max = 75. ):
         if zen mask should be applied
 
     zen_max : float, optional, default = 75
-        maximum in satellite zenith angle (if zen_mask = True)
+        maximum in satellite zenith angle (if mask_with_zen = True)
 
 
     Returns
@@ -177,7 +177,7 @@ def get_zen_mask(expname, geo = {}, mask_with_zen = False, zen_max = 75.):
 
     # get georef if needed
     if geo == {}:
-        geo = read_georef( expname, mask_with_zen = mask_with_zen, zen_max = zen_mask )
+        geo = read_georef( expname, mask_with_zen = mask_with_zen, zen_max = zen_max )
     
     
     # calculate mask
