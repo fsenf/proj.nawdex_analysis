@@ -8,18 +8,11 @@ All simulation files are saved on mistral under
 
 The following list is available:
 ```
-find /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP -type d | sort
-
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexlem-mis-0007
+find /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP -type d -iname 'nawdexnwp*mis*'| sort
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0001
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0001/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0002
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0002/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0003
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0003/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0004
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0004/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0005
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0006
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0007
@@ -29,9 +22,7 @@ find /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP -type d | sort
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0011
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-10km-mis-0012
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-20km-mis-0001
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-20km-mis-0001/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-20km-mis-0002
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-20km-mis-0002/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-20km-mis-0003
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-20km-mis-0004
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-20km-mis-0005
@@ -41,28 +32,19 @@ find /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP -type d | sort
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-20km-mis-0009
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-20km-mis-0010
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0001
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0001/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0002
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0002/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0003
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0003/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0004
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0005
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0005/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0006
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0007
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0007/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0008
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0009
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0009/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0010
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0011
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0011/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0012
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-40km-mis-0001
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-40km-mis-0001/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-40km-mis-0002
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-40km-mis-0002/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-40km-mis-0003
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-40km-mis-0004
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-40km-mis-0005
@@ -72,13 +54,9 @@ find /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP -type d | sort
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-40km-mis-0009
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-40km-mis-0010
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0001
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0001/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0002
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0002/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0003
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0003/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0004
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0004/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0005
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0006
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0007
@@ -89,11 +67,9 @@ find /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP -type d | sort
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-5km-mis-0012
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0001
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0001_latbc
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0001/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0001_with_icon-2.1.00
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0002
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0002_latbc
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0002/post
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0003
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0004
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0005
@@ -102,42 +78,6 @@ find /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP -type d | sort
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0008
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0009
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0010
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0001
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0002
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0003
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0003/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0004
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0004/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0020
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0020/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0021
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0022
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-fh2-0022/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0001
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0001/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0002
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0002/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0003
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0003/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0004
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0004/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0005
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0005/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0006
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0006/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0007
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0007/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0008
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0008/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0009
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0009/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0010
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0010/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0011
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0011/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0012
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-lowres-fh2-0012/post
-/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/post_gridsetup
 ```
 
 
