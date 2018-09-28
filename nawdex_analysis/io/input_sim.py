@@ -288,7 +288,7 @@ def read_iconvar_vector( fname, vlist ):
     outset.update( geo )
     
     for vname in vlist:
-        outset[vname] = outset[vname][mask]
+        outset[vname] = outset[vname].squeeze()[mask]
 
 
     return outset
