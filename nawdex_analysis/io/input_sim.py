@@ -150,7 +150,7 @@ def read_georef( expname, mask_with_zen = True, zen_max = 75. ):
 ######################################################################
 ######################################################################
 
-def get_zen_mask(expname, geo = {}, zen_max = 75.):
+def get_zen_mask(expname, geo = {}, mask_with_zen = False, zen_max = 75.):
     
     '''
     Calculates a satellite zenith angle mask.
@@ -165,6 +165,10 @@ def get_zen_mask(expname, geo = {}, zen_max = 75.):
     geo : dict, optional, default ={}
         contains georef information if this is available in advance
 
+    mask_with_zen : bool, optional, default = True
+        if zen mask should be applied
+
+
     Returns
     -------
     mask : bool numpy array
@@ -173,7 +177,7 @@ def get_zen_mask(expname, geo = {}, zen_max = 75.):
 
     # get georef if needed
     if geo == {}:
-        geo = read_georef( expname )
+        geo = read_georef( expname, mask_with_zen = mask_with_zen, zen_max = zen_mask )
     
     
     # calculate mask
@@ -234,7 +238,7 @@ def read_synsat_vector( fname, bt_generation_mode = 'mcfarq_rescale_noccthresh' 
 ######################################################################
 ######################################################################
 
-def read_iconvar_vector( fname, vname ):
+def read_iconvar_vector( fname, vlist ):
     
     '''
     Input of Synsat BT vector (given at original ICON grid).
@@ -245,8 +249,8 @@ def read_iconvar_vector( fname, vname ):
     fname : str
         name of ICON file (should be netcdf file)
 
-    vname : str
-        variable name
+    vname : list of str
+        list of variable names
 
     Returns
     -------
@@ -254,17 +258,23 @@ def read_iconvar_vector( fname, vname ):
         set of synsat and georef vectors
     '''
 
+    
+    # check if vlist is list
+    # ====================
+    if not type(vlist) == type([]):
+        vlist = [vlist,]
+
 
     # read brightness temperatures
     # =============================
-    dset = ncio.read_icon_4d_data(fname, [vname,], itime = None)
+    dset = ncio.read_icon_4d_data(fname, vlist, itime = None)
 
 
        
     # read georeference
     # ==================
     subdir =  subdir_from_fname( fname )
-    geo = read_georef( subdir )
+    geo = read_georef( subdir, mask_with_zen = False )
     
 
     # get zenith angle mask
@@ -274,9 +284,11 @@ def read_iconvar_vector( fname, vname ):
 
     # prepare dict output
     # ====================
-    outset = {}
-    outset[vname] = dset[vname][mask]
+    outset = dset.copy()
     outset.update( geo )
+    
+    for vname in vlist:
+        outset[vname] = outset[vname][mask]
 
 
     return outset
