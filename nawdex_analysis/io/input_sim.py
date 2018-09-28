@@ -233,3 +233,53 @@ def read_synsat_vector( fname, bt_generation_mode = 'mcfarq_rescale_noccthresh' 
 
 ######################################################################
 ######################################################################
+
+def read_iconvar_vector( fname, vname ):
+    
+    '''
+    Input of Synsat BT vector (given at original ICON grid).
+
+
+    Parameters
+    ----------
+    fname : str
+        name of ICON file (should be netcdf file)
+
+    vname : str
+        variable name
+
+    Returns
+    -------
+    outset : dict of numpy arrays
+        set of synsat and georef vectors
+    '''
+
+
+    # read brightness temperatures
+    # =============================
+    dset = ncio.read_icon_4d_data(fname, [vname,], itime = None)
+
+
+       
+    # read georeference
+    # ==================
+    subdir =  subdir_from_fname( fname )
+    geo = read_georef( subdir )
+    
+
+    # get zenith angle mask
+    # =====================
+    mask =  get_zen_mask( subdir, geo = geo )
+
+
+    # prepare dict output
+    # ====================
+    outset = {}
+    outset[vname] = dset[vname][mask]
+    outset.update( geo )
+
+
+    return outset
+
+######################################################################
+######################################################################
