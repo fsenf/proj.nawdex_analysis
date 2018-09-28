@@ -45,7 +45,7 @@ def get_vector2msevi_index( vgeo, msevi_georef_file = None ):
         # hope that meteosat file is there
         msevi_georef_file = meteosat_georef_file
     
-    msevi_georef = ncio.read_icon_4d_data( georef_file, ['lon', 'lat'], itime = None)
+    msevi_georef = ncio.read_icon_4d_data( msevi_georef_file, ['lon', 'lat'], itime = None)
 
 
     # prepare the reprojection ---------------------------------------
