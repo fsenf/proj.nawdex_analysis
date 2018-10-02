@@ -13,8 +13,9 @@ import warnings
 
 
 import tropy.analysis_tools.grid_and_interpolation as gi
+import tropy.io_tools.hdf as hio
 
-from nawdex_analysis.config import SEVIRI_cutout
+from nawdex_analysis.config import SEVIRI_cutout, nawdex_regions_file 
 
 ######################################################################
 # (1) SEVIRI projection and co-ordinate transformations
@@ -292,3 +293,57 @@ def get_vector2msevi_index( vgeo ):
 
 ######################################################################
 ######################################################################
+
+
+def nn_reproj_with_index( dset, ind, apply_mask = True, Nan = 0 ):
+
+    '''
+    Reprojects data field intpo Meteosat SEVIRI projection.
+
+
+    Parameters
+    ----------
+    dset : dict of numpy arrays
+        set of fields that should be reprojected
+
+    ind : numpy array
+        interpolation index that maps the field in dset into SEVIRI grid
+    
+    apply_mask : bool, optional, default = True
+        switch if masking with domain mask should be applied
+
+    Nan : float
+        value inserted for positions with mask == False
+
+
+
+    Returns
+    --------
+    dset_inter :  dict of numpy arrays
+        set of fields that have been interpolated onto SEVIRI grid
+    '''
+
+
+    # prepare masking
+    if apply_mask:
+            mask = hio.read_var_from_hdf( nawdex_regions_file, 'full_region' )
+            mask = mask.astype( np.bool ) 
+
+
+    # apply interpolation index
+    dset_inter = {}
+    
+    for vname in dset.keys():
+        
+        # do interpolation
+        v = dset[vname][ind]
+        
+        
+        # apply masking if wanted
+        if apply_mask:
+            v = np.where( mask, Nan, v )
+        
+        dset_inter[vname] = v[:]
+        
+    return dset_inter
+

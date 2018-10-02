@@ -9,9 +9,18 @@ SEVIRI_cutout = ((114, 1118), (271, 3047))  # edge based region defintion
 NWCSAF_region = ((617, 1660), (1004, 2776)) 
 
 if 'altair' in os.environ['HOSTNAME'] :
-    fdir = '/vols/talos/home/fabian/data/icon/nawdex/meteosat/'
-    meteosat_georef_file = '%s/msevi-nawdex-20160923.nc' % fdir
+    nawdex_dir = '/vols/talos/home/fabian/data/icon/nawdex/'
+    nawdex_meteosat_dir = '%s/meteosat/' % nawdex_dir
+    meteosat_georef_file = '%s/msevi-nawdex-20160923.nc' % nawdex_meteosat_dir
+    
+    nawdex_regions_file = '%s/region_masks_for_msevi_nawdex.h5' % nawdex_dir
+
 
 else:  # assume mistral 
-    fdir = '/pf/b/b380352/data/nawdex/meteosat/'
-    meteosat_georef_file = '%s/msevi-nawdex-20160923.nc' % fdir
+    nawdex_dir = '/pf/b/b380352/data/nawdex/'
+    nawdex_meteosat_dir = '%s/meteosat/' % nawdex_dir
+    meteosat_georef_file = '%s/msevi-nawdex-20160923.nc' % nawdex_meteosat_dir
+
+    nawdex_regions_file = '%s/region_masks_for_msevi_nawdex.h5' % nawdex_dir
+
+
