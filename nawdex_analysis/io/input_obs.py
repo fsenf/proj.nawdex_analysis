@@ -12,7 +12,12 @@ import datetime
 import tropy.io_tools.hdf as hio
 import tropy.io_tools.netcdf as ncio
 import tropy.analysis_tools.grid_and_interpolation as gi
-from tropy.l15_msevi.msevi import MSevi
+
+# optional import of MSevi containers (for TROPOS)
+try:
+    from tropy.l15_msevi.msevi import MSevi
+except:
+    pass
 
 from nawdex_analysis.config import SEVIRI_cutout, NWCSAF_region, meteosat_georef_file
 from nawdex_analysis.io.tools import lonlat2azizen
