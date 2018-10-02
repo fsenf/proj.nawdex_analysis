@@ -326,8 +326,8 @@ def nn_reproj_with_index( dset, ind, apply_mask = True, Nan = 0 ):
 
     # prepare masking
     if apply_mask:
-            mask = hio.read_var_from_hdf( nawdex_regions_file, 'full_region' )
-            mask = mask.astype( np.bool ) 
+        mask = hio.read_var_from_hdf( nawdex_regions_file, 'full_region' )
+        mask = mask.astype( np.bool ) 
 
 
     # apply interpolation index
@@ -341,7 +341,7 @@ def nn_reproj_with_index( dset, ind, apply_mask = True, Nan = 0 ):
         
         # apply masking if wanted
         if apply_mask:
-            v = np.where( mask, Nan, v )
+            v = np.where( mask, v, Nan )
         
         dset_inter[vname] = v[:]
         
