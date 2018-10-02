@@ -21,6 +21,46 @@ from nawdex_analysis.config import SEVIRI_cutout
 ######################################################################
 
 
+def set_msevi_proj(lon0 = 0):
+        
+        ''' 
+        Returns line/column numbers in geostationary satellite
+        projection
+        
+        Parameters
+        ----------
+        lon : numpy array
+            longitude
+        
+        lat : numpy array
+            latitude
+            
+        
+        Returns
+        -------
+        msevi_proj : pyproj object
+            Meteosat SEVIRI projection
+
+        '''
+        geos_proj_param = {
+                'proj':      'geos',
+                'h':     35785831.0,
+                'a':      6378169.0,
+                'b':      6356583.8,
+                'lon_0':        lon0
+        }
+        # 
+        
+        # Apply MSG SEVIRI satellite projection
+        msevi_proj = pyproj.Proj(**geos_proj_param)
+
+        return msevi_proj
+
+        
+######################################################################
+######################################################################
+
+
 def msevi_ll2xy(lon, lat, hres = False, lon0 = 0):
         
         ''' 
@@ -155,8 +195,52 @@ def msevi_ij2xy(irow, icol, hres = False):
 
 
 ######################################################################
+######################################################################
+
+
+def msevi_ij2ll(irow, icol, lon0 = 0, hres = False):
+        
+        '''
+        Converts msevi indices into xy coordinates.
+        
+        
+        Parameters
+        ----------
+        irow : numpy array
+             row index in SEVIRI projection
+        
+        icol : numpy array
+            column index in SEVIRI projection
+
+
+        Returns
+        -------
+        lon : numpy array
+            longitude
+        
+        lat : numpy array
+            latitude
+
+        '''
+
+        # first get projection coordinates
+        x, y = msevi_ij2xy(irow, icol, hres = hres)
+
+        
+        # set up projection
+        msevi_proj = set_msevi_proj(lon0 = lon0)
+        lon, lat = msevi_proj(x, y, inverse = True)
+
+        
+        return lon, lat
+
+
+
+
+######################################################################
 # (2) Nearest Neighbor Interpolation
 ######################################################################
+
 
 def get_vector2msevi_index( vgeo ):
 
