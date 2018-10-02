@@ -110,6 +110,7 @@ def msevi_ll2xy(lon, lat, hres = False, lon0 = 0):
 ######################################################################
 ######################################################################
 
+
 def msevi_xy2ij(x, y, hres = False):
         
         '''
@@ -261,14 +262,12 @@ def get_vector2msevi_index( vgeo ):
     '''
 
     # prepare target fields ..........................................
-    
-    # get shape
-    (ir1, ir2), (ic1, ic2) = SEVIRI_cutout
-    nrows = ir2 - ir1
-    ncols = ic2 - ic1
+    nmax = 3712
 
-    # index set 
-    irow, icol = gi.make_index_set(nrows, ncols)
+    irow_all, icol_all = gi.make_index_set( nmax, nmax )
+    irow = gi.cutout_fields( irow_all, SEVIRI_cutout)
+    icol = gi.cutout_fields( icol_all, SEVIRI_cutout)
+
 
     # and projection co-ordinates
     xsevi, ysevi = msevi_ij2xy(irow, icol)
