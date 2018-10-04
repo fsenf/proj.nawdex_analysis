@@ -237,8 +237,6 @@ def msevi_ij2ll(irow, icol, lon0 = 0, hres = False):
         return lon, lat
 
 
-
-
 ######################################################################
 # (2) Nearest Neighbor Interpolation
 ######################################################################
@@ -347,3 +345,174 @@ def nn_reproj_with_index( dset, ind, apply_mask = True, Nan = 0 ):
         
     return dset_inter
 
+######################################################################
+######################################################################
+
+
+
+def reproj_param(lin, col, region, 
+                 hres = False):
+
+        '''
+        Preparation of reprojection parameters.
+
+
+        Parameters
+        ----------
+        lin : numpy array, 2dim
+            line or row indices of points to be interpolated
+
+        col : numpy array, 2dim
+            column indices of points to be interpolated
+
+        region : tuble or list of floats
+            region tuble stating first and last row and first and last column
+            e.g. region = ((ir1, ir2), (ic1, ic2))
+
+        hres : bool, optional, default = False
+            option for using high-resolution SEVIRI grid 
+
+        
+        Returns
+        --------
+        rparam : dict of numpy arrays
+            reprojection parameters
+        '''
+
+        # extract region
+        (ir1, ir2), (ic1, ic2) = region
+        lin0 = ir1
+        col0 = ic1
+
+        nlin = ir2 - ir1
+        ncol = ic2 - ic1
+
+        # set high-res 
+        # TODO: is offset right? Check against MSevi class
+        if hres==True:
+                lin0 = lin0*3
+                col0 = col0*3
+                nlin = nlin*3
+                ncol = ncol*3
+
+        # round line/column indices
+        ilin = np.round(lin).astype(np.int)
+        icol = np.round(col).astype(np.int)
+
+        # Get region mask
+        regmask = (ilin>=lin0)&(ilin<(lin0+nlin))&(icol>=col0)&(icol<(col0+ncol))
+
+        # get flattened array index
+        iflat = (ilin[regmask]-lin0)*ncol+(icol[regmask]-col0)
+
+        # get ordering index
+        isort = np.argsort(iflat)
+        (iuniq,ifirst)=np.unique(iflat[isort],return_index=True)
+
+        count = np.diff(np.append(ifirst,len(iflat)))
+
+        rparam =  dict( count = count,
+                        iuniq = iuniq,
+                        ifirst = ifirst,
+                        iflat = iflat, 
+                        regmask = regmask,
+                        lin0 = lin0,
+                        col0 = col0,
+                        nlin = nlin, 
+                        ncol = ncol,
+                        isort = isort)
+
+        return rparam
+
+######################################################################
+######################################################################
+
+
+def reproj_field(f, rparam, operator = np.nanmean):
+
+    '''
+    Reprojection field using reprojection parameters (and grid box avareging)
+    
+    
+    Parameters
+    ----------
+    f : numpy array, 2dim
+        field to be interpolated
+
+    rparam : dict of numpy arrays
+        reprojection parameters
+
+    operator : numpy method, optional, default = np.nanmean
+        operator used for calculations, e.g. averaging         
+
+
+    Returns
+    --------
+    f_reproj
+    '''
+
+    # Mask for out-of-region pixels
+    f = f[rparam['regmask']].flatten()
+
+    # Sort by flat index
+    f = f[rparam['isort']]
+
+    # Create new field
+    newf = np.empty(rparam['nlin']*rparam['ncol'])
+    newf[:] = np.nan
+
+    # # Calculate mean through cumulative sum/vectorized ##
+    # cumsum = np.cumsum(f)[para['ilast']]
+    # cumsum = np.append((cumsum[0],np.diff(cumsum)))
+    # mean = cumsum/para['count']
+    # newf[para['iuniq']]=mean
+    # # Calculate mean by for-loop
+    warnings.filterwarnings('ignore') ## all-nans result in Runtime warning
+    for i,j,cnt in zip(rparam['iuniq'],rparam['ifirst'],rparam['count']):
+        newf[i] = operator(f[j:(j+cnt)])
+    # ... and return
+    f_reproj = newf.reshape((rparam['nlin'],rparam['ncol']))
+
+    return f_reproj
+
+######################################################################
+######################################################################
+
+
+def get_vector2msevi_rparam( vgeo, region = SEVIRI_cutout ):
+
+    '''
+    Calculates reprojection parameters for the conversion between 
+    ICON output vectors and the Msevi grid.
+
+
+    Parameters
+    ----------
+    vgeo : dict of numpy arrays
+        set of fields containing vector geo-reference
+      
+
+    Returns
+    --------
+    rparam : dict of numpy arrays
+        reprojection parameters
+    '''
+
+    # prepare input fields ...........................................
+    
+    # reshape because gi - tools expects 2dim fields
+    vlon = vgeo['lon'].reshape(1, -1)
+    vlat = vgeo['lat'].reshape(1, -1)
+
+    xsim, ysim = msevi_ll2xy(vlon, vlat, lon0 = 0)
+    lin, col = msevi_xy2ij( xsim, ysim ) 
+
+
+    # calculation reprojection parameters ............................
+    rparam = reproj_param(lin, col, region)
+
+    return rparam
+
+
+######################################################################
+######################################################################
