@@ -293,7 +293,8 @@ def get_vector2msevi_index( vgeo ):
 ######################################################################
 
 
-def nn_reproj_with_index( dset, ind, apply_mask = True, Nan = 0 ):
+def nn_reproj_with_index( dset, ind, 
+                          vnames = 'all', apply_mask = True, Nan = 0 ):
 
     '''
     Reprojects data field intpo Meteosat SEVIRI projection.
@@ -306,13 +307,15 @@ def nn_reproj_with_index( dset, ind, apply_mask = True, Nan = 0 ):
 
     ind : numpy array
         interpolation index that maps the field in dset into SEVIRI grid
-    
+
+    vnames : string of list of strings, optional, default = 'all'
+        list of variable names to be interpolated
+
     apply_mask : bool, optional, default = True
         switch if masking with domain mask should be applied
 
     Nan : float
         value inserted for positions with mask == False
-
 
 
     Returns
@@ -327,11 +330,22 @@ def nn_reproj_with_index( dset, ind, apply_mask = True, Nan = 0 ):
         mask = hio.read_var_from_hdf( nawdex_regions_file, 'full_region' )
         mask = mask.astype( np.bool ) 
 
+    # prepare variable list
+    if vnames == 'all':
+        vlist = dset.keys()
+
+    elif type( vnames ) == type( '' ):
+        vlist = [ vnames, ]
+        
+    else:
+        vlist = vnames
+        
+        
 
     # apply interpolation index
     dset_inter = {}
     
-    for vname in dset.keys():
+    for vname in vlist:
         
         # do interpolation
         v = dset[vname][ind]
