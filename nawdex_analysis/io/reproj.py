@@ -364,7 +364,7 @@ def nn_reproj_with_index( dset, ind,
 
 
 
-def reproj_param(lin, col, region, 
+def get_reproj_param(lin, col, region, 
                  hres = False):
 
         '''
@@ -525,10 +525,82 @@ def get_vector2msevi_rparam( vgeo, region = SEVIRI_cutout ):
 
 
     # calculation reprojection parameters ............................
-    rparam = reproj_param(lin, col, region)
+    rparam = get_reproj_param(lin, col, region)
 
     return rparam
 
+
+######################################################################
+######################################################################
+
+def combined_reprojection( dset, ind, rparam, 
+                           vnames = 'all', apply_mask = True, Nan = 0 ):
+
+    '''
+    Combine nearest neighbor (nn) and box-average interpolation. If a grid box has no value, 
+    the nn value is taken.
+
+
+    Parameters
+    ----------
+    dset : dict of numpy arrays
+        set of fields that should be reprojected
+
+    ind : numpy array
+        interpolation index that maps the field in dset into SEVIRI grid
+
+    rparam : dict of numpy arrays
+        reprojection parameters
+
+    vnames : string of list of strings, optional, default = 'all'
+        list of variable names to be interpolated
+
+    apply_mask : bool, optional, default = True
+        switch if masking with domain mask should be applied
+
+    Nan : float
+        value inserted for positions with mask == False
+
+
+    Returns
+    --------
+    dset_inter :  dict of numpy arrays
+        set of fields that have been interpolated onto SEVIRI grid
+    '''
+
+    # LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+    # (i) NN Interpolation
+    # TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+    dset_nn = nn_reproj_with_index( dset, ind, 
+                                    vnames = vnames, 
+                                    apply_mask = apply_mask, 
+                                    Nan = Nan )
+
+
+    # LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+    # (ii) Box-averaging Interpolation and combination 
+    # TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+    
+    vlist = dset_nn.keys()
+
+    # apply interpolation index
+    dset_inter = {}
+    
+    for vname in vlist:
+        
+        # get field vector
+        fvec = dset[vname]
+        
+        # do averaging interpolation
+        fave = reproj_field( fvec, rparam )
+
+        # get nn result and combine
+        fnn = dset_nn[vname]
+
+        # take nn where ave is not defined
+        dset_inter[vname] = np.where( fave.mask, fnn, fave )
+        
+    return dset_inter
 
 ######################################################################
 ######################################################################
