@@ -468,12 +468,16 @@ def reproj_field(f, rparam, operator = np.nanmean):
     # newf[para['iuniq']]=mean
     # # Calculate mean by for-loop
     warnings.filterwarnings('ignore') ## all-nans result in Runtime warning
+
     for i,j,cnt in zip(rparam['iuniq'],rparam['ifirst'],rparam['count']):
         newf[i] = operator(f[j:(j+cnt)])
-    # ... and return
+
+
     f_reproj = newf.reshape((rparam['nlin'],rparam['ncol']))
 
-    return f_reproj
+
+    # ... and return
+    return np.ma.masked_invalid( f_reproj )
 
 ######################################################################
 ######################################################################
@@ -499,10 +503,8 @@ def get_vector2msevi_rparam( vgeo, region = SEVIRI_cutout ):
     '''
 
     # prepare input fields ...........................................
-    
-    # reshape because gi - tools expects 2dim fields
-    vlon = vgeo['lon'].reshape(1, -1)
-    vlat = vgeo['lat'].reshape(1, -1)
+    vlon = vgeo['lon']
+    vlat = vgeo['lat']
 
     xsim, ysim = msevi_ll2xy(vlon, vlat, lon0 = 0)
     lin, col = msevi_xy2ij( xsim, ysim ) 
