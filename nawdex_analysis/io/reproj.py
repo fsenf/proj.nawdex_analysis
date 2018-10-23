@@ -360,6 +360,7 @@ def nn_reproj_with_index( dset, ind,
     return dset_inter
 
 ######################################################################
+# (3) Box-average Interpolation and Reprojection
 ######################################################################
 
 
