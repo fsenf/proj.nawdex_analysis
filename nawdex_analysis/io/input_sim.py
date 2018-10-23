@@ -242,7 +242,8 @@ def read_synsat_vector( fname, bt_generation_mode = 'mcfarq_rescale_noccthresh' 
 def read_iconvar_vector( fname, vlist ):
     
     '''
-    Input of Synsat BT vector (given at original ICON grid).
+    Input of ICON variable vector (given at original ICON grid and with applied 
+    zenith angle mask).
 
 
     Parameters
@@ -252,6 +253,7 @@ def read_iconvar_vector( fname, vlist ):
 
     vname : list of str
         list of variable names
+
 
     Returns
     -------
@@ -293,6 +295,47 @@ def read_iconvar_vector( fname, vlist ):
 
 
     return outset
+
+######################################################################
+######################################################################
+
+def read_icon_rad_vector( fname, map_varnames = True ):
+    
+    '''
+    Reads ICON TOA radiation vector.
+
+
+    Parameters
+    ----------
+    fname : str
+        name of ICON file (should be netcdf file)
+
+
+    Returns
+    -------
+    radset : dict of numpy arrays
+        set of synsat and georef vectors
+    '''
+
+    vlist =  ['sod_t', 'sou_t', 'thb_t']       
+    
+    input_set = read_iconvar_vector(fname, vlist)
+
+
+    # select input fields
+    radset = {}
+    if map_varnames:
+
+        swf_up   = input_set['sou_t']
+        swf_down = input_set['sod_t']
+        
+        radset['swf_net'] = swf_up  -  swf_down
+        radset['lwf'] = input_set['thb_t']
+    else:
+        radset = input_set
+
+
+    return radset
 
 ######################################################################
 ######################################################################
