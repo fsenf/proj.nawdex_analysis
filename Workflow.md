@@ -122,6 +122,42 @@ For regridding of synsat data, two steps are needed.
 
 Step one seems to be easy. Step two is a bit more complicated. One could generate and store a nearest neighbor index for the coarser model grids, but for the finer grid an other method should be applied. If several model grid box centers fall into one SEVIRI pixel then all radiances should be averaged (similar to an rediation-based averaging a satellite sensor would do).
 
+
+Two sets of functions have been developed to regrid data, all are contained in the package `reproj`assessed by
+
+```
+>>>import nawdex_analysis.io.reproj as reproj
+```
+
+#### NN interpolation
+The first set treats the nearest-neighbor-interpolation problem. Two steps are needed. First an interpolation index is calculated with
+
+```
+>>>index =  reproj.get_vector2msevi_index( vgeo )
+```
+
+where `vgeo` is a dictionary containing the geo reference. And second, the index (and some masking) is applied to a dataset (also dict).
+
+```
+>>>dset_nn_reproj =  reproj.nn_reproj_with_index( dset, ind ) 
+```
+The index must only be calculated once and can be applied thereafter in a very efficient way.
+
+#### Box-average interpolation
+The second set treats the box-average interpolation which is not trivial because the target grid is not rectangular. The calculation is also divided into two steps. First, reprojection parameters (depending on the grid) are calculated (similar to the nn index) with
+
+```
+>>>rparam = reproj.get_vector2msevi_rparam( vgeo )
+```
+where `vgeo` is again a dictionary containing the geo reference. A field is reprojected with
+
+```
+>>>fint = reproj.reproj_field(f, rparam)
+```
+
+
+
+
 ## Observational Data (on TROPOS altair)
 ### TOA Radiation fluxes
 TOA Radiation fluxes have been provided by Nicola Clerbaux (Belgium) as hdf5 files. The data are saved as `H5T_STD_I16BE` which means signed 16-bit integer (big endian). On TROPOS altair, TOA radiation data are saved under
