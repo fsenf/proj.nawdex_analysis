@@ -236,6 +236,44 @@ def msevi_ij2ll(irow, icol, lon0 = 0, hres = False):
         
         return lon, lat
 
+######################################################################
+######################################################################
+
+def msevi_lonlat(region = SEVIRI_cutout):
+
+    '''
+    Calcualtions MSG longitude and latitude for a certain cutout.
+
+
+    Parameters
+    ----------
+    region : tuble of int, optional, default = SEVIRI_cutout
+        cutout region defintion as ((ir1, ir2), (ic1, ic2))
+
+
+    Returns
+    --------
+    vgeo : dict of numpy arrays
+        georeference dictionary
+    '''
+
+    
+    # prepare index field
+    nmax = 3712
+
+    irow_all, icol_all = gi.make_index_set( nmax, nmax )
+    irow = gi.cutout_fields( irow_all, region )
+    icol = gi.cutout_fields( icol_all, region )
+
+
+    # and use geo-stationary projection
+    lon, lat = msevi_ij2ll(irow, icol)
+
+    vgeo = dict( lon = lon, lat = lat )
+
+    return vgeo
+    
+
 
 ######################################################################
 # (2) Nearest Neighbor Interpolation
