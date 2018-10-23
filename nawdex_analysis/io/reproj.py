@@ -637,7 +637,10 @@ def combined_reprojection( dset, ind, rparam,
         fnn = dset_nn[vname]
 
         # take nn where ave is not defined
-        dset_inter[vname] = np.where( fave.mask, fnn, fave )
+        
+        f_inter = np.where( fave.mask, fnn, fave )
+        dset_inter[vname] = np.ma.masked_equal( f_inter, Nan )
+        
         
     return dset_inter
 
