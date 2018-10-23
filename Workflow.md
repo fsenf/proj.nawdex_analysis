@@ -155,6 +155,13 @@ where `vgeo` is again a dictionary containing the geo reference. A field is repr
 >>>fint = reproj.reproj_field(f, rparam)
 ```
 
+#### Combined interpolation
+The box averaging only fills grid boxes of the target grid that contain values from the initial simulation grid. For a coarse initial simulation grid, box averging results in a sparse dataset with missing values filled with Nans. Therefore, a combination of NN interpolation and box averaging is applied to a data set (again dict) using 
+
+```
+>>>dset_inter = reproj.combined_reprojection( dset, ind, rparam )
+```
+
 
 
 
