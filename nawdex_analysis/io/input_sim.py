@@ -331,9 +331,14 @@ def read_icon_rad_vector( fname, map_varnames = True ):
         
         radset['swf_net'] = swf_up  -  swf_down
         radset['lwf'] = input_set['thb_t']
+
+        radset['lon'] = input_set['lon']
+        radset['lat'] = input_set['lat']
+
     else:
         radset = input_set
 
+    
 
     return radset
 
