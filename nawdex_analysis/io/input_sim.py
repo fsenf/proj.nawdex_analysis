@@ -8,6 +8,8 @@ import os, sys, copy
 import numpy as np
 import scipy.ndimage
 import datetime
+import xarray as xr
+import pandas as pd
 
 import tropy.io_tools.hdf as hio
 import tropy.io_tools.netcdf as ncio
@@ -339,6 +341,69 @@ def read_icon_rad_vector( fname, map_varnames = True ):
         radset = input_set
 
     
+
+    return radset
+
+######################################################################
+######################################################################
+
+
+def read_radiation_flux_flist( flist ):
+    
+    '''
+    Reads ICON TOA radiation vectors from filelist as time stack.
+
+
+    Parameters
+    ----------
+    flist : list of str
+        filename  list of ICON file (should be netcdf file)
+
+
+    Returns
+    -------
+    radset : dict of numpy arrays
+        set of synsat and georef vectors
+    '''
+
+    
+    # init data set
+    radset = dict( time = [] )
+
+
+    # loop over file list
+    for fname in sorted( flist ):
+        
+        # input radiation vector
+        dset = nawdex_analysis.io.input_sim.read_icon_rad_vector(fname)
+
+        # stack the data
+        vnames = ['lwf', 'swf_net']
+        for k in vnames:
+
+            if not k in radset:
+                radset[k] = []
+
+            radset[k] += [  np.ma.expand_dims(dset[k], axis = 0), ]
+
+    
+        # input time and convert to datetime object
+        # (a bit complicated using xarray and pandas...)
+        xset = xr.open_dataset(fname)
+        time =  pd.to_datetime(  xset['time'].data[0] ).to_pydatetime()
+        radset['time'] += [time,]
+        xset.close()
+
+    # add georef
+    radset['lon'] = dset['lon']
+    radset['lat'] = dset['lat']
+
+
+
+    # stack data along time axis
+    vnames += 'time'
+    for k in vnames:
+        radset[k] = np.row_stack( radset[k] )
 
     return radset
 
