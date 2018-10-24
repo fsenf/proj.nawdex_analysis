@@ -77,7 +77,7 @@ def save_radflux_flist( flist, outname,
 ######################################################################
 
 
-def save_rad2nc( outname, dset, fill_val = 0 ):
+def save_rad2nc( outname, dset, fill_val = 0, use_clear = False ):
 
     '''
     Saves Radiaiton fluxes to netcdf.
@@ -94,6 +94,9 @@ def save_rad2nc( outname, dset, fill_val = 0 ):
 
     fill_val : float or int, optional, default = 0
         fill value to be replace by NaNs
+
+    use_clear :  bool, optional, default = False
+        switch if clearsky or cloudy values are used
 
 
     Returns
@@ -126,14 +129,18 @@ def save_rad2nc( outname, dset, fill_val = 0 ):
     lat = dset['lat']
 
 
+    if use_clear:
+        clear_attrib = 'clearsky'
+    else:
+        clear_attrib = ''
 
     # ### Dataset Attributes
 
     # Global attributes for the data set
     att_glob = {'author': 'Fabian Senf (senf@tropos.de)', 
                 'institution': 'Leibniz Institute for Tropospheric Research',
-                'title': 'TOA Radiation Fluxes',
-                'description': 'instantaneous TOA radiation fluxes simulated with ICON'}
+                'title': 'TOA %s Radiation Fluxes' % clear_attrib,
+                'description': 'instantaneous %s TOA radiation fluxes simulated with ICON' % clear_attrib}
 
 
     # Attributes for the single variables
@@ -154,7 +161,7 @@ def save_rad2nc( outname, dset, fill_val = 0 ):
 
     # LONG-WAVE ------------------------------------------------------
     vname = 'lwf'
-    long_name = 'TOA long-wave radiation flux'
+    long_name = 'TOA %s long-wave radiation flux' % clear_attrib
     
     atts = copy.copy( att_rad ) 
     atts['long_name'] = copy.copy( long_name )
@@ -166,7 +173,7 @@ def save_rad2nc( outname, dset, fill_val = 0 ):
 
     # SHORT-WAVE ------------------------------------------------------
     vname = 'swf_net'
-    long_name = 'TOA short-wave net radiation flux'
+    long_name = 'TOA %s short-wave net radiation flux' % clear_attrib
     
     atts = copy.copy( att_rad ) 
     atts['long_name'] = copy.copy( long_name )
