@@ -440,6 +440,9 @@ def read_radiation_flux_flist( flist,
     for k in vnames:
         radset[k] = np.row_stack( radset[k] )
 
+    radset['time'] = radset['time'].squeeze()
+
+
     return radset
 
 ######################################################################
