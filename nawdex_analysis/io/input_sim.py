@@ -401,7 +401,7 @@ def read_radiation_flux_flist( flist ):
 
 
     # stack data along time axis
-    vnames += 'time'
+    vnames += ['time',]
     for k in vnames:
         radset[k] = np.row_stack( radset[k] )
 
