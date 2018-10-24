@@ -375,7 +375,7 @@ def read_radiation_flux_flist( flist ):
     for fname in sorted( flist ):
         
         # input radiation vector
-        dset = nawdex_analysis.io.input_sim.read_icon_rad_vector(fname)
+        dset = read_icon_rad_vector(fname)
 
         # stack the data
         vnames = ['lwf', 'swf_net']
