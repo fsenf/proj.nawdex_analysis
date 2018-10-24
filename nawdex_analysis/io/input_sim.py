@@ -271,8 +271,9 @@ def read_iconvar_vector( fname, vlist ):
         vlist = [vlist,]
 
 
-    # read brightness temperatures
+    # read variables
     # =============================
+    print '... read data from ', fname
     dset = ncio.read_icon_4d_data(fname, vlist, itime = None)
 
 
