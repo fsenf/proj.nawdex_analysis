@@ -302,7 +302,7 @@ def read_iconvar_vector( fname, vlist ):
 ######################################################################
 ######################################################################
 
-def read_icon_rad_vector( fname, map_varnames = True ):
+def read_icon_rad_vector( fname, map_varnames = True, use_clear = False ):
     
     '''
     Reads ICON TOA radiation vector.
@@ -313,6 +313,12 @@ def read_icon_rad_vector( fname, map_varnames = True ):
     fname : str
         name of ICON file (should be netcdf file)
 
+    map_varnames : bool, optional, default = True
+        switch if original variable names are mapped to generic names
+
+    use_clear :  bool, optional, default = False
+        switch if clearsky or cloudy values are used
+
 
     Returns
     -------
@@ -320,7 +326,11 @@ def read_icon_rad_vector( fname, map_varnames = True ):
         set of synsat and georef vectors
     '''
 
-    vlist =  ['sod_t', 'sou_t', 'thb_t']       
+
+    if not use_clear:
+        vlist =  ['sod_t', 'sou_t', 'thb_t']       
+    else:
+        vlist = ['swtoaclr', 'lwtoaclr']
     
     input_set = read_iconvar_vector(fname, vlist)
 
@@ -329,11 +339,15 @@ def read_icon_rad_vector( fname, map_varnames = True ):
     radset = {}
     if map_varnames:
 
-        swf_up   = input_set['sou_t']
-        swf_down = input_set['sod_t']
+        if not use_clear:
+            swf_up   = input_set['sou_t']
+            swf_down = input_set['sod_t']
         
-        radset['swf_net'] = swf_up  -  swf_down
-        radset['lwf'] = input_set['thb_t']
+            radset['swf_net'] = swf_up  -  swf_down
+            radset['lwf'] = input_set['thb_t']
+        else:
+            radset['swf_net'] = input_set['swtoaclr']
+            radset['lwf']     = input_set['lwtoaclr']
 
         radset['lon'] = input_set['lon']
         radset['lat'] = input_set['lat']
@@ -350,6 +364,7 @@ def read_icon_rad_vector( fname, map_varnames = True ):
 
 
 def read_radiation_flux_flist( flist, 
+                               use_clear = False,
                                interpolation2msevi = True ):
     
     '''
@@ -363,6 +378,9 @@ def read_radiation_flux_flist( flist,
 
     interpolation2msevi : bool, optional, default = True
         switch if output should be interpolated to MSG grid
+
+    use_clear :  bool, optional, default = False
+        switch if clearsky or cloudy values are used
 
 
     Returns
@@ -383,7 +401,7 @@ def read_radiation_flux_flist( flist,
         
         # input radiation vector
         vnames = ['lwf', 'swf_net']
-        din = read_icon_rad_vector(fname)
+        din = read_icon_rad_vector(fname, use_clear = use_clear)
 
         # do intrepolation to MSG grid
         if interpolation2msevi:

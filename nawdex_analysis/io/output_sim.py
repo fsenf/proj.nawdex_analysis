@@ -34,6 +34,7 @@ from nawdex_analysis.io.input_sim import read_radiation_flux_flist
 
 
 def save_radflux_flist( flist, outname, 
+                        use_clear = False,
                         interpolation2msevi = True ):    
 
     '''
@@ -51,6 +52,9 @@ def save_radflux_flist( flist, outname,
     interpolation2msevi : bool, optional, default = True
         switch if output should be interpolated to MSG grid
 
+    use_clear :  bool, optional, default = False
+        switch if clearsky or cloudy values are used
+
 
     Returns
     -------
@@ -60,6 +64,7 @@ def save_radflux_flist( flist, outname,
 
     # input of radiation data
     dout = read_radiation_flux_flist( flist, 
+                                      use_clear = use_clear,
                                       interpolation2msevi = interpolation2msevi )
 
 
