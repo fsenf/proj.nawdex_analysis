@@ -423,8 +423,8 @@ def read_radiation_flux_flist( flist,
         xset.close()
 
     # add georef
-    radset['lon'] = dset['lon']
-    radset['lat'] = dset['lat']
+    radset['lon'] = din['lon']
+    radset['lat'] = din['lat']
 
 
 
