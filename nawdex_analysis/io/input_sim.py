@@ -394,15 +394,22 @@ def read_radiation_flux_flist( flist,
                 rparam = nawdex_analysis.io.reproj. get_vector2msevi_rparam( din )
 
 
-
-            # partial dataset
+            # interpolate partial dataset
             dpart = {}
             for k in vnames:
                 dpart[k] = din[k]
 
             dset_inter = nawdex_analysis.io.reproj.combined_reprojection( dpart, ind, rparam )
- 
+            
+
+            # get also new georef
+            geo = nawdex_analysis.io.reproj.msevi_lonlat()
+            dset_inter.update( geo )
+
+            # and rewrite final dataset
             dset = dset_inter
+
+
         else:
             dset = din
             
@@ -423,8 +430,8 @@ def read_radiation_flux_flist( flist,
         xset.close()
 
     # add georef
-    radset['lon'] = din['lon']
-    radset['lat'] = din['lat']
+    radset['lon'] = dset['lon']
+    radset['lat'] = dset['lat']
 
 
 
