@@ -16,6 +16,7 @@ import tropy.io_tools.netcdf as ncio
 import tropy.analysis_tools.grid_and_interpolation as gi
 
 from nawdex_analysis.io.tools import lonlat2azizen
+import nawdex_analysis.io.reproj
 
 
 ######################################################################
@@ -348,7 +349,8 @@ def read_icon_rad_vector( fname, map_varnames = True ):
 ######################################################################
 
 
-def read_radiation_flux_flist( flist ):
+def read_radiation_flux_flist( flist, 
+                               interpolation2msevi = True ):
     
     '''
     Reads ICON TOA radiation vectors from filelist as time stack.
@@ -359,6 +361,9 @@ def read_radiation_flux_flist( flist ):
     flist : list of str
         filename  list of ICON file (should be netcdf file)
 
+    interpolation2msevi : bool, optional, default = True
+        switch if output should be interpolated to MSG grid
+
 
     Returns
     -------
@@ -366,21 +371,44 @@ def read_radiation_flux_flist( flist ):
         set of synsat and georef vectors
     '''
 
+  
     
     # init data set
     radset = dict( time = [] )
 
 
     # loop over file list
-    for fname in sorted( flist ):
+    flist = sorted( flist )
+    for ifile, fname in enumerate( flist ):
         
         # input radiation vector
-        dset = read_icon_rad_vector(fname)
+        vnames = ['lwf', 'swf_net']
+        din = read_icon_rad_vector(fname)
+
+        # do intrepolation to MSG grid
+        if interpolation2msevi:
+
+            # get reprojection parameters
+            if ifile == 0:
+                ind = nawdex_analysis.io.reproj.get_vector2msevi_index( din )
+                rparam = nawdex_analysis.io.reproj. get_vector2msevi_rparam( din )
+
+
+
+            # partial dataset
+            dpart = {}
+            for k in vnames:
+                dpart[k] = din[k]
+
+            dset_inter = nawdex_analysis.io.reproj.combined_reprojection( dpart, ind, rparam )
+ 
+            dset = dset_inter
+        else:
+            dset = din
+            
 
         # stack the data
-        vnames = ['lwf', 'swf_net']
         for k in vnames:
-
             if not k in radset:
                 radset[k] = []
 
