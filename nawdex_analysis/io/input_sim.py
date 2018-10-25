@@ -624,11 +624,11 @@ def test_read_radiation_flux_flist( flist,
 
 
     # set input parameters -------------------------------------------
-    variable_names = ['lwf', 'swf_net']
+    variable_list = ['lwf', 'swf_net']
     reader_function =  read_icon_rad_vector
     reader_kwargs = dict(use_clear = use_clear)
 
-    input_param = dict(  variable_names = variable_names,
+    input_param = dict(  variable_list = variable_list,
                          reader_function =  reader_function,
                          reader_kwargs = reader_kwargs)
     # ================================================================
@@ -671,11 +671,11 @@ def read_synsat_flist( flist,
 
 
     # set input parameters -------------------------------------------
-    variable_names = ['bt062', 'bt073', 'bt087', 'bt108', 'bt120', 'bt134']
+    variable_list = ['bt062', 'bt073', 'bt087', 'bt108', 'bt120', 'bt134']
     reader_function =  read_synsat_vector
     reader_kwargs = dict()
 
-    input_param = dict(  variable_names = variable_names,
+    input_param = dict(  variable_list = variable_list,
                          reader_function =  reader_function,
                          reader_kwargs = reader_kwargs)
     # ================================================================
