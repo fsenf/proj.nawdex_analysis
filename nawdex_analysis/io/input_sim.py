@@ -17,6 +17,7 @@ import tropy.analysis_tools.grid_and_interpolation as gi
 
 from nawdex_analysis.io.tools import lonlat2azizen
 import nawdex_analysis.io.reproj
+from nawdex_analysis.config import simulation_dir
 
 
 ######################################################################
@@ -98,6 +99,45 @@ def get_grid_filename( subdir ):
 
 ######################################################################
 ######################################################################
+
+def get_synsat_basename(synsat_name ):
+
+    '''
+    Recovers simulation filename on which synsat forward operator was
+    applied to.
+
+
+    Parameters
+    ----------
+    synsat_name : str
+        filename of synsat file
+
+
+    Returns
+    --------
+    basename : str
+        filename of basefile
+    '''
+
+
+    # get synsat file parts
+    synsat_dir = os.path.dirname( synsat_name )
+    synsat_base = os.path.splitext( os.path.basename( synsat_name ) )[0]
+    subdir = synsat_dir.split('/')[-1]
+
+        
+    # build fc name
+    fdir = '%s/%s' % (simulation_dir, subdir)
+    namebase = '_'.join( synsat_base.split('_')[1:-2] )
+    simfile = '%s/%s.nc' % (fdir, namebase)
+
+    return simfile
+    
+
+
+######################################################################
+######################################################################
+
 
 def read_georef( expname, mask_with_zen = True, zen_max = 75. ):
 

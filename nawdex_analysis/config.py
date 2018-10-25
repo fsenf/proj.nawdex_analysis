@@ -23,4 +23,4 @@ else:  # assume mistral
 
     nawdex_regions_file = '%s/region_masks_for_msevi_nawdex.h5' % nawdex_dir
 
-
+    simulation_dir = '/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP'
