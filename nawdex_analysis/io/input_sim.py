@@ -476,7 +476,7 @@ def read_generic_sim_data_flist( flist,
                                  interpolation2msevi = True ):
     
     '''
-    Reads ICON TOA radiation vectors from filelist as time stack.
+    Reads ICON field vectors from filelist as time stack.
 
 
     Parameters
@@ -619,7 +619,7 @@ def test_read_radiation_flux_flist( flist,
     Returns
     -------
     radset : dict of numpy arrays
-        set of synsat and georef vectors
+        set of TOA radiation and georef vectors
     '''
 
 
@@ -643,6 +643,53 @@ def test_read_radiation_flux_flist( flist,
 
 
     return radset
+
+######################################################################
+######################################################################
+
+def read_synsat_flist( flist, 
+                       interpolation2msevi = True ):
+    
+    '''
+    Reads ICON Synsat vectors from filelist as time stack.
+
+
+    Parameters
+    ----------
+    flist : list of str
+        filename  list of ICON file (should be netcdf file)
+
+    interpolation2msevi : bool, optional, default = True
+        switch if output should be interpolated to MSG grid
+
+
+    Returns
+    -------
+    btset : dict of numpy arrays
+        set of synsat and georef fields
+    '''
+
+
+    # set input parameters -------------------------------------------
+    variable_names = ['bt062', 'bt073', 'bt087', 'bt108', 'bt120', 'bt134']
+    input_reader =  read_synsat_vector
+    input_kwargs = dict()
+
+    input_param = dict(  variable_names = variable_names,
+                         input_reader =  input_reader,
+                         input_kwargs = input_kwargs)
+    # ================================================================
+
+
+
+    # data input -----------------------------------------------------
+    btset = read_generic_sim_data_flist( flist, 
+                                         input_param,
+                                         interpolation2msevi = interpolation2msevi )
+    # ================================================================
+
+
+    return btset
 
 ######################################################################
 ######################################################################
