@@ -16,6 +16,7 @@ import tropy.analysis_tools.grid_and_interpolation as gi
 import tropy.io_tools.hdf as hio
 
 from nawdex_analysis.config import SEVIRI_cutout, nawdex_regions_file 
+from nawdex_analysis.io.tools import  lonlat2azizen
 
 ######################################################################
 # (1) SEVIRI projection and co-ordinate transformations
@@ -239,7 +240,7 @@ def msevi_ij2ll(irow, icol, lon0 = 0, hres = False):
 ######################################################################
 ######################################################################
 
-def msevi_lonlat(region = SEVIRI_cutout):
+def msevi_lonlat(region = SEVIRI_cutout, return_azi_zen = False):
 
     '''
     Calcualtions MSG longitude and latitude for a certain cutout.
@@ -249,6 +250,9 @@ def msevi_lonlat(region = SEVIRI_cutout):
     ----------
     region : tuble of int, optional, default = SEVIRI_cutout
         cutout region defintion as ((ir1, ir2), (ic1, ic2))
+
+    return_azi_zen : bool, optional, default = False
+        switch if satellite azimuth and zenith angle is calculated and returned
 
 
     Returns
@@ -270,6 +274,11 @@ def msevi_lonlat(region = SEVIRI_cutout):
     lon, lat = msevi_ij2ll(irow, icol)
 
     vgeo = dict( lon = lon, lat = lat )
+
+    if return_azi_zen:
+        azi, zen = lonlat2azizen(lon, lat)
+        vgeo['azi'] = azi
+        vgeo['zen'] = zen
 
     return vgeo
     

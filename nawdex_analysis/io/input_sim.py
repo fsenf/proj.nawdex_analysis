@@ -390,8 +390,11 @@ def read_radiation_flux_flist( flist,
         set of synsat and georef vectors
     '''
 
-  
+
+    # set variable names
+    vnames = ['lwf', 'swf_net']
     
+
     # init data set
     radset = dict( time = [] )
 
@@ -401,7 +404,6 @@ def read_radiation_flux_flist( flist,
     for ifile, fname in enumerate( flist ):
         
         # input radiation vector
-        vnames = ['lwf', 'swf_net']
         din = read_icon_rad_vector(fname, use_clear = use_clear)
 
         # do intrepolation to MSG grid
@@ -460,6 +462,184 @@ def read_radiation_flux_flist( flist,
         radset[k] = np.row_stack( radset[k] )
 
     radset['time'] = radset['time'].squeeze()
+
+
+    return radset
+
+######################################################################
+######################################################################
+
+
+
+def read_generic_sim_data_flist( flist, 
+                                 input_param,
+                                 interpolation2msevi = True ):
+    
+    '''
+    Reads ICON TOA radiation vectors from filelist as time stack.
+
+
+    Parameters
+    ----------
+    flist : list of str
+        filename  list of ICON file (should be netcdf file)
+
+    input_param : dict
+        set of input parameters incl. function for data reading and kwargs
+        mandatory keys: 'reader_function', 'reader_kwargs', 'variable_list'
+
+    interpolation2msevi : bool, optional, default = True
+        switch if output should be interpolated to MSG grid
+
+
+
+    Returns
+    -------
+    dataset : dict of numpy arrays
+        set of synsat and georef vectors
+    '''
+
+
+
+    # check input paramaters -----------------------------------------
+    mandatory_input_keys = ['reader_function',
+                             'reader_kwargs',
+                             'variable_list']
+
+    for k in mandatory_input_keys:
+        if not k in input_param.keys():
+            raise ValueError('%s should be defined in input_param' % k)
+    # ================================================================
+
+
+
+    # get input properties
+    reader_function = input_param.get('reader_function', None)
+    reader_kwargs   = input_param.get('reader_kwargs', None)
+    variable_list   = input_param.get('variable_list', None)
+
+
+
+    # init data set
+    dataset = dict( time = [] )
+
+
+    # loop over file list
+    flist = sorted( flist )
+    for ifile, fname in enumerate( flist ):
+        
+        # input radiation vector
+        # din = read_icon_rad_vector(fname, use_clear = use_clear)
+        din = reader_function(fname, **reader_kwargs)
+
+        # do intrepolation to MSG grid
+        if interpolation2msevi:
+
+            # get reprojection parameters
+            if ifile == 0:
+                ind = nawdex_analysis.io.reproj.get_vector2msevi_index( din )
+                rparam = nawdex_analysis.io.reproj. get_vector2msevi_rparam( din )
+
+
+            # interpolate partial dataset
+            dpart = {}
+            for k in variable_list:
+                dpart[k] = din[k]
+
+            dset_inter = nawdex_analysis.io.reproj.combined_reprojection( dpart, ind, rparam )
+            
+
+            # get also new georef
+            geo = nawdex_analysis.io.reproj.msevi_lonlat(return_azi_zen = True)
+            dset_inter.update( geo )
+
+            # and rewrite final dataset
+            dset = dset_inter
+
+
+        else:
+            dset = din
+            
+
+        # stack the data
+        for k in variable_list:
+            if not k in dataset:
+                dataset[k] = []
+
+            dataset[k] += [  np.ma.expand_dims(dset[k], axis = 0), ]
+
+    
+        # input time and convert to datetime object
+        # (a bit complicated using xarray and pandas...)
+        xset = xr.open_dataset(fname)
+        time =  pd.to_datetime(  xset['time'].data[0] ).to_pydatetime()
+        dataset['time'] += [time,]
+        xset.close()
+
+
+    # add georef
+    for k in ['lon', 'lat', 'zen', 'azi']:
+        dataset[k] = dset[k]
+
+
+    # stack data along time axis
+    vnames = variable_list + ['time',]
+    for k in vnames:
+        dataset[k] = np.row_stack( dataset[k] )
+
+    dataset['time'] = dataset['time'].squeeze()
+
+
+    return dataset
+
+######################################################################
+######################################################################
+
+
+def test_read_radiation_flux_flist( flist, 
+                                    use_clear = False,
+                                    interpolation2msevi = True ):
+    
+    '''
+    Reads ICON TOA radiation vectors from filelist as time stack.
+
+
+    Parameters
+    ----------
+    flist : list of str
+        filename  list of ICON file (should be netcdf file)
+
+    interpolation2msevi : bool, optional, default = True
+        switch if output should be interpolated to MSG grid
+
+    use_clear :  bool, optional, default = False
+        switch if clearsky or cloudy values are used
+
+
+    Returns
+    -------
+    radset : dict of numpy arrays
+        set of synsat and georef vectors
+    '''
+
+
+    # set input parameters -------------------------------------------
+    variable_names = ['lwf', 'swf_net']
+    input_reader =  read_icon_rad_vector
+    input_kwargs = dict(use_clear = use_clear)
+
+    input_param = dict(  variable_names = variable_names,
+                         input_reader =  input_reader,
+                         input_kwargs = input_kwargs)
+    # ================================================================
+
+
+
+    # data input -----------------------------------------------------
+    radset = read_generic_sim_data_flist( flist, 
+                                          input_param,
+                                          interpolation2msevi = interpolation2msevi )
+    # ================================================================
 
 
     return radset
