@@ -14,7 +14,8 @@ if 'altair' in os.environ['HOSTNAME'] :
     meteosat_georef_file = '%s/msevi-nawdex-20160923.nc' % nawdex_meteosat_dir
     
     nawdex_regions_file = '%s/region_masks_for_msevi_nawdex.h5' % nawdex_dir
-
+    
+    simulation_dir = ''
 
 else:  # assume mistral 
     nawdex_dir = '/pf/b/b380352/data/nawdex/'
