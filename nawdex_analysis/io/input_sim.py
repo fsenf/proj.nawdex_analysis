@@ -546,7 +546,7 @@ def read_generic_sim_data_flist( flist,
         dataset['time'] += [time,]
 
     if interpolation2msevi:
-        dataset['region'] =   SEVIRI_cutout
+        dataset['msevi_region'] =   SEVIRI_cutout
         dataset['nwcsaf_region'] =  NWCSAF_region
  
 
