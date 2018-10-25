@@ -403,6 +403,47 @@ def read_icon_rad_vector( fname, map_varnames = True, use_clear = False ):
 ######################################################################
 ######################################################################
 
+def read_time( fname ):
+
+    '''
+    Reads time object from netcdf file. Applies filename mapping if synsat
+    file is used.
+
+
+    Parameters
+    ----------
+    fname : str
+        name of file
+
+
+    Returns
+    -------
+    time : datetime object
+        time
+ 
+    '''
+
+
+    # check if file is synsat
+    if 'synsat_' in os.path.basename( fname ):
+        infile =  get_synsat_basename( fname )
+    else:
+        infile = fname
+
+
+    # input time and convert to datetime object
+    # (a bit complicated using xarray and pandas...)
+    xset = xr.open_dataset( infile )
+    time =  pd.to_datetime(  xset['time'].data[0] ).to_pydatetime()
+    
+
+    return time
+
+######################################################################
+######################################################################
+
+    
+
 
 def read_generic_sim_data_flist( flist, 
                                  input_param,
@@ -501,11 +542,7 @@ def read_generic_sim_data_flist( flist,
 
             dataset[k] += [  np.ma.expand_dims(dset[k], axis = 0), ]
 
-    
-        # input time and convert to datetime object
-        # (a bit complicated using xarray and pandas...)
-        xset = xr.open_dataset(fname)
-        time =  pd.to_datetime(  xset['time'].data[0] ).to_pydatetime()
+        time = read_time( fname )
         dataset['time'] += [time,]
         xset.close()
 
