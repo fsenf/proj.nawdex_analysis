@@ -435,7 +435,8 @@ def read_time( fname ):
     # (a bit complicated using xarray and pandas...)
     xset = xr.open_dataset( infile )
     time =  pd.to_datetime(  xset['time'].data[0] ).to_pydatetime()
-    
+    xset.close()
+
 
     return time
 
@@ -544,7 +545,6 @@ def read_generic_sim_data_flist( flist,
 
         time = read_time( fname )
         dataset['time'] += [time,]
-        xset.close()
 
 
     # add georef
