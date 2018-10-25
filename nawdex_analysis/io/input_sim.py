@@ -17,8 +17,7 @@ import tropy.analysis_tools.grid_and_interpolation as gi
 
 from nawdex_analysis.io.tools import lonlat2azizen
 import nawdex_analysis.io.reproj
-from nawdex_analysis.config import simulation_dir
-
+from nawdex_analysis.config import simulation_dir, SEVIRI_cutout, NWCSAF_region
 
 ######################################################################
 # (1) Variable Vectors
@@ -546,6 +545,10 @@ def read_generic_sim_data_flist( flist,
         time = read_time( fname )
         dataset['time'] += [time,]
 
+    if interpolation2msevi:
+        dataset['region'] =   SEVIRI_cutout
+        dataset['nwcsaf_region'] =  NWCSAF_region
+ 
 
     # add georef
     for k in ['lon', 'lat', 'zen', 'azi']:
