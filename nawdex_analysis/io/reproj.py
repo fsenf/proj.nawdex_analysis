@@ -582,7 +582,10 @@ def get_vector2msevi_rparam( vgeo, region = SEVIRI_cutout ):
 ######################################################################
 
 def combined_reprojection( dset, ind, rparam, 
-                           vnames = 'all', apply_mask = True, Nan = 0 ):
+                           vnames = 'all', 
+                           apply_mask = True, 
+                           only_apply_nn = False,
+                           Nan = 0 ):
 
     '''
     Combine nearest neighbor (nn) and box-average interpolation. If a grid box has no value, 
@@ -605,6 +608,9 @@ def combined_reprojection( dset, ind, rparam,
 
     apply_mask : bool, optional, default = True
         switch if masking with domain mask should be applied
+
+    only_apply_nn : bool, optional, default = False
+        switch if only nearest neighbor interpolation is applied
 
     Nan : float
         value inserted for positions with mask == False
@@ -639,14 +645,18 @@ def combined_reprojection( dset, ind, rparam,
         # get field vector
         fvec = dset[vname]
         
-        # do averaging interpolation
-        fave = reproj_field( fvec, rparam )
-
         # get nn result and combine
         fnn = dset_nn[vname]
 
+        # do averaging interpolation
+        if not only_apply_nn:
+            fave = reproj_field( fvec, rparam )
+        else:
+            fave = np.nan * np.ma.ones_like( fnn )
+            fave = np.ma.masked_invalid( fave )
+
+
         # take nn where ave is not defined
-        
         f_inter = np.where( fave.mask, fnn, fave )
         dset_inter[vname] = np.ma.masked_equal( f_inter, Nan )
         
