@@ -80,7 +80,7 @@ def plot_prods(fname, itime, prodname, pics_dir = '../pics'):
     picname = '%s/nawdex-nwcsaf_%s_%s_%s.jpg' % (full_pics_dir, 
                                                  mode,
                                                  prodname,
-                                                 time_obj.strftime('%Y-%m-%d_%H'))
+                                                 time_obj.strftime('%Y-%m-%d_%H%M'))
     print '... save image to %s' % picname
     if not os.path.isdir(full_pics_dir):
         os.makedirs( full_pics_dir )
