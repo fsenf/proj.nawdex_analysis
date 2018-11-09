@@ -256,6 +256,7 @@ def read_synsat_vector( fname, bt_generation_mode = 'mcfarq_rescale_noccthresh' 
 
     # read brightness temperatures
     # =============================
+    print '... read data from ', fname
     dset = hio.read_dict_from_hdf(fname)
     bts = dset[ bt_generation_mode ]
 

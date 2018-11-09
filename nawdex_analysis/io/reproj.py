@@ -650,7 +650,7 @@ def combined_reprojection( dset, ind, rparam,
 
         # do averaging interpolation
         if not only_apply_nn:
-            fave = reproj_field( fvec, rparam )
+            fave = reproj_field( fvec, rparam, operator = np.mean )
         else:
             fave = np.nan * np.ma.ones_like( fnn )
             fave = np.ma.masked_invalid( fave )
