@@ -10,60 +10,20 @@ matplotlib.use('AGG')
 import pylab as pl
 import datetime
 
-import nawdex_analysis.plot.nawdex_map as nawdex_map
 
 import tropy.io_tools.netcdf as ncio
 import tropy.io_tools.hdf as hio
 from tropy.standard_config import *
 
-######################################################################
-######################################################################
+import nawdex_analysis.plot.nawdex_map as nawdex_map
+from nawdex_analysis.io.input_sim import  prepare_data_for_plotting
 
-def prepare_data_for_plotting( fname, itime, prodname):
-
-    '''
-    Prepares data for plotting.
-
-    Parameters
-    ----------
-    fname : str
-        input data file name
-
-    itime : int
-        time index for which data is read
-
-    prodname : str
-        name of the product read
-    
-
-    Returns 
-    --------
-    dset : dict
-        dataset dictionary
-
-    '''
-
-    # read bt variables
-    dset = ncio.read_icon_4d_data(fname, [prodname], itime = itime)
-    
-    # read geo-ref
-    geo = ncio.read_icon_4d_data(fname, ['lon', 'lat'], itime = None)
-    dset.update( geo )
-
-    # also get mask
-    mfile = '%s/icon/nawdex/region_masks_for_msevi_nawdex.h5' % local_data_path
-    dset['mask'] = hio.read_var_from_hdf(mfile, 'full_region')
-    
-    dset['time_obj'] = ncio.read_icon_time(fname, itime = itime)
-    dset['time_str'] =  time_obj.strftime('%Y-%m-%d %H:%M UTC')
-
-    return dset
 
 ######################################################################
 ######################################################################
 
 
-def plot_prods(fname, itime, prodname):
+def plot_prods(fname, itime, prodname, pics_dir = '../pics'):
 
     '''
     Plots a selected NWCSAF product given a netcdf filename.
@@ -79,6 +39,9 @@ def plot_prods(fname, itime, prodname):
 
     prodname : str
         name of the product read
+
+    pics_dir : str, optional, default = '../pics'
+        main directory for images
     
 
     Returns 
@@ -88,34 +51,40 @@ def plot_prods(fname, itime, prodname):
 
     # input data
     dset = prepare_data_for_plotting( fname, itime, prodname)
-
-
+    time_obj = dset['time_obj']
+    time_str = dset['time_str']
+    
     # get subpath from name
     basename = os.path.splitext( os.path.basename( fname ) )[0] 
     dirname = os.path.dirname( fname )
-    subpath = dirname.split('/')[-1]
 
 
     if 'synsat' in basename:
         prefix = 'Synthetic'    
-
+        mode = basename
     else:
         prefix = 'Observed'
- 
+        mode = 'meteosat'
 
     # plots
     pl.figure( figsize = (12, 5) )
     mp = nawdex_map.nawdex_nwcsaf_plot(dset, vname = prodname)
 
     
-    pl.title('%s NWCSAF %s  @  %s' % (subpath, prodname, time_str ))
-
-    picname = '../pics/%s/nawdex-nwcsaf_%s_%s_%s.jpg' % (subpath, 
-                                                  mode,
-                                                  prodname,
-                                                  time_obj.strftime('%Y-%m-%d_%H'))
-    print '... save image to %s' % picname
+    pl.title('%s NWCSAF %s  @  %s' % (mode, prodname, time_str ))
     pl.subplots_adjust(bottom = 0.02, right = 0.85)
+
+
+    # save image
+    full_pics_dir = '%s/%s' % (pics_dir, mode)
+    picname = '%s/nawdex-nwcsaf_%s_%s_%s.jpg' % (full_pics_dir, 
+                                                 mode,
+                                                 prodname,
+                                                 time_obj.strftime('%Y-%m-%d_%H'))
+    print '... save image to %s' % picname
+    if not os.path.isdir(full_pics_dir):
+        os.makedirs( full_pics_dir )
+
     pl.savefig(picname, dpi = 100)
     pl.close()
 
@@ -127,7 +96,7 @@ def plot_prods(fname, itime, prodname):
 ######################################################################
 
 
-def all_plots_for_file( fname ):
+def all_nwcsaf_plots_for_file( fname , pics_dir = '../pics/'):
 
     '''
     Make NWCSAF plots for a file.
@@ -137,6 +106,9 @@ def all_plots_for_file( fname ):
     ----------
     fname : str
         input data file name
+
+    pics_dir : str, optional, default = '../pics'
+        main directory for images
 
 
     Returns
@@ -150,8 +122,8 @@ def all_plots_for_file( fname ):
 
     # time loop
     for itime in range(ntime):
-        plot_prods(fname, itime, 'CMa')
-        plot_prods(fname, itime, 'CT')
+        plot_prods(fname, itime, 'CMa', pics_dir = pics_dir)
+        plot_prods(fname, itime, 'CT', pics_dir = pics_dir)
 
 
     return
@@ -166,5 +138,5 @@ if __name__ == '__main__':
     fname = sys.argv[1]
 
     # prodname = sys.argv[2]
-    all_plots_for_file( fname )
+    all_nwcsaf_plots_for_file( fname )
 

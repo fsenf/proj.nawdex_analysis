@@ -17,7 +17,7 @@ import tropy.analysis_tools.grid_and_interpolation as gi
 
 from nawdex_analysis.io.tools import lonlat2azizen
 import nawdex_analysis.io.reproj
-from nawdex_analysis.config import simulation_dir, SEVIRI_cutout, NWCSAF_region
+from nawdex_analysis.config import simulation_dir, SEVIRI_cutout, NWCSAF_region, nawdex_regions_file
 
 ######################################################################
 # (1) Variable Vectors
@@ -663,6 +663,50 @@ def read_synsat_flist( flist,
 
 
     return btset
+
+######################################################################
+######################################################################
+
+
+def prepare_data_for_plotting( fname, itime, prodname):
+
+    '''
+    Prepares data for plotting.
+
+    Parameters
+    ----------
+    fname : str
+        input data file name
+
+    itime : int
+        time index for which data is read
+
+    prodname : str
+        name of the product read
+    
+
+    Returns 
+    --------
+    dset : dict
+        dataset dictionary
+
+    '''
+
+    # read bt variables
+    dset = ncio.read_icon_4d_data(fname, [prodname], itime = itime)
+    
+    # read geo-ref
+    geo = ncio.read_icon_4d_data(fname, ['lon', 'lat'], itime = None)
+    dset.update( geo )
+
+    # also get mask
+    mfile = nawdex_regions_file
+    dset['mask'] = hio.read_var_from_hdf(mfile, 'full_region')
+    
+    dset['time_obj'] = ncio.read_icon_time(fname, itime = itime)
+    dset['time_str'] =  dset['time_obj'].strftime('%Y-%m-%d %H:%M UTC')
+
+    return dset
 
 ######################################################################
 ######################################################################
