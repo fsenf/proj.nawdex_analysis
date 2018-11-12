@@ -41,7 +41,7 @@ def read_mask( region = 'full_region'):
 
     # also get mask
     mfile = nawdex_regions_file
-    dset['mask'] = hio.read_var_from_hdf(mfile, 'full_region')
+    dset = {'mask' : hio.read_var_from_hdf(mfile, 'full_region') }
     
     return dset
 
