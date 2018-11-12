@@ -77,7 +77,7 @@ def read_data_field( fname, itime, varname ):
     xset = xr.open_dataset(fname)
     
     var = np.ma.masked_invalid( xset.isel(time = itime)[varname].data )
-    dset = dict( varname = var )
+    dset = { varname : var }
     
     # read geo-ref
     geo = ncio.read_icon_4d_data(fname, ['lon', 'lat'], itime = None)
