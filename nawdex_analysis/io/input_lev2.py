@@ -48,18 +48,18 @@ def read_mask( region = 'full_region'):
 ######################################################################
 ######################################################################
 
-def read_data_field( fname, itime, varname ):
+def read_data_field( fname, time, varname ):
 
     '''
-    Prepares data for plotting.
+    Reads "level2" data for analysis and plotting.
 
     Parameters
     ----------
     fname : str
         input data file name
 
-    itime : int
-        time index for which data is read
+    time : int or datetime object
+        time index OR datetime object for which data is read
 
     varname : str
         name of the product read
@@ -76,7 +76,14 @@ def read_data_field( fname, itime, varname ):
     # dset = ncio.read_icon_4d_data(fname, [varname], itime = itime)
     xset = xr.open_dataset(fname)
     
-    var = np.ma.masked_invalid( xset.isel(time = itime)[varname].data )
+    if type( time ) == type( 10 ):
+        itime = time
+        var = np.ma.masked_invalid( xset.isel(time = itime)[varname].data )
+        
+    elif type ( time ) == datetime.datetime :
+        tfloat = convert_time( time ) 
+        var = np.ma.masked_invalid( xset.sel(time = tfloat)[varname].data )
+
     dset = { varname : var }
     
     # read geo-ref
