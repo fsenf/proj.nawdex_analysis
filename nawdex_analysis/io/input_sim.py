@@ -364,6 +364,16 @@ def read_icon_rad_vector( fname, map_varnames = True, use_clear = False ):
     -------
     radset : dict of numpy arrays
         set of synsat and georef vectors
+
+
+    Notes
+    -----
+    The following sign convention is used (similar to observations): 
+     * upwelling flux is positive
+     * downwelling flux is negative
+    
+    This means that a radiative flux leading to a loss of energy is 
+    positive!
     '''
 
 
@@ -379,15 +389,16 @@ def read_icon_rad_vector( fname, map_varnames = True, use_clear = False ):
     radset = {}
     if map_varnames:
 
+        # signs convention
         if not use_clear:
             swf_up   = input_set['sou_t']
             swf_down = input_set['sod_t']
         
             radset['swf_net'] = swf_up  -  swf_down
-            radset['lwf'] = input_set['thb_t']
+            radset['lwf'] = - input_set['thb_t']
         else:
-            radset['swf_net'] = input_set['swtoaclr']
-            radset['lwf']     = input_set['lwtoaclr']
+            radset['swf_net'] = - input_set['swtoaclr']
+            radset['lwf']     = - input_set['lwtoaclr']
 
         radset['lon'] = input_set['lon']
         radset['lat'] = input_set['lat']
