@@ -7,6 +7,7 @@ import xarray as xr
 
 
 from nawdex_analysis.config import nawdex_dir
+from nawdex_analysis.io.tools import convert_time
 
 
 '''
