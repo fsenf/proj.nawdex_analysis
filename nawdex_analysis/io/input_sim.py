@@ -365,6 +365,16 @@ def read_icon_rad_vector( fname, map_varnames = True, use_clear = False ):
     -------
     radset : dict of numpy arrays
         set of synsat and georef vectors
+
+
+    Notes
+    -----
+    The following sign convention is used (similar to observations): 
+     * upwelling flux is positive
+     * downwelling flux is negative
+    
+    This means that a radiative flux leading to a loss of energy is 
+    positive!
     '''
 
 
@@ -380,15 +390,16 @@ def read_icon_rad_vector( fname, map_varnames = True, use_clear = False ):
     radset = {}
     if map_varnames:
 
+        # signs convention
         if not use_clear:
             swf_up   = input_set['sou_t']
             swf_down = input_set['sod_t']
         
             radset['swf_net'] = swf_up  -  swf_down
-            radset['lwf'] = input_set['thb_t']
+            radset['lwf'] = - input_set['thb_t']
         else:
-            radset['swf_net'] = input_set['swtoaclr']
-            radset['lwf']     = input_set['lwtoaclr']
+            radset['swf_net'] = - input_set['swtoaclr']
+            radset['lwf']     = - input_set['lwtoaclr']
 
         radset['lon'] = input_set['lon']
         radset['lat'] = input_set['lat']
@@ -668,46 +679,3 @@ def read_synsat_flist( flist,
 ######################################################################
 ######################################################################
 
-
-def prepare_data_for_plotting( fname, itime, prodname):
-
-    '''
-    Prepares data for plotting.
-
-    Parameters
-    ----------
-    fname : str
-        input data file name
-
-    itime : int
-        time index for which data is read
-
-    prodname : str
-        name of the product read
-    
-
-    Returns 
-    --------
-    dset : dict
-        dataset dictionary
-
-    '''
-
-    # read bt variables
-    dset = ncio.read_icon_4d_data(fname, [prodname], itime = itime)
-    
-    # read geo-ref
-    geo = ncio.read_icon_4d_data(fname, ['lon', 'lat'], itime = None)
-    dset.update( geo )
-
-    # also get mask
-    mfile = nawdex_regions_file
-    dset['mask'] = hio.read_var_from_hdf(mfile, 'full_region')
-    
-    dset['time_obj'] = ncio.read_icon_time(fname, itime = itime)
-    dset['time_str'] =  dset['time_obj'].strftime('%Y-%m-%d %H:%M UTC')
-
-    return dset
-
-######################################################################
-######################################################################

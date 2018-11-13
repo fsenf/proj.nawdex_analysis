@@ -34,18 +34,17 @@ def nawdex_bt_plot(dset, region = 'zenith75', vname = 'bt108'):
     
     # map geo-ref 
     x, y = mp(dset['lon'], dset['lat'])
-    zen = dset['zen']
-
-    btm = np.ma.masked_where( (zen > 75) | (np.isnan(zen)), dset[vname] )
+    m  = dset['mask']
+    vm = np.ma.masked_where( ~m, dset[vname] )
 
     if vname == 'bt062':
-        mp.pcolormesh(x, y, btm, 
+        mp.pcolormesh(x, y, vm, 
                             cmap = enhanced_wv62_cmap(vmax = 260, vmed2 = 235, vmed1 = 225, vmin = 210),
                             vmin = 210,
                             vmax = 260)
            
     elif vname == 'bt108':
-        mp.pcolormesh(x, y, btm, 
+        mp.pcolormesh(x, y, vm, 
                             cmap = enhanced_colormap(),
                             vmin = 200,
                             vmax = 300)
@@ -58,6 +57,37 @@ def nawdex_bt_plot(dset, region = 'zenith75', vname = 'bt108'):
 
 ######################################################################
 ######################################################################
+
+
+def nawdex_rad_plot(dset, region = 'zenith75', vname = 'lwf', is_clear = True):
+        
+
+    mp = nawdex_map( region = region, color = 'gold' )
+    
+    # map geo-ref 
+    x, y = mp(dset['lon'], dset['lat'])
+    m  = dset['mask']
+
+    vm = np.ma.masked_where( ~m, dset[vname] )
+
+    if vname == 'lwf':
+        mp.pcolormesh(x, y, vm, 
+                            cmap = pl.cm.jet, 
+                            vmin = 150, vmax = 350 )           
+    elif vname == 'swf_net':
+        mp.pcolormesh(x, y, vm, 
+                            cmap = pl.cm.jet, 
+                            vmin = -50, vmax = -900 )           
+
+
+    mp.colorbar()
+
+    return mp
+
+
+######################################################################
+######################################################################
+
 
 
 

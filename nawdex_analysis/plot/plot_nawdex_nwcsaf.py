@@ -3,7 +3,7 @@
 import os, sys
 import numpy as np
 import matplotlib
-matplotlib.use('AGG')
+# matplotlib.use('AGG')
 
 
 
@@ -16,7 +16,7 @@ import tropy.io_tools.hdf as hio
 from tropy.standard_config import *
 
 import nawdex_analysis.plot.nawdex_map as nawdex_map
-from nawdex_analysis.io.input_sim import  prepare_data_for_plotting
+from nawdex_analysis.io.input_lev2 import  read_data_field
 
 
 ######################################################################
@@ -50,7 +50,7 @@ def plot_prods(fname, itime, prodname, pics_dir = '../pics'):
     '''
 
     # input data
-    dset = prepare_data_for_plotting( fname, itime, prodname)
+    dset = read_data_field( fname, itime, prodname)
     time_obj = dset['time_obj']
     time_str = dset['time_str']
     
