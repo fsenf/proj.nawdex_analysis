@@ -135,6 +135,7 @@ def check_varname_and_time_in_nc( fname, varname, time ):
 
 
 def make_filetime_index( varname, tobject, 
+                         filepart = '',
                          subdirs = ['meteosat', 'synsat', 'sim-toarad', 'gerb-like']):
     
     '''
@@ -149,6 +150,10 @@ def make_filetime_index( varname, tobject,
     
     tobject : datetime object
         selected time slot
+
+    filepart : str
+        a part of the filename given as substring to select
+        only a subset of files
 
     subdirs : list of str, optional,  default = ['meteosat', 'synsat', 'sim-toarad', 'gerb-like']
         list of subdirectories where file search is done
@@ -165,7 +170,7 @@ def make_filetime_index( varname, tobject,
     flist = []
 
     for sdir in subdirs:
-        flist += glob.glob('%s/%s/*nc' % (nawdex_dir, sdir))
+        flist += glob.glob('%s/%s/*%s*.nc' % (nawdex_dir, sdir, filepart))
     
     
     # over over files and generate index
