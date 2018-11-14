@@ -85,7 +85,7 @@ def check_if_nc_has_time( fname, time ):
     tfloat = convert_time( time )
 
     # check file content
-    f = xr.open_dataset(fname, autoclose = True)
+    f = xr.open_dataset(fname )#, autoclose = True)
     decision = np.any( tfloat == f.time.data )
     f.close()
 
@@ -171,7 +171,6 @@ def make_filetime_index( varname, tobject,
 
     for sdir in subdirs:
         flist += glob.glob('%s/%s/*%s*.nc' % (nawdex_dir, sdir, filepart))
-    
     
     # over over files and generate index
     index = {}
