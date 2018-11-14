@@ -77,14 +77,18 @@ def read_data_field( fname, time, varname ):
     # dset = ncio.read_icon_4d_data(fname, [varname], itime = itime)
     xset = xr.open_dataset(fname)
     
+    # time is given as index
     if type( time ) == type( 10 ):
         itime = time
         var = np.ma.masked_invalid( xset.isel(time = itime)[varname].data )
+        time_obj = ncio.read_icon_time(fname, itime = itime)
         
+    # time is given as datetime object
     elif type ( time ) == datetime.datetime :
         tfloat = convert_time( time ) 
         var = np.ma.masked_invalid( xset.sel(time = tfloat)[varname].data )
-
+        time_obj = time
+        
     dset = { varname : var }
     
     # read geo-ref
@@ -94,7 +98,7 @@ def read_data_field( fname, time, varname ):
     # also get mask
     dset.update( read_mask( region = 'full_region' ) )
     
-    dset['time_obj'] = ncio.read_icon_time(fname, itime = itime)
+    dset['time_obj'] = time_obj
     dset['time_str'] =  dset['time_obj'].strftime('%Y-%m-%d %H:%M UTC')
 
     return dset
