@@ -14,6 +14,7 @@ import tropy.io_tools.netcdf as ncio
 import tropy.analysis_tools.grid_and_interpolation as gi
 
 from nawdex_analysis.config import nawdex_regions_file
+from nawdex_analysis.io.tools import convert_time
 
 ######################################################################
 # (1) Regridded Data for Further Analysis
