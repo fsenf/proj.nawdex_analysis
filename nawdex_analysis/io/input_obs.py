@@ -216,9 +216,10 @@ def read_radiation_fluxes(t,
 ######################################################################
 ######################################################################
 
-def read_incoming_solar_flux(t, 
-                          fdir = '/vols/talos/home/fabian/data/gerb-like/',
-                          do_cutout = True):
+def read_solar_flux(t, 
+                    fluxtype = 'incoming', 
+                    fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                    do_cutout = True):
     
     '''
     Reads and scales incoming solar radiation flux data based on GERB-like SEVIRI retrievals.
@@ -228,6 +229,9 @@ def read_incoming_solar_flux(t,
     ----------
     t : datetime object
         a time slot
+
+    fluxtype : str, optional, default = 'incoming',
+        specify the type of solar flux ('incoming' or 'downwelling' vs. 'upwelling')       
         
     fdir : str, optional, default =  '/vols/talos/home/fabian/data/gerb-like/'
         file directory name
@@ -238,8 +242,8 @@ def read_incoming_solar_flux(t,
         
     Returns
     -------
-    swf_down : numpy array, 2dim
-        downwelling short-wave radiation flux
+    swf : numpy array, 2dim
+        up- or downwelling short-wave radiation flux
     '''
     
     # get time string
@@ -248,16 +252,19 @@ def read_incoming_solar_flux(t,
     # input data from hdf files
     fname = '%s/GL_SEV3_L20_HR_SOL_TH_%s00_ED01.hdf' % (fdir, time_string)
 
+    if fluxtype in ['incoming', 'downwelling']:
+        sfflux = hio.read_var_from_hdf(fname, 'Incoming Solar Flux', subpath='Angles').astype(np.int16)
+    elif fluxtype == 'upwelling':
+        sfflux = hio.read_var_from_hdf(fname, 'Solar Flux', subpath='Radiometry').astype(np.int16)
 
-    sfflux_down = hio.read_var_from_hdf(fname, 'Incoming Solar Flux', subpath='Angles').astype(np.int16)
     
     # do the scaling
-    swf_down = scale_radiation( sfflux_down )
+    swf = scale_radiation( sfflux )
 
     if do_cutout:
-        return gi.cutout_fields(swf_down, SEVIRI_cutout)
+        return gi.cutout_fields(swf, SEVIRI_cutout)
     else:
-        return swf_down
+        return swf
 
 ######################################################################
 ######################################################################
