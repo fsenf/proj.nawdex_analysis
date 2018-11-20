@@ -216,6 +216,98 @@ def read_radiation_fluxes(t,
 ######################################################################
 ######################################################################
 
+def read_incoming_solar_flux(t, 
+                          fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                          do_cutout = True):
+    
+    '''
+    Reads and scales incoming solar radiation flux data based on GERB-like SEVIRI retrievals.
+    
+    
+    Parameters
+    ----------
+    t : datetime object
+        a time slot
+        
+    fdir : str, optional, default =  '/vols/talos/home/fabian/data/gerb-like/'
+        file directory name
+
+    do_cutout : bool, optional, default = True
+        if SEVIRI cutout is applied
+        
+        
+    Returns
+    -------
+    swf_down : numpy array, 2dim
+        downwelling short-wave radiation flux
+    '''
+    
+    # get time string
+    time_string = t.strftime('%Y%m%d_%H%M')
+    
+    # input data from hdf files
+    fname = '%s/GL_SEV3_L20_HR_SOL_TH_%s00_ED01.hdf' % (fdir, time_string)
+
+
+    sfflux_down = hio.read_var_from_hdf(fname, 'Incoming Solar Flux', subpath='Angles').astype(np.int16)
+    
+    # do the scaling
+    swf_down = scale_radiation( sfflux_down )
+
+    if do_cutout:
+        return gi.cutout_fields(swf_down, SEVIRI_cutout)
+    else:
+        return swf_down
+
+######################################################################
+######################################################################
+
+def read_cc_from_fluxdata(t, 
+                          fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                          do_cutout = True):
+    
+    '''
+    Reads and scales cloud cover based on GERB-like SEVIRI retrievals.
+    
+    
+    Parameters
+    ----------
+    t : datetime object
+        a time slot
+        
+    fdir : str, optional, default =  '/vols/talos/home/fabian/data/gerb-like/'
+        file directory name
+
+    do_cutout : bool, optional, default = True
+        if SEVIRI cutout is applied
+        
+        
+    Returns
+    -------
+    cc_scaled : numpy array, 2dim
+        cloud cover field
+    '''
+    
+    # get time string
+    time_string = t.strftime('%Y%m%d_%H%M')
+    
+    # input data from hdf files
+    fname = '%s/GL_SEV3_L20_HR_SOL_TH_%s00_ED01.hdf' % (fdir, time_string)
+
+
+    cc = hio.read_var_from_hdf(fname, 'Cloud Cover', subpath='Scene Identification').astype(np.int16)
+    
+    # do the scaling
+    cc_scaled = scale_radiation( cc, factor = 0.01 )
+
+    if do_cutout:
+        return gi.cutout_fields(cc_scaled, SEVIRI_cutout)
+    else:
+        return cc_scaled
+
+
+######################################################################
+######################################################################
 
 def read_radiation_flux_tstack(date, 
                                fdir = '/vols/talos/home/fabian/data/gerb-like/',
