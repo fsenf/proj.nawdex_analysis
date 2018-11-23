@@ -27,7 +27,7 @@ def nawdex_map( region = 'zenith75' , color = 'black'):
 ######################################################################
 ######################################################################
 
-def nawdex_bt_plot(dset, region = 'zenith75', vname = 'bt108'):
+def nawdex_bt_plot(dset, region = 'zenith75', vname = 'bt108', plot_colorbar = True):
         
 
     mp = nawdex_map( region = region, color = 'gold' )
@@ -49,8 +49,8 @@ def nawdex_bt_plot(dset, region = 'zenith75', vname = 'bt108'):
                             vmin = 200,
                             vmax = 300)
 
-
-    mp.colorbar()
+    if plot_colorbar:
+        mp.colorbar()
 
     return mp
 
@@ -92,7 +92,7 @@ def nawdex_rad_plot(dset, region = 'zenith75', vname = 'lwf', is_clear = True):
 
 
 
-def nawdex_nwcsaf_plot(dset, vname = 'CMa'):
+def nawdex_nwcsaf_plot(dset, vname = 'CMa', plot_colorbar = True):
         
         
 
@@ -107,10 +107,8 @@ def nawdex_nwcsaf_plot(dset, vname = 'CMa'):
     cmap = pl.cm.get_cmap('bone', 4)
 
     if vname == 'CMa':
-        mp.pcolormesh(x, y, vm, cmap = cmap, vmin = 1, vmax = 5)
+        pcm = mp.pcolormesh(x, y, vm, cmap = cmap, vmin = 1, vmax = 5)
 
-        cbar = mp.colorbar( ticks = [1.5, 2.5, 3.5, 4.5])
-        cbar.ax.set_yticklabels( ['clear','partly cloudy','cloudy','outside'])
 
     if vname == 'CT':
         
@@ -121,16 +119,11 @@ def nawdex_nwcsaf_plot(dset, vname = 'CMa'):
                                                  '#e6e6e6', '#e6e6e6', '#0050d7', '#00b4e6',
                                                  '#00f0f0', '#5ac8a0', '#c800c8'])
 
-        cax = mp.pcolormesh(x,y, vm, cmap = cmap, vmin = 1, vmax = 20)
+        pcm = mp.pcolormesh(x,y, vm, cmap = cmap, vmin = 1, vmax = 20)
 
-        cbar = mp.colorbar(cax,  ticks=[ 1.5, 2.5, 3.5, 4.5, 6, 8, 10,12,14,
-                                         15.5, 16.5, 17.5, 18.5, 19.5]) 
 
-        cbar.ax.set_yticklabels(['land', 'sea', 'snow', 'sea ice', 
-                                 'very low', 'low', 'middle', 'high opaque', 
-                                 'very high opaque', 'semi. thin', 'semi. meanly thick', 
-                                 'semi. thick', 'semi. above', 'fractional'
-                             ])
+    if plot_colorbar:
+        nwcsaf_product_colorbar( pcm, vname = vname )
 
     return mp
 
@@ -139,4 +132,20 @@ def nawdex_nwcsaf_plot(dset, vname = 'CMa'):
 ######################################################################
 
 
+def nwcsaf_product_colorbar( pcm, vname = 'CMa' ):
 
+
+
+    if vname == 'CMa':
+        cbar = mp.colorbar( pcm, ticks = [1.5, 2.5, 3.5, 4.5])
+        cbar.ax.set_yticklabels( ['clear','partly cloudy','cloudy','outside'])
+
+    elif vanme = 'CT':
+        cbar = mp.colorbar( pcm,  ticks=[ 1.5, 2.5, 3.5, 4.5, 6, 8, 10,12,14,
+                                         15.5, 16.5, 17.5, 18.5, 19.5]) 
+
+        cbar.ax.set_yticklabels(['land', 'sea', 'snow', 'sea ice', 
+                                 'very low', 'low', 'middle', 'high opaque', 
+                                 'very high opaque', 'semi. thin', 'semi. meanly thick', 
+                                 'semi. thick', 'semi. above', 'fractional'
+                             ])
