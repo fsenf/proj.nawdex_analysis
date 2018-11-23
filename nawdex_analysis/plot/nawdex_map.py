@@ -140,7 +140,7 @@ def nwcsaf_product_colorbar( pcm, vname = 'CMa' ):
         cbar = mp.colorbar( pcm, ticks = [1.5, 2.5, 3.5, 4.5])
         cbar.ax.set_yticklabels( ['clear','partly cloudy','cloudy','outside'])
 
-    elif vanme = 'CT':
+    elif vname == 'CT':
         cbar = mp.colorbar( pcm,  ticks=[ 1.5, 2.5, 3.5, 4.5, 6, 8, 10,12,14,
                                          15.5, 16.5, 17.5, 18.5, 19.5]) 
 
