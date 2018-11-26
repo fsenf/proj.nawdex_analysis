@@ -112,11 +112,11 @@ def nawdex_rad_plot(dset, region = 'zenith75', vname = 'lwf', is_clear = True):
 
 
 
-def nawdex_nwcsaf_plot(dset, vname = 'CMa', plot_colorbar = True):
+def nawdex_nwcsaf_plot(dset, vname = 'CMa',region = 'zenith75', plot_colorbar = True):
         
         
 
-    mp = nawdex_map( region = 'zenith75', color = 'gold' )
+    mp = nawdex_map( region = region, color = 'gold' )
     
     # map geo-ref 
     x, y = mp(dset['lon'], dset['lat'])
