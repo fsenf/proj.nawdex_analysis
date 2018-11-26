@@ -152,7 +152,7 @@ def nawdex_nwcsaf_plot(dset, vname = 'CMa',region = 'zenith75', plot_colorbar = 
 ######################################################################
 
 
-def nwcsaf_product_colorbar( pcm, vname = 'CMa', **kwargs ):
+def nwcsaf_product_colorbar( pcm, vname = 'CMa', mp = pl, **kwargs ):
 
 
 
