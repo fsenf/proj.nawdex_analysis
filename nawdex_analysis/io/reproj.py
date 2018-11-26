@@ -355,6 +355,61 @@ def get_vector2msevi_index( vgeo ):
 
     return ind[1] # go back to vector representation
 
+######################################################################
+######################################################################
+
+def get_msevi2vector_index( vgeo, region = SEVIRI_cutout ):
+
+    '''
+    Calculates nearest neighbor index for the conversion between 
+    MSevi grid and ICON output vectors. 
+
+    Inverse transformation of `get_vector2msevi_index`.
+
+
+    Parameters
+    ----------
+    vgeo : dict of numpy arrays
+        set of fields containing vector geo-reference
+      
+
+    Returns
+    --------
+    ind : numpy array
+        index for nn interpolation
+    '''
+
+
+    # get region properties
+    # ======================
+    (ir1, ir2), (ic1, ic2 ) = region
+    
+    nrows = ir2 - ir1
+    ncols = ic2 - ic1
+    
+
+    # prepare input fields ...........................................
+    
+    # reshape because gi - tools expects 2dim fields
+    vlon = vgeo['lon']
+    vlat = vgeo['lat']
+
+    
+    # use projection to retrieve index set
+    xsim, ysim = msevi_ll2xy(vlon, vlat, lon0 = 0)
+    
+    irow_full, icol_full = msevi_xy2ij( xsim, ysim )
+    
+    # apply offset
+    irow = (np.round(irow_full) - ir1).astype(np.int)
+    icol=  (np.round(icol_full) - ic1).astype(np.int)
+    
+    #and clip index range
+    irow = np.clip(irow, 0, nrows - 1)
+    icol = np.clip(icol, 0, ncols - 1)
+       
+    return irow, icol
+
 
 ######################################################################
 ######################################################################
