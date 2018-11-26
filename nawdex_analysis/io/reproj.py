@@ -26,9 +26,9 @@ from nawdex_analysis.io.tools import  lonlat2azizen
 def set_msevi_proj(lon0 = 0):
         
         ''' 
-        Returns line/column numbers in geostationary satellite
-        projection
-        
+        Geostationary projection object for Meteosat.
+
+
         Parameters
         ----------
         lon : numpy array
@@ -36,7 +36,10 @@ def set_msevi_proj(lon0 = 0):
         
         lat : numpy array
             latitude
-            
+
+        lon0 : float, optional, default = 0
+            sub-satellite longitude
+
         
         Returns
         -------
@@ -63,12 +66,13 @@ def set_msevi_proj(lon0 = 0):
 ######################################################################
 
 
-def msevi_ll2xy(lon, lat, hres = False, lon0 = 0):
+def msevi_ll2xy(lon, lat, lon0 = 0):
         
         ''' 
         Returns line/column numbers in geostationary satellite
-        projection
+        projection.
         
+
         Parameters
         ----------
         lon : numpy array
@@ -76,7 +80,11 @@ def msevi_ll2xy(lon, lat, hres = False, lon0 = 0):
         
         lat : numpy array
             latitude
-            
+
+        lon0 : float, optional, default = 0
+            sub-satellite longitude
+
+        
         
         Returns
         -------
@@ -127,6 +135,9 @@ def msevi_xy2ij(x, y, hres = False):
         y : numpy array
             y-coordinate in SEVIRI projection
 
+        hres : bool, optional, default = False
+            switch if resolution coordinates have been input
+
 
         Returns
         -------
@@ -169,6 +180,9 @@ def msevi_ij2xy(irow, icol, hres = False):
         
         icol : numpy array
             column index in SEVIRI projection
+
+        hres : bool, optional, default = False
+            switch if resolution coordinates have been input
 
 
         Returns
@@ -214,6 +228,12 @@ def msevi_ij2ll(irow, icol, lon0 = 0, hres = False):
         
         icol : numpy array
             column index in SEVIRI projection
+
+        lon0 : float, optional, default = 0
+            sub-satellite longitude
+
+        hres : bool, optional, default = False
+            switch if resolution coordiante have been input
 
 
         Returns
@@ -557,6 +577,9 @@ def get_vector2msevi_rparam( vgeo, region = SEVIRI_cutout ):
     vgeo : dict of numpy arrays
         set of fields containing vector geo-reference
       
+    region : tuble of int, optional, default = SEVIRI_cutout
+        cutout region defintion as ((ir1, ir2), (ic1, ic2))
+
 
     Returns
     --------
