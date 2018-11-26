@@ -14,10 +14,30 @@ from tropy.plotting_tools.colormaps import enhanced_colormap, enhanced_wv62_cmap
 
 def nawdex_map( region = 'zenith75' , color = 'black'):
     
+    '''
+    Draws a map in cylindric projection.
+
+    
+    Parameters
+    ----------
+    region : str, optional, default = 'zenith75'
+         region selection
+
+         possible arguments:
+         'max-extent' : full NAWDEX simulations region
+         'zenith75' : cutout of the NAWDEX region where zenith_angle < 75 degree fits in
+         'atlantic' : cutout of the North Atlantic
+
+    color : str, optional, default = 'black'
+         color of the coastlines and country borders
+    '''
+
     if region == 'max-extent':
         m = Basemap(projection = 'cyl',llcrnrlat = 23, urcrnrlat = 81, llcrnrlon = -79, urcrnrlon = 41,resolution='i')
     elif region == 'zenith75':
         m = Basemap(projection = 'cyl',llcrnrlat = 23,urcrnrlat = 66.5, llcrnrlon = -65, urcrnrlon = 40,resolution='i')
+    elif region == 'atlantic':
+        m = Basemap(projection = 'cyl',llcrnrlat = 23, urcrnrlat = 66.5, llcrnrlon = -65, urcrnrlon = 10, resolution='i')
     
     m.drawcoastlines(color = color)
     m.drawcountries(color = color)
@@ -132,17 +152,19 @@ def nawdex_nwcsaf_plot(dset, vname = 'CMa', plot_colorbar = True):
 ######################################################################
 
 
-def nwcsaf_product_colorbar( pcm, vname = 'CMa' ):
+def nwcsaf_product_colorbar( pcm, vname = 'CMa', **kwargs ):
 
 
 
     if vname == 'CMa':
-        cbar = mp.colorbar( pcm, ticks = [1.5, 2.5, 3.5, 4.5])
+        cbar = mp.colorbar( pcm, ticks = [1.5, 2.5, 3.5, 4.5], 
+                            **kwargs)
         cbar.ax.set_yticklabels( ['clear','partly cloudy','cloudy','outside'])
 
     elif vname == 'CT':
         cbar = mp.colorbar( pcm,  ticks=[ 1.5, 2.5, 3.5, 4.5, 6, 8, 10,12,14,
-                                         15.5, 16.5, 17.5, 18.5, 19.5]) 
+                                          15.5, 16.5, 17.5, 18.5, 19.5], 
+                            **kwargs) 
 
         cbar.ax.set_yticklabels(['land', 'sea', 'snow', 'sea ice', 
                                  'very low', 'low', 'middle', 'high opaque', 
