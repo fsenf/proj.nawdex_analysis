@@ -4,7 +4,7 @@
 Tools for input of simulated data.
 '''
 
-import os, sys, copy
+import os, sys, copy, glob
 import numpy as np
 import scipy.ndimage
 import datetime
