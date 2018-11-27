@@ -19,7 +19,7 @@ try:
 except:
     pass
 
-from nawdex_analysis.config import SEVIRI_cutout, NWCSAF_region, 
+from nawdex_analysis.config import SEVIRI_cutout, NWCSAF_region
 from nawdex_analysis.config import meteosat_georef_file, gerb_like_dir
 
 from nawdex_analysis.io.tools import lonlat2azizen
