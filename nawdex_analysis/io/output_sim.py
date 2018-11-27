@@ -379,3 +379,114 @@ def save_rad2nc( outname, dset, fill_val = 0, use_clear = False ):
 
 ######################################################################
 ######################################################################
+
+
+
+def save_retrieved_clearsky_swf2nc( outname, dset, fill_val = 0 ):
+
+    '''
+    Saves retrieved clearsky radiation fluxes to netcdf.
+
+
+    Parameters
+    ----------
+    dset : dict of numpy arrays
+        TOA radiation flux dataset to be saved into netcdf
+        dataset incl. lon, lat, time, and lwf, swf_net
+
+    outname : str
+        output filename
+
+    fill_val : float or int, optional, default = 0
+        fill value to be replace by NaNs
+
+
+    Returns
+    --------
+    None
+    '''
+
+    # Replacing NaN with FillValue
+    rad = {}
+
+    for vname in dset.keys():
+        if  vname in ['swf_net']:
+        
+            # interpolation
+            v = dset[vname]
+        
+            # masking
+            rad[vname] = np.where(v.mask, fill_val, v) 
+
+
+    # ### Time Variables
+    tvec = []
+    for t in dset['time']:
+        time = convert_time( t )
+        tvec.append( time )
+    tvec = np.array( tvec )
+
+    # ### Lon-Lat Variables as Columns
+    lon = dset['lon']
+    lat = dset['lat']
+
+
+    # ### Dataset Attributes
+
+    # Global attributes for the data set
+    att_glob = {'author': 'Fabian Senf (senf@tropos.de)', 
+                'institution': 'Leibniz Institute for Tropospheric Research',
+                'title': 'TOA clearsky Radiation Fluxes',
+                'scae_factor': dset['scale_factor'], 
+                'description': 'instantaneous clearsky TOA radiation fluxes: The upwelling radiation has been taken from ICON simulation, the downwelling part is taken from GERB-like data to account for a delay in MSG SEVIRI scan time. A constant scale factor to the simulated upwelling SWF to reduce the bias between obs and sim.' % clear_attrib}
+
+
+    # Attributes for the single variables
+    att_time = {'units': 'day as %Y%m%d.%f',
+                'long_name': 'Time',
+                'calendar': 'proleptic_gregorian'}
+
+    att_lon = dict( long_name = "longitude" , units = "degrees_east"  )
+    att_lat = dict( long_name = "latitude" , units = "degrees_north" ) 
+
+           
+    att_rad = dict( units = 'W m**(-2)')
+
+
+
+    outset = {}
+    encoding = {}
+
+
+    # SHORT-WAVE ------------------------------------------------------
+    vname = 'swf_net'
+    long_name = 'TOA clearsky short-wave net radiation flux' 
+    
+    atts = copy.copy( att_rad ) 
+    atts['long_name'] = copy.copy( long_name )
+    outset[vname] = (['time', 'rows', 'cols'], rad[vname], atts)
+    encoding[vname] = {'zlib': True, 
+                       '_FillValue': fill_val,
+                       'dtype': 'int16', 
+                       'scale_factor': 0.25}
+
+
+
+   # Create the data set
+    ds_out = xr.Dataset(outset,
+                        coords = {'time': ('time', tvec, att_time),
+                                  'lon': (['rows', 'cols'], lon, att_lon),
+                                  'lat': (['rows', 'cols'], lat, att_lat), 
+                                  },
+                        attrs = att_glob)
+
+
+
+
+    print '... write output to', outname
+    ds_out.to_netcdf(outname, encoding = encoding)
+
+    return 
+
+######################################################################
+######################################################################

@@ -679,3 +679,60 @@ def read_synsat_flist( flist,
 ######################################################################
 ######################################################################
 
+
+def read_simulated_clearsky_flux(itime, expname, ind = None, do_regrid = True):
+    
+    '''
+    Reads simulated solar clearsky fluxes.
+
+
+    Paramaters
+    ----------
+    itime : int
+        time index in the input file
+
+    expname : str
+        name of the simulation experiment, e.g. expname = 'nawdexnwp-20km-mis-0001'
+
+    ind : numpy array, 2dim, optional, default = None
+        interpolation index, when do_regrid option is used
+
+    do_regrid : bool, optional, default = True
+        if regridding onto MSG grid should be done
+
+
+    Returns
+    --------
+    time : datetime object
+        time of the input field
+
+    swf_sim : dict of numpy arrays
+        dataset containing clearsky fluxes and georef
+    '''
+    
+    # get filename
+    fdir = '%s/%s' % (simulation_dir, expname)
+    fname = glob.glob('%s/%s*2drad_30min*%s.nc' % (fdir, expname, str(2*itime).zfill(4)))[0]
+    
+    
+    # read simulation fields
+    swf_sim = read_iconvar_vector(fname, ['sod_t', 'swtoaclr'])
+    time    = read_time(fname)
+
+    swf_sim['swf_up'] = swf_sim['sod_t'] - swf_sim['swtoaclr']
+    
+    # nearest neighbor regridding
+    if do_regrid and ind is not None:
+        swf_sim_regrid = nawdex_analysis.io.reproj.nn_reproj_with_index(swf_sim, ind, 
+                                                                    vnames=['swf_up', 'sod_t', 'swtoaclr'], 
+                                                                    apply_mask=True, 
+                                                                    Nan=0)
+    #swf_sim_regrid['albedo_sim'] = np.ma.masked_invalid( swf_sim_regrid['albedo_sim'] )
+
+        return time, swf_sim_regrid
+    else:
+        return time, swf_sim
+
+
+######################################################################
+######################################################################
