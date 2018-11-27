@@ -19,7 +19,9 @@ try:
 except:
     pass
 
-from nawdex_analysis.config import SEVIRI_cutout, NWCSAF_region, meteosat_georef_file
+from nawdex_analysis.config import SEVIRI_cutout, NWCSAF_region, 
+from nawdex_analysis.config import meteosat_georef_file, gerb_like_dir
+
 from nawdex_analysis.io.tools import lonlat2azizen
 
 ######################################################################
@@ -163,7 +165,7 @@ def scale_radiation( rad_flux, factor = 0.25, Nan = -32767, n_repeat = 3):
 
 
 def read_radiation_fluxes(t, 
-                          fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                          fdir = gerb_like_dir,
                           do_cutout = True):
     
     '''
@@ -175,7 +177,7 @@ def read_radiation_fluxes(t,
     t : datetime object
         a time slot
         
-    fdir : str, optional, default =  '/vols/talos/home/fabian/data/gerb-like/'
+    fdir : str, optional, default =  gerb_like_dir
         file directory name
 
     do_cutout : bool, optional, default = True
@@ -218,7 +220,7 @@ def read_radiation_fluxes(t,
 
 def read_solar_flux(t, 
                     fluxtype = 'incoming', 
-                    fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                    fdir = gerb_like_dir,
                     do_cutout = True):
     
     '''
@@ -233,7 +235,7 @@ def read_solar_flux(t,
     fluxtype : str, optional, default = 'incoming',
         specify the type of solar flux ('incoming' or 'downwelling' vs. 'upwelling')       
         
-    fdir : str, optional, default =  '/vols/talos/home/fabian/data/gerb-like/'
+    fdir : str, optional, default =  gerb_like_dir
         file directory name
 
     do_cutout : bool, optional, default = True
@@ -270,7 +272,7 @@ def read_solar_flux(t,
 ######################################################################
 
 def read_cc_from_fluxdata(t, 
-                          fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                          fdir = gerb_like_dir,
                           do_cutout = True):
     
     '''
@@ -282,7 +284,7 @@ def read_cc_from_fluxdata(t,
     t : datetime object
         a time slot
         
-    fdir : str, optional, default =  '/vols/talos/home/fabian/data/gerb-like/'
+    fdir : str, optional, default =  gerb_like_dir
         file directory name
 
     do_cutout : bool, optional, default = True
@@ -317,7 +319,7 @@ def read_cc_from_fluxdata(t,
 ######################################################################
 
 def read_radiation_flux_tstack(date, 
-                               fdir = '/vols/talos/home/fabian/data/gerb-like/',
+                               fdir = gerb_like_dir,
                                georef_file = None,
                                ntimes = 24,
                                do_cutout = True):
@@ -331,7 +333,7 @@ def read_radiation_flux_tstack(date,
     date : string
         date string as %Y%m%d
         
-    fdir : str, optional, default =  '/vols/talos/home/fabian/data/gerb-like/'
+    fdir : str, optional, default =  gerb_like_dir
         file directory name
 
     georef_file : str, optional, default = None
