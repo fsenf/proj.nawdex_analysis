@@ -437,7 +437,7 @@ def save_retrieved_clearsky_swf2nc( outname, dset, fill_val = 0 ):
     att_glob = {'author': 'Fabian Senf (senf@tropos.de)', 
                 'institution': 'Leibniz Institute for Tropospheric Research',
                 'title': 'TOA clearsky Radiation Fluxes',
-                'scae_factor': dset['scale_factor'], 
+                'bias_correction_scale_factor': dset['scale_factor'], 
                 'description': 'instantaneous clearsky TOA radiation fluxes: The upwelling radiation has been taken from ICON simulation, the downwelling part is taken from GERB-like data to account for a delay in MSG SEVIRI scan time. A constant scale factor to the simulated upwelling SWF to reduce the bias between obs and sim.'}
 
 
