@@ -17,7 +17,7 @@ import datetime
 ######################################################################
 ######################################################################
 
-def convert_time(t):
+def convert_time(t, roundTo = 60.):
 
     '''
     Utility converts between two time formats A->B or B->A: 
@@ -57,9 +57,45 @@ def convert_time(t):
         tout += datetime.timedelta( days = frac )
 
 
-    return tout
+    return roundTime( tout, roundTo = roundTo )
         
 
+
+######################################################################
+######################################################################
+
+def roundTime(dt = None, roundTo = 60):
+
+    """
+
+
+    Round a datetime object to any time laps in seconds.
+
+
+    Parameters
+    ----------
+    dt : datetime object, optional, default now
+        time to be round
+    
+    roundTo : float, optional, default 1 minute
+         Closest number of seconds to round to, default 1 minute.
+
+
+    Returns
+    --------
+    t : datetime object
+        rounded time
+
+    Author: Thierry Husson 2012 - Use it as you want but don't blame me.
+    """
+    if dt == None : dt = datetime.datetime.now()
+
+    seconds = (dt - dt.min).seconds
+
+    # // is a floor division, not a comment on following line:
+    rounding = (seconds+roundTo/2) // roundTo * roundTo
+
+    return dt + datetime.timedelta(0,rounding-seconds,-dt.microsecond)
 
 ######################################################################
 ######################################################################
