@@ -49,10 +49,11 @@ def read_mask( region = 'full_region'):
 ######################################################################
 ######################################################################
 
-def read_data_field( fname, time, varname ):
+def read_data_field( fname, time, varname, region = 'full_region' ):
 
     '''
     Reads "level2" data for analysis and plotting.
+
 
     Parameters
     ----------
@@ -64,7 +65,10 @@ def read_data_field( fname, time, varname ):
 
     varname : str
         name of the product read
-    
+ 
+    region : str, optional, default = 'full_region'
+        region for which mask is input
+
 
     Returns 
     --------
@@ -96,7 +100,7 @@ def read_data_field( fname, time, varname ):
     dset.update( geo )
 
     # also get mask
-    dset.update( read_mask( region = 'full_region' ) )
+    dset.update( read_mask( region = region ) )
     
     dset['time_obj'] = time_obj
     dset['time_str'] =  dset['time_obj'].strftime('%Y-%m-%d %H:%M UTC')
