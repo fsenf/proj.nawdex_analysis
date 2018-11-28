@@ -55,9 +55,9 @@ def convert_time(t, roundTo = 60.):
 
         tout = datetime.datetime.strptime(str(date), '%Y%m%d')
         tout += datetime.timedelta( days = frac )
+        tout = roundTime( tout, roundTo = roundTo )
 
-
-    return roundTime( tout, roundTo = roundTo )
+    return tout 
         
 
 
