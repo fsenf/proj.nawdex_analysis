@@ -301,6 +301,91 @@ def msevi_lonlat(region = SEVIRI_cutout, return_azi_zen = False):
         vgeo['zen'] = zen
 
     return vgeo
+
+
+######################################################################
+######################################################################
+
+def slice2nwcsaf_region(region):
+    
+    '''
+    Function that gets the NWCSAF region definition from a region slice (row1, row2), (col1, col2).
+    
+    
+    Parameters
+    ----------
+    region : tuple of tuples of int
+        region slice (row1, row2), (col1, col2)
+
+
+    Returns
+    -------
+    icenter : tuple of int
+        center index of the region cutout 
+    
+    ndims : tuple of int
+        dimensions ( size ) of the region (nrows, ncols)
+        
+    '''
+    
+    
+    # get sizes
+    rowsize = region[0][1] - region[0][0]
+    colsize = region[1][1] - region[1][0]
+    
+    ndims = rowsize, colsize
+    
+    
+    # centerindex
+    crow =  region[0][0] + rowsize / 2 + 1
+    ccol =  region[1][0] + colsize / 2 + 1
+    
+    icenter = crow, ccol
+    
+    return icenter, ndims
+
+######################################################################
+######################################################################
+
+def nwcsaf_region2slice(icenter, ndims):
+
+    '''
+    The region defintion of the NWCSAF (based on size and center coordinates)
+    is converted to a region slice.
+ 
+
+    
+    Parameters
+    ----------
+    icenter : tuple of int
+        center index of the region cutout 
+    
+    ndims : tuple of int
+        dimensions ( size ) of the region (nrows, ncols)
+
+
+    Returns
+    -------
+    region : tuple of tuples of int
+        region slice (row1, row2), (col1, col2)
+
+    
+    '''
+
+
+    crow, ccol = icenter
+
+    crow, ccol = crow - 1, ccol - 1 # shift between 1-base and 0-base index system 
+    nrows, ncols = ndims
+
+    irow1 = crow - nrows / 2
+    irow2 = irow1 + nrows
+
+    icol1 = ccol - ncols / 2
+    icol2 = icol1 + ncols
+
+
+    return ((irow1, irow2), (icol1, icol2))
     
 
 
@@ -314,6 +399,7 @@ def get_vector2msevi_index( vgeo ):
     '''
     Calculates nearest neighbor index for the conversion between 
     ICON output vectors and the Msevi grid.
+
 
     Parameters
     ----------
