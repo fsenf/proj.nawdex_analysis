@@ -64,6 +64,38 @@ def convert_time(t, roundTo = 60.):
 ######################################################################
 ######################################################################
 
+def convert_timevec( timevec ):
+    '''
+    Utility converts between an array of two time formats A->B or B->A: 
+    
+
+    Parameters
+    ----------
+    timevec : list or array
+        time list
+        A = either float as %Y%m%d.%f where %f is fraction of the day
+        B = datetime object
+
+
+    Returns
+    -------
+    tout : list
+        list of datetime objects or floats
+        time, counterpart to t
+    '''
+    
+    times = []
+    for tfloat in timevec:
+        times += [ convert_time( tfloat ), ]
+    
+    times = np.array( times )
+    
+    return times
+
+######################################################################
+######################################################################
+
+
 def roundTime(dt = None, roundTo = 60):
 
     """
