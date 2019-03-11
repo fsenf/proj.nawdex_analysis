@@ -13,8 +13,10 @@ import tropy.io_tools.hdf as hio
 import tropy.io_tools.netcdf as ncio
 import tropy.analysis_tools.grid_and_interpolation as gi
 
+from nawdex_analysis.config import nawdex_dir
 from nawdex_analysis.config import nawdex_regions_file
 from nawdex_analysis.io.tools import convert_time
+import nawdex_analysis.io.selector
 
 ######################################################################
 # (1) Regridded Data for Further Analysis
@@ -108,4 +110,179 @@ def read_data_field( fname, time, varname, region = 'full_region' ):
     return dset
 
 ######################################################################
+# (2) Specifically tailored Input for CRE analysis
 ######################################################################
+
+
+
+def radname2ctname( radname, datatype = 'obs' ):
+    
+    '''
+    Name converter: Converts the standard filename of TOA allsky files to 
+    corresponding cloud type files.
+
+
+    Parameters
+    ----------
+    radname : str
+       name of toa allsky radiation file
+
+    datatype : str, optional, default = 'obs'
+       select conversion either for obs OR sim files 
+
+
+    Returns
+    --------
+    ctname : str
+       cloud type filename
+    '''
+    
+    if datatype == 'obs':
+        ctname = radname.replace('gerb-like', 'meteosat')
+        ctname = ctname.replace('toa_radflux', 'nwcsaf_msevi')
+    elif datatype = 'sim':
+        ctname = radname.replace('sim-toarad', 'synsat')
+        ctname = ctname.replace('toa_radflux', 'nwcsaf_synsat')
+
+    return ctname
+
+######################################################################
+######################################################################
+
+
+def collect_data4cre_obs( radname, itime ):
+    
+    '''
+    Collects a set of observed data fields for cloud-radiative effect analysis.  
+    
+    Parameters
+    ----------
+    radname : str
+       name of toa allsky radiation file
+
+    itime : int
+       time index of data fields ('swf_net' and 'lwf') in radname
+
+
+    Returns
+    --------
+    dset : dict
+       dataset dict containing swf, lwf and ct fields
+    '''
+
+    # set filenames
+    clearname = radname.replace('toa_', 'toa_clear_')
+    ctname = radname2ctname( radname, datatype = 'obs' )
+
+    # read data
+    dset = {}
+    for vname in ['lwf', 'swf_net']:
+        radset = read_data_field(radname, itime, vname, region='atlantic')
+        dset[vname] = radset[vname]
+        
+        
+        
+    
+    # short-wave clear
+    tobj = radset['time_obj']
+    filemap = nawdex_analysis.io.selector.make_filetime_index('swf_net', tobj, 
+                                                filepart = '-scaled', 
+                                                subdirs=['retrieved_clearsky_netswf'])
+
+    print filemap
+    
+    clearname = filemap[tobj][0]
+    clearset = read_data_field(clearname, itime, 'swf_net', region ='atlantic')
+    dset['swf_net_clear'] = clearset['swf_net']
+    
+    # long-wave
+    lwfclearname = clearname.replace('retrieved_clearsky_netswf/clearsky_netswf-', 'sim-toarad/toa_clear_radflux-' )
+    lwfclearname = lwfclearname.replace('-scaled','')
+
+    lwfclearset = read_data_field(lwfclearname, itime, 'lwf', region ='atlantic')
+    dset['lwf_clear']= lwfclearset['lwf']
+
+    # cloud type
+    ctset = read_data_field( ctname, tobj, 'CT', region = 'atlantic')
+    dset.update( ctset    )
+    # select region mask
+    region_mask = dset['mask']
+        
+    # possible extension (get away from coast)
+    nedge = 11
+    region_mask = scipy.ndimage.minimum_filter( region_mask, nedge)
+
+    mlon =  dset['lon'][region_mask].mean()
+    mlat =  dset['lat'][region_mask].mean()
+
+    x, y = gi.ll2xyc( dset['lon'], dset['lat'], mlon = mlon, mlat = mlat )
+    a = gi.simple_pixel_area(x, y, xy = True)
+
+    # update mask and area
+    dset['mask'] = region_mask
+    dset['area'] = a
+        
+    return dset
+                
+######################################################################
+######################################################################
+
+
+def collect_data4cre_sim( radname, itime ):
+
+    '''
+    Collects a set of simulated data fields for cloud-radiative effect analysis.  
+
+    
+    Parameters
+    ----------
+    radname : str
+       name of toa allsky radiation file
+
+    itime : int
+       time index of data fields ('swf_net' and 'lwf') in radname
+
+
+    Returns
+    --------
+    dset : dict
+       dataset dict containing swf, lwf and ct fields
+    '''
+    
+    # set filenames
+    clearname = radname.replace('toa_', 'toa_clear_')
+    ctname = radname2ctname( radname, datatype = 'sim' )
+
+    # read data
+    dset = {}
+    for vname in ['lwf', 'swf_net']:
+        radset = read_data_field(radname, itime, vname, region='atlantic')
+        dset[vname] = radset[vname]
+        
+        clearset = read_data_field(clearname, itime, vname, region ='atlantic')
+        dset['%s_clear' % vname] = clearset[vname]
+    
+    ctset = read_data_field( ctname, radset['time_obj'], 'CT', region = 'atlantic')
+    dset.update( ctset    )
+    # select region mask
+    region_mask = dset['mask']
+        
+    # possible extension (get away from coast)
+    nedge = 11
+    region_mask = scipy.ndimage.minimum_filter( region_mask, nedge)
+
+    mlon =  dset['lon'][region_mask].mean()
+    mlat =  dset['lat'][region_mask].mean()
+
+    x, y = gi.ll2xyc( dset['lon'], dset['lat'], mlon = mlon, mlat = mlat )
+    a = gi.simple_pixel_area(x, y, xy = True)
+
+    # update mask and area
+    dset['mask'] = region_mask
+    dset['area'] = a
+        
+    return dset
+        
+######################################################################
+######################################################################
+
