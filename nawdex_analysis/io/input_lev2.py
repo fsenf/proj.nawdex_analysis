@@ -140,7 +140,7 @@ def radname2ctname( radname, datatype = 'obs' ):
     if datatype == 'obs':
         ctname = radname.replace('gerb-like', 'meteosat')
         ctname = ctname.replace('toa_radflux', 'nwcsaf_msevi')
-    elif datatype = 'sim':
+    elif datatype == 'sim':
         ctname = radname.replace('sim-toarad', 'synsat')
         ctname = ctname.replace('toa_radflux', 'nwcsaf_synsat')
 
