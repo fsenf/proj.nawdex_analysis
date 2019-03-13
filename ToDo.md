@@ -15,9 +15,9 @@ These scripts contain analysis and output functions that should be merged into t
 ### Notebooks
 We have a set of notebooks
 
-http://localhost:8787/notebooks/proj/2017-07_icon-nawdex/nbooks/12-plot_cc_tseries_for_simulationsets.ipynb
-http://localhost:8787/notebooks/proj/2017-07_icon-nawdex/nbooks/15-plot_cloudtype_statistics.ipynb
-http://localhost:8787/notebooks/proj/2017-07_icon-nawdex/nbooks/16-plot_cre_statistics.ipynb
+    http://localhost:8787/notebooks/proj/2017-07_icon-nawdex/nbooks/12-plot_cc_tseries_for_simulationsets.ipynb
+    http://localhost:8787/notebooks/proj/2017-07_icon-nawdex/nbooks/15-plot_cloudtype_statistics.ipynb
+    http://localhost:8787/notebooks/proj/2017-07_icon-nawdex/nbooks/16-plot_cre_statistics.ipynb
 
 that are very dirty - a lot of different tasks and duplciates in there.
 
@@ -34,7 +34,8 @@ It would be great
 
 
 ## Analysis Task
-* analysis clear-sky CRE --> bias in short- and longwave will give information about cloud masking, clearsky estimation
-* 
+* analyze clear-sky CRE --> bias in short- and longwave will give information about cloud masking, clearsky estimation
+* check different scaling factors for observed CRE (1. vs. 0.85)
+* develop a relative measure how a certain configuration change improves CC and CRE compared to a standard setup -- this means a standard or reference needs to be defined.
 
 
