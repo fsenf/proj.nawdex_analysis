@@ -150,7 +150,7 @@ def radname2ctname( radname, datatype = 'obs' ):
 ######################################################################
 
 
-def collect_data4cre_obs( radname, itime ):
+def collect_data4cre_obs( radname, itime, filepart = '-scaled' ):
     
     '''
     Collects a set of observed data fields for cloud-radiative effect analysis.  
@@ -162,6 +162,10 @@ def collect_data4cre_obs( radname, itime ):
 
     itime : int
        time index of data fields ('swf_net' and 'lwf') in radname
+
+    filepart : str
+       part in the file that gives information about scaling of clear-sky fields
+       either '-scaled' or '-not_scaled'
 
 
     Returns
@@ -186,7 +190,7 @@ def collect_data4cre_obs( radname, itime ):
     # short-wave clear
     tobj = radset['time_obj']
     filemap = nawdex_analysis.io.selector.make_filetime_index('swf_net', tobj, 
-                                                filepart = '-scaled', 
+                                                filepart = filepart, 
                                                 subdirs=['retrieved_clearsky_netswf'])
 
     print filemap
@@ -197,7 +201,7 @@ def collect_data4cre_obs( radname, itime ):
     
     # long-wave
     lwfclearname = clearname.replace('retrieved_clearsky_netswf/clearsky_netswf-', 'sim-toarad/toa_clear_radflux-' )
-    lwfclearname = lwfclearname.replace('-scaled','')
+    lwfclearname = lwfclearname.replace(filepart,'')
 
     lwfclearset = read_data_field(lwfclearname, itime, 'lwf', region ='atlantic')
     dset['lwf_clear']= lwfclearset['lwf']
@@ -285,4 +289,42 @@ def collect_data4cre_sim( radname, itime ):
         
 ######################################################################
 ######################################################################
+
+
+def collect_data4cre( radname, itime, **kwargs ):
+
+    '''
+    Collects a set of data fields (observed or simulated) for cloud-radiative effect analysis.  
+
+    
+    Parameters
+    ----------
+    radname : str
+       name of toa allsky radiation file
+
+    itime : int
+       time index of data fields ('swf_net' and 'lwf') in radname
+
+    **kwargs : dict
+       set of keywords for data input, e.g.
+       filepart in ['-scaled', '-not_scaled']  only for obs !!!
+
+
+    Returns
+    --------
+    dset : dict
+       dataset dict containing swf, lwf and ct fields
+    '''
+    
+
+    # select obs or sim reader
+    if 'gerb' in radname:
+        return collect_data4cre_obs( radname, itime, **kwargs)
+    elif 'sim-toarad' in radname:
+        return collect_data4cre_sim( radname, itime)
+
+
+######################################################################
+######################################################################
+
 
