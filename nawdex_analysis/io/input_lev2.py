@@ -8,6 +8,7 @@ import os, sys, copy
 import numpy as np
 import datetime
 import xarray as xr
+import scipy.ndimage
 
 import tropy.io_tools.hdf as hio
 import tropy.io_tools.netcdf as ncio
