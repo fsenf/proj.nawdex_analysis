@@ -34,7 +34,7 @@ def ave_cre_from_radname( radname, itime ):
     ctbins =  np.arange(0,22)
     lcre_ave = area_weighted_binwise_averages(lcre, a, ct, ctbins)
     scre_ave = area_weighted_binwise_averages(scre, a, ct, ctbins)
-    afrac = area_fractions( a, ct, bins ) * 100.
+    afrac = area_fractions( a, ct, ctbins ) * 100.
     
     # rewrite data into xarray
     ct_map = [6, 8, 10, 12, 14, 15, 16, 17, 18, 19]
