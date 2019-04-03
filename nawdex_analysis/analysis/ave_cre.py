@@ -5,7 +5,7 @@ import xarray as xr
 
 import tropy.io_tools.netcdf as ncio
 
-from averaging import area_weighted_binwise_averages, 
+from averaging import area_weighted_binwise_averages, area_fractions
 import nawdex_analysis.io.input_lev2
 
 ######################################################################
