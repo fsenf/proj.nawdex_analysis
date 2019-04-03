@@ -93,7 +93,7 @@ def read_data_field( fname, time, varname, region = 'full_region' ):
     # time is given as datetime object
     elif type ( time ) == datetime.datetime :
         tfloat = convert_time( time ) 
-        var = np.ma.masked_invalid( xset.sel(time = tfloat)[varname].data )
+        var = np.ma.masked_invalid( xset.sel(time = tfloat, method = 'nearest')[varname].data )
         time_obj = time
         
     dset = { varname : var }
