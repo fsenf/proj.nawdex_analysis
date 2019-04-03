@@ -15,7 +15,7 @@ import nawdex_analysis.io.input_lev2
 def ave_cre_from_radname( radname, itime ):
     
     # input fields
-    dset = nawdex_tools.io.input_lev2.collect_data4cre( radname, itime )
+    dset = nawdex_analysis.io.input_lev2.collect_data4cre( radname, itime )
     
     
     # prepare analysis array
