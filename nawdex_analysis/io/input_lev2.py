@@ -253,10 +253,9 @@ def collect_data4cre_sim( radname, itime ):
     dset : dict
        dataset dict containing swf, lwf and ct fields
     '''
-    
-    # set filenames
+   # set filenames
     clearname = radname.replace('toa_', 'toa_clear_')
-    ctname = radname2ctname( radname, datatype = 'sim' )
+    ctname = radname2ctname( radname )
 
     # read data
     dset = {}
@@ -264,10 +263,29 @@ def collect_data4cre_sim( radname, itime ):
         radset = read_data_field(radname, itime, vname, region='atlantic')
         dset[vname] = radset[vname]
         
-        clearset = read_data_field(clearname, itime, vname, region ='atlantic')
-        dset['%s_clear' % vname] = clearset[vname]
+        
+        
     
-    ctset = read_data_field( ctname, radset['time_obj'], 'CT', region = 'atlantic')
+    # short-wave clear
+    tobj = radset['time_obj']
+    filemap = nawdex_analysis.io.selector.make_filetime_index('swf_net', tobj, 
+                                                filepart = '-scaled', 
+                                                subdirs=['retrieved_clearsky_netswf'])
+
+    
+    clearname = filemap[tobj][0]
+    clearset = read_data_field(clearname, itime, 'swf_net', region ='atlantic')
+    dset['swf_net_clear'] = clearset['swf_net']
+    
+    # long-wave
+    lwfclearname = clearname.replace('retrieved_clearsky_netswf/clearsky_netswf-', 'sim-toarad/toa_clear_radflux-' )
+    lwfclearname = lwfclearname.replace('-scaled','')
+
+    lwfclearset = read_data_field(lwfclearname, itime, 'lwf', region ='atlantic')
+    dset['lwf_clear']= lwfclearset['lwf']
+
+    # cloud type
+    ctset = read_data_field( ctname, tobj, 'CT', region = 'atlantic')
     dset.update( ctset    )
     # select region mask
     region_mask = dset['mask']
@@ -287,6 +305,40 @@ def collect_data4cre_sim( radname, itime ):
     dset['area'] = a
         
     return dset
+   
+    # # set filenames
+    # clearname = radname.replace('toa_', 'toa_clear_')
+    # ctname = radname2ctname( radname, datatype = 'sim' )
+
+    # # read data
+    # dset = {}
+    # for vname in ['lwf', 'swf_net']:
+    #     radset = read_data_field(radname, itime, vname, region='atlantic')
+    #     dset[vname] = radset[vname]
+        
+    #     clearset = read_data_field(clearname, itime, vname, region ='atlantic')
+    #     dset['%s_clear' % vname] = clearset[vname]
+    
+    # ctset = read_data_field( ctname, radset['time_obj'], 'CT', region = 'atlantic')
+    # dset.update( ctset    )
+    # # select region mask
+    # region_mask = dset['mask']
+        
+    # # possible extension (get away from coast)
+    # nedge = 11
+    # region_mask = scipy.ndimage.minimum_filter( region_mask, nedge)
+
+    # mlon =  dset['lon'][region_mask].mean()
+    # mlat =  dset['lat'][region_mask].mean()
+
+    # x, y = gi.ll2xyc( dset['lon'], dset['lat'], mlon = mlon, mlat = mlat )
+    # a = gi.simple_pixel_area(x, y, xy = True)
+
+    # # update mask and area
+    # dset['mask'] = region_mask
+    # dset['area'] = a
+        
+    # return dset
         
 ######################################################################
 ######################################################################
