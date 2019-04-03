@@ -17,7 +17,7 @@ import numpy as np
 ######################################################################
 
 
-def area_fractions( v, a, bins ):
+def area_fractions( a, selector, bins ):
 
     '''
     Calculates area fractions of variable values in certain intervals.
@@ -25,11 +25,11 @@ def area_fractions( v, a, bins ):
     
     Parameters
     ----------
-    v : numpy array, 2dim
-        variables field
-
     a : numpy array, 2dim
         grid box areas
+
+    selector : numpy array, 2dim
+        field that selects the variable mask
 
     bins : numpy array, 1dim
         set of values used for binning
@@ -54,7 +54,8 @@ def area_fractions( v, a, bins ):
         b1 = bins[i]
         b2 = bins[i + 1]
     
-        mask = (v >= b1) & (v < b2) 
+        mask = (selector >= b1) & (selector < b2) 
+        
         
         afrac[i] = a[mask].sum() / atot
 
@@ -73,10 +74,13 @@ def area_weighted_binwise_averages( v, a, selector, bins ):
     Parameters
     ----------
     v : numpy array, 2dim
-        variables field
+        variables field to be averaged
 
     a : numpy array, 2dim
         grid box areas
+
+    selector : numpy array, 2dim
+        field that selects the variable mask
 
     bins : numpy array, 1dim
         set of values used for binning

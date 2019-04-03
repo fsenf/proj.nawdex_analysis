@@ -5,7 +5,7 @@ import xarray as xr
 
 import tropy.io_tools.netcdf as ncio
 
-from averaging import area_weighted_binwise_averages
+from averaging import area_weighted_binwise_averages, 
 import nawdex_analysis.io.input_lev2
 
 ######################################################################
@@ -34,7 +34,7 @@ def ave_cre_from_radname( radname, itime ):
     ctbins =  np.arange(0,22)
     lcre_ave = area_weighted_binwise_averages(lcre, a, ct, ctbins)
     scre_ave = area_weighted_binwise_averages(scre, a, ct, ctbins)
-
+    afrac = area_fractions( a, ct, bins ) * 100.
     
     # rewrite data into xarray
     ct_map = [6, 8, 10, 12, 14, 15, 16, 17, 18, 19]
@@ -48,8 +48,10 @@ def ave_cre_from_radname( radname, itime ):
                      'time' : ('time', [dset['time_obj'],], {}),
                     'scre_ave' : (('time','ct'), np.array( [scre_ave,] )[:,ct_map], 
                                   {'units' : 'W m^{-2}', 'longname':'area-average shortwave CRE '}),
-                    'lcre_ave' : (('time','ct'), np.array( [lcre_ave,] )[:,ct_map], 
-                                  {'units' : 'W m^{-2}', 'longname':'area-average longwave CRE '})})
+                    'scre_ave' : (('time','ct'), np.array( [scre_ave,] )[:,ct_map], 
+                                  {'units' : 'W m^{-2}', 'longname':'area-average shortwave CRE '}),
+                    'afrac' : (('time','ct'), np.array( [afrac,] )[:,ct_map], 
+                                  {'units' : '%', 'longname':'relative area fractions per cloud type'})})
 
     return outset
 
