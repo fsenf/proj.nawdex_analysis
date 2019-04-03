@@ -37,9 +37,9 @@ def ave_cre_from_radname( radname, itime ):
     afrac = area_fractions( a, ct, ctbins ) * 100.
     
     # rewrite data into xarray
-    ct_map = [6, 8, 10, 12, 14, 15, 16, 17, 18, 19]
+    ct_map = [2, 6, 8, 10, 12, 14, 15, 16, 17, 18, 19]
 
-    ct_labels = [ 'very low', 'low', 'middle', 'high opaque', 
+    ct_labels = [ 'clear_ocean',  'very low', 'low', 'middle', 'high opaque', 
                                  'very high opaque', 'semi. thin', 'semi. meanly thick', 
                                  'semi. thick', 'semi. above', 'fractional'
                              ] 
