@@ -163,8 +163,8 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled' ):
 
     itime : int
        time index of data fields ('swf_net' and 'lwf') in radname
-
-    filepart : str
+    
+    filepart : str, optional, default = '-scaled'
        part in the file that gives information about scaling of clear-sky fields
        either '-scaled' or '-not_scaled'
 

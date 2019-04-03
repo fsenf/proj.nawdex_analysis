@@ -12,10 +12,34 @@ import nawdex_analysis.io.input_lev2
 ######################################################################
 
 
-def ave_cre_from_radname( radname, itime ):
+def ave_cre_from_radname( radname, itime, **kwargs ):
+       
+    '''
+    Calculate Cloud-radiative effect (CRE) for different cloud types.
+
     
+    Parameters
+    ----------
+    radname : str
+       name of toa allsky radiation file
+
+    itime : int
+       time index of data fields ('swf_net' and 'lwf') in radname
+
+    filepart : str, optional, default = '-scaled'
+       part in the file that gives information about scaling of clear-sky fields
+       either '-scaled' or '-not_scaled'
+
+
+    Returns
+    --------
+    outset : xarray Dataset
+       dataset containing average longwave, short-wave CRE and area fractions
+       depending on cloud type
+    '''
+
     # input fields
-    dset = nawdex_analysis.io.input_lev2.collect_data4cre( radname, itime )
+    dset = nawdex_analysis.io.input_lev2.collect_data4cre( radname, itime, **kwargs )
     
     
     # prepare analysis array
@@ -59,7 +83,28 @@ def ave_cre_from_radname( radname, itime ):
 ######################################################################
 
 
-def ave_cre_from_radname_tloop( radname ):
+def ave_cre_from_radname_tloop( radname, **kwargs ):
+
+    '''
+    Calculate Cloud-radiative effect (CRE) for different cloud types (time loop).
+
+    
+    Parameters
+    ----------
+    radname : str
+       name of toa allsky radiation file
+
+    filepart : str, optional, default = '-scaled'
+       part in the file that gives information about scaling of clear-sky fields
+       either '-scaled' or '-not_scaled'
+
+
+    Returns
+    --------
+    outset : xarray Dataset
+       dataset containing average longwave, short-wave CRE and area fractions
+       depending on cloud type
+    '''
     
     # get time dimension
     ntimes = ncio.read_icon_dimension(radname, 'time')
@@ -68,7 +113,7 @@ def ave_cre_from_radname_tloop( radname ):
     for itime in range( ntimes ):
     #for itime in [2,3]:    
         try:
-            outset += [ave_cre_from_radname(radname, itime), ]
+            outset += [ave_cre_from_radname(radname, itime, **kwargs), ]
         except:
             print 'error at %d' %  itime
         
