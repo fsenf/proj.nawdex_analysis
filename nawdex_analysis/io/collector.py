@@ -7,7 +7,7 @@ import xarray as xr
 import pandas as pd
 
 from nawdex_analysis.config import nawdex_dir
-from selector import  gather_simset, expname2conf_str, set_dateslice
+from selector import  gather_simset, expname2conf_str, set_dateslices
 
 
 '''
