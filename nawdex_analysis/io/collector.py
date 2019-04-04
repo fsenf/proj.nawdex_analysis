@@ -7,7 +7,7 @@ import xarray as xr
 import netCDF4
 
 from nawdex_analysis.config import nawdex_dir
-from selector import  gather_simset
+from selector import  gather_simset, expname2conf_str
 
 
 '''
@@ -18,7 +18,9 @@ This is a pachake that collects data for different sets.
 ######################################################################
 ######################################################################
 
-def collect_ave_cre4set( set_number, file_format = 'default' ):
+def collect_ave_cre4set( set_number, 
+                         file_format = 'default', 
+                         allowed_set_range = [1,4] ):
 
     '''
     Collects average CRE data for a selected set.
@@ -29,13 +31,24 @@ def collect_ave_cre4set( set_number, file_format = 'default' ):
     set_number : int
        numeric identifier of a selected experiment set.
 
+    file_format : str, optional, default = 'default'
+       a string that defines file format, 
+       restriction: two %s are needed at the moment
 
+    allowed_set_range : list, optional, default = [1, 4]
+       min & max of the allow set range
+
+    
     Returns
     --------
     dset_sim : xarray Dataset
        set that contains time series of CRE effects.
 
     '''
+
+    if set_number < allowed_set_range[0] or set_number > allowed_set_range[1]:
+        raise ValueError('set_number is outside allowed range')
+    
 
     # get experiment list
     # ====================
