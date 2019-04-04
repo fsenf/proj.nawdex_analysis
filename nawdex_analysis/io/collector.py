@@ -139,7 +139,58 @@ def get_obs_cre4time_list( time, file_part ='-scaled'):
         
         t += dt
     
-
-    return 
     
+    # merge and prepare dataset
+    # =========================
+    d = xr.merge( obsdat )
+    dex = d.expand_dims( 'idname', axis = -1)
 
+    expname = 'msevi%s' % file_part
+    dex['expname'] = xr.DataArray([expname, ], dims='idname')
+    dex['idname'] = [expname, ]
+    
+    
+    return dex.sel( time = time )
+
+######################################################################
+######################################################################
+
+def get_cre4set( set_number, allowed_set_range = [1,4] ):
+
+
+    '''
+    Collects average CRE data for a selected set.
+
+
+    Parameters
+    ----------
+    set_number : int
+       numeric identifier of a selected experiment set.
+
+    allowed_set_range : list, optional, default = [1, 4]
+       min & max of the allow set range
+
+    
+    Returns
+    --------
+    dset : xarray Dataset
+       set that contains time series of simulated and observed CRE effects.
+
+    '''
+
+    # get simulated CRE
+    # ====================
+    dsim = collect_sim_ave_cre4set( set_number, 
+                                    allowed_set_range = allowed_set_range )
+
+    
+    # get the two observation variants
+    # ========================================
+    dobs_scaled = get_obs_cre4time_list( dsim.time, file_part ='-scaled')
+    dobs_not_scaled = get_obs_cre4time_list( dsim.time, file_part ='-not_scaled')
+
+
+    return xr.merge( [dsim, dobs_scaled, dobs_not_scaled] )
+
+######################################################################
+######################################################################
