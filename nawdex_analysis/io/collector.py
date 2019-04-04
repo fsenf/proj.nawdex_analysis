@@ -82,7 +82,7 @@ def collect_sim_ave_cre4set( set_number,
         
     dset_sim = xr.merge( dlist )
 
-    return dset_sim
+    return dset_sim.sel( time = date_slice )
 
 
 ######################################################################
