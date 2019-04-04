@@ -318,3 +318,127 @@ def gather_simset( set_number ):
 ######################################################################
 ######################################################################
 
+
+def set_dateslices( set_number ):
+
+    '''
+    Sets the time range to be analyzed for a selected experiment set.
+
+
+    Parameters
+    ----------
+    set_number : int
+        numerical ID for experiment set (1 ... 4)
+
+
+    Returns
+    --------
+    date_slice : slice object
+        date slice object containing start date and end date
+
+    '''
+    
+    if set_number == 1:
+        date_slice =  slice('2016-09-21', '2016-09-23')
+        date_slice =  slice('2016-09-21', '2016-09-22')  # !!!! TODO CHECK why sim-toarad slots are missing !!!!
+        
+        
+    elif set_number == 2:
+        date_slice =  slice('2016-09-23', '2016-09-25')
+        
+    elif set_number == 3:
+        date_slice =  slice('2016-09-30', '2016-10-02')
+        
+    elif set_number == 4:
+        date_slice =  slice('2016-10-03', '2016-10-05')
+            
+    return date_slice
+
+######################################################################
+######################################################################
+
+
+def expname2conf_str( expname ):    
+    
+    '''
+    Based on experiment name of configuration ID string is generated.
+
+
+    Parameters
+    ----------
+    expname : str
+        name of observation or simulation experiment
+
+    
+    Returns
+    --------
+    id_string : str
+        name of simulation experiment using coding of parameter settings
+        e.g. '2km_oneMom_Conv'
+    '''
+
+    
+    if 'msevi' in expname:
+        return expname
+    
+    # ELSE
+    mis_number = int(expname.split('-')[-1])
+    res = expname.split('-')[1]
+
+    
+    if np.mod(mis_number, 2) == 0:
+        muphys = 'oneMom'
+    else:
+        muphys = 'twoMom'
+
+    
+    cpar = 'Conv'
+    
+    # now select conv vs. noConv
+    if res == '2km' and mis_number in [3, 4]:
+        cpar = 'Conv'
+        
+    elif res == '2km' :
+        cpar = 'noConv'
+        
+    c5 = (res == '5km' and mis_number in [3,4])
+    c10 = (res == '10km' and mis_number in [3,4])
+ 
+    if c5 or c10:
+        cpar = 'noConv'
+    
+    id_string = '%s_%s_%s' % (res, muphys, cpar)
+    
+    return id_string
+
+
+######################################################################
+######################################################################
+
+def convert_explist2idlist( explist ):
+    
+    '''
+    Converts expname lists into ID string lists.
+
+    
+    Parameters
+    ----------
+    explist : list
+        list of expnames
+
+
+    Returns
+    --------
+    idlist : list
+        list of ID strings
+    '''
+    
+    idlist = []
+    for expname in explist:
+        idlist += [ expname2conf_str( expname ) , ]
+        
+    return idlist
+
+######################################################################
+######################################################################
+
