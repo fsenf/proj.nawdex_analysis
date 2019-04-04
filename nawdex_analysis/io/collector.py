@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-import os, sys, glob
+import os, sys, glob, copy
 import numpy as np
 
+import datetime
 import xarray as xr
 import pandas as pd
 
@@ -119,12 +120,12 @@ def get_obs_cre4time_list( time, file_part ='-scaled'):
     for t in sorted( time ):
         timeobj_lists += [ pd.Timestamp( t.data ).to_pydatetime() ,]
 
-    timeobj_lists = np.array( times )
+    timeobj_lists = np.array( timeobj_lists )
 
 
     # read daily stacks of obs data
     # ==============================
-    t1, t2 = times.min(), times.max()
+    t1, t2 = timeobj_lists.min(), timeobj_lists.max()
 
     t = copy.copy( t1 )
 
