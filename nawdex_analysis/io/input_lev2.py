@@ -176,10 +176,13 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled' ):
     '''
 
     # set filenames
+    # ==============
     clearname = radname.replace('toa_', 'toa_clear_')
     ctname = radname2ctname( radname, datatype = 'obs' )
 
-    # read data
+
+    # read allsky data
+    # =================
     dset = {}
     for vname in ['lwf', 'swf_net']:
         radset = read_data_field(radname, itime, vname, region='atlantic')
@@ -188,35 +191,53 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled' ):
         
         
     
-    # short-wave clear
+    # find the right short-wave clear file
+    # ===================================
     tobj = radset['time_obj']
     filemap = nawdex_analysis.io.selector.make_filetime_index('swf_net', tobj, 
                                                 filepart = filepart, 
                                                 subdirs=['retrieved_clearsky_netswf'])
 
-    print filemap
-    
+    # print filemap    
+
+    # input swf clear
+    # ===============
     clearname = filemap[tobj][0]
-    clearset = read_data_field(clearname, itime, 'swf_net', region ='atlantic')
-    dset['swf_net_clear'] = clearset['swf_net']
-    
-    # long-wave
+    clearset = read_data_field(clearname, tobj, 'swf_net', region ='atlantic')
+    dset['swf_net_clear'] = clearset['swf_net']    
+
+
+    # long-wave filename
+    # ====================
     lwfclearname = clearname.replace('retrieved_clearsky_netswf/clearsky_netswf-', 'sim-toarad/toa_clear_radflux-' )
     lwfclearname = lwfclearname.replace(filepart,'')
 
-    lwfclearset = read_data_field(lwfclearname, itime, 'lwf', region ='atlantic')
+
+    # input lwf clear data
+    # ====================
+    lwfclearset = read_data_field(lwfclearname, tobj, 'lwf', region ='atlantic')
     dset['lwf_clear']= lwfclearset['lwf']
 
-    # cloud type
+
+
+    # input cloud type
+    # ====================
     ctset = read_data_field( ctname, tobj, 'CT', region = 'atlantic')
-    dset.update( ctset    )
-    # select region mask
+    dset.update( ctset    
+
+
+)
+    # select and modify region mask
+    # ==============================
     region_mask = dset['mask']
         
     # possible extension (get away from coast)
     nedge = 11
     region_mask = scipy.ndimage.minimum_filter( region_mask, nedge)
 
+
+    # finally prepare georef
+    # =======================
     mlon =  dset['lon'][region_mask].mean()
     mlat =  dset['lat'][region_mask].mean()
 
