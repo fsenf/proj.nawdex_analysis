@@ -12,7 +12,7 @@ import nawdex_analysis.io.input_lev2
 ######################################################################
 
 
-def ave_cre_from_radname( radname, itime, **kwargs ):
+def ave_cre_from_radname( radname, itime, factor = -1, **kwargs ):
        
     '''
     Calculate Cloud-radiative effect (CRE) for different cloud types.
@@ -25,6 +25,9 @@ def ave_cre_from_radname( radname, itime, **kwargs ):
 
     itime : int
        time index of data fields ('swf_net' and 'lwf') in radname
+
+    factor : float
+       factor used to convert direction conversion (outward vs. inward)
 
     filepart : str, optional, default = '-scaled'
        part in the file that gives information about scaling of clear-sky fields
@@ -70,12 +73,114 @@ def ave_cre_from_radname( radname, itime, **kwargs ):
     
     outset = xr.Dataset({'ct' : ('ct', ct_labels, {}),
                      'time' : ('time', [dset['time_obj'],], {}),
-                    'scre_ave' : (('time','ct'), np.array( [scre_ave,] )[:,ct_map], 
+                    'scre_ave' : (('time','ct'), factor * np.array( [scre_ave,] )[:,ct_map], 
                                   {'units' : 'W m^{-2}', 'longname':'area-average shortwave CRE '}),
-                    'scre_ave' : (('time','ct'), np.array( [scre_ave,] )[:,ct_map], 
-                                  {'units' : 'W m^{-2}', 'longname':'area-average shortwave CRE '}),
+                    'lcre_ave' : (('time','ct'), factor * np.array( [lcre_ave,] )[:,ct_map], 
+                                  {'units' : 'W m^{-2}', 'longname':'area-average longwave CRE '}),
                     'afrac' : (('time','ct'), np.array( [afrac,] )[:,ct_map], 
                                   {'units' : '%', 'longname':'relative area fractions per cloud type'})})
+
+    return outset
+
+######################################################################
+######################################################################
+
+
+def ave_radfluxes_from_radname( radname, itime, **kwargs ):
+       
+    '''
+    Calculate Cloud-radiative effect (CRE) for different cloud types.
+
+    
+    Parameters
+    ----------
+    radname : str
+       name of toa allsky radiation file
+
+    itime : int
+       time index of data fields ('swf_net' and 'lwf') in radname
+
+    factor : float
+       factor used to convert direction conversion (outward vs. inward)
+
+    filepart : str, optional, default = '-scaled'
+       part in the file that gives information about scaling of clear-sky fields
+       either '-scaled' or '-not_scaled'
+
+
+    Returns
+    --------
+    outset : xarray Dataset
+       dataset containing average longwave, short-wave CRE and area fractions
+       depending on cloud type
+    '''
+
+    # input fields
+    # ============
+    dset = nawdex_analysis.io.input_lev2.collect_data4cre( radname, itime, **kwargs )
+    
+    
+    # prepare analysis array
+    # =======================
+    m = dset['mask']
+    a = dset['area'][m]
+    ct = dset['CT'][m]
+
+
+    # define cloud type bins 
+    # =======================
+    ctbins =  np.arange(0, 22)
+    ct_map = [2, 6, 8, 10, 12, 14, 15, 16, 17, 18, 19]
+    ct_labels = [ 'clear_ocean',  'very low', 'low', 'middle', 'high opaque', 
+                                 'very high opaque', 'semi. thin', 'semi. meanly thick', 
+                                 'semi. thick', 'semi. above', 'fractional'] 
+    
+
+    # prepare all variables
+    # ======================
+    radflux_namelist = ['lwf', 'lwf_clear', 'swf_net', 'swf_net_clear']
+
+    ave_rflux = {}
+    for rname in radflux_namelist:
+        
+        v = dset[rname][m].copy()
+        v[np.isnan(v)] = 0.
+
+        ave_rflux[ rname ] = area_weighted_binwise_averages(v, a, ct, ctbins)
+        
+
+    # calculate area-weighted CRE average
+    # ===================================
+    afrac = area_fractions( a, ct, ctbins ) * 100.
+    
+
+    # prepare variables
+    # ==================
+    attrs = {}
+    attrs['lwf'] = {'units' : 'W m^{-2}', 'longname':'area-average longwave radiation flux (all-sky)'}
+    attrs['lwf_clear'] = {'units' : 'W m^{-2}', 'longname':'area-average longwave radiation flux (clearsky)'}
+
+    attrs['swf_net'] = {'units' : 'W m^{-2}', 'longname':'area-average shortwave radiation flux (all-sky)'}
+    attrs['swf_net_clear'] = {'units' : 'W m^{-2}', 'longname':'area-average shortwave radiation flux (clearsky)'}
+    
+
+
+    # prepare variable dict
+    # =====================
+    vardict = {}
+    for rname in radflux_namelist:
+        vardict[rname] = (('time','ct'), np.array( [ave_rflux[rname],] )[:,ct_map], attrs[rname])
+
+    vardict['ct']    =  ('ct', ct_labels, {})
+    vardict['time']  =  ('time', [dset['time_obj'],], {})
+    vardict['afrac'] =  (('time','ct'), np.array( [afrac,] )[:,ct_map], 
+                         {'units' : '%', 'longname':'relative area fractions per cloud type'})
+
+
+    # rewrite data into xarray
+    # =========================
+    outset = xr.Dataset( vardict )
+
 
     return outset
 
@@ -105,6 +210,15 @@ def ave_cre_from_radname_tloop( radname, **kwargs ):
        dataset containing average longwave, short-wave CRE and area fractions
        depending on cloud type
     '''
+
+    # using a keyword to select output variable type
+    output_vars = kwargs.pop('output_vars', 'cre')
+
+    if output_vars == 'cre':
+        calculate_average_function = ave_cre_from_radname
+    elif output_vars == 'radfluxes':
+        calculate_average_function = ave_radfluxes_from_radname
+
     
     # get time dimension
     ntimes = ncio.read_icon_dimension(radname, 'time')
@@ -113,7 +227,7 @@ def ave_cre_from_radname_tloop( radname, **kwargs ):
     for itime in range( ntimes ):
     #for itime in [2,3]:    
         try:
-            outset += [ave_cre_from_radname(radname, itime, **kwargs), ]
+            outset += [calculate_average_function(radname, itime, **kwargs), ]
         except:
             print 'error at %d' %  itime
         
