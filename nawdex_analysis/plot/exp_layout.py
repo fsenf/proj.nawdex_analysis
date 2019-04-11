@@ -140,7 +140,8 @@ def get_exp_kws_points( idname ):
         kws['zorder'] = 10
 
     elif idname == 'msevi-not_scaled':
-        kws['color'] = 'gray'
+        kws['color'] = 'lightgray'
+        kws['markeredgecolor'] = 'black'
         kws['linewidth'] = 2
         kws['linestyle'] = '-'
         kws['zorder'] = 9
