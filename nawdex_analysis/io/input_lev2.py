@@ -218,8 +218,12 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset
 
     print radname, clearname, lwfclearname
 
+
     # input lwf clear data
     # ====================
+    if filepart == '-not_scaled':
+        lwf_clear_offset = 0
+
     lwfclearset = read_data_field(lwfclearname, tobj, 'lwf', region ='atlantic')
     dset['lwf_clear'] = lwfclearset['lwf'] + lwf_clear_offset
     
