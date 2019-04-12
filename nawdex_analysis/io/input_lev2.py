@@ -151,7 +151,7 @@ def radname2ctname( radname, datatype = 'obs' ):
 ######################################################################
 
 
-def collect_data4cre_obs( radname, itime, filepart = '-scaled' ):
+def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset = 2. ):
     
     '''
     Collects a set of observed data fields for cloud-radiative effect analysis.  
@@ -168,6 +168,10 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled' ):
        part in the file that gives information about scaling of clear-sky fields
        either '-scaled' or '-not_scaled'
 
+    lwf_clear_offset : float, optional, default = 2.
+       due to the bias in the simulated LWF, we might use an predefined offset
+       to correct this issue
+       i.e. LWF_clear_simulated += lwf_clear_offset
 
     Returns
     --------
@@ -212,12 +216,13 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled' ):
     lwfclearname = clearname.replace('retrieved_clearsky_netswf/clearsky_netswf-', 'sim-toarad/toa_clear_radflux-' )
     lwfclearname = lwfclearname.replace(filepart,'')
 
+    print clearname, lwfclearname
 
     # input lwf clear data
     # ====================
     lwfclearset = read_data_field(lwfclearname, tobj, 'lwf', region ='atlantic')
-    dset['lwf_clear']= lwfclearset['lwf']
-
+    dset['lwf_clear'] = lwfclearset['lwf'] + lwf_clear_offset
+    
 
 
     # input cloud type
