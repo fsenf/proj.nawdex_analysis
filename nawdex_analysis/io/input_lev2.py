@@ -151,7 +151,7 @@ def radname2ctname( radname, datatype = 'obs' ):
 ######################################################################
 
 
-def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset = 2. ):
+def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset = -2. ):
     
     '''
     Collects a set of observed data fields for cloud-radiative effect analysis.  
@@ -216,7 +216,7 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset
     lwfclearname = clearname.replace('retrieved_clearsky_netswf/clearsky_netswf-', 'sim-toarad/toa_clear_radflux-' )
     lwfclearname = lwfclearname.replace(filepart,'')
 
-    print clearname, lwfclearname
+    print radname, clearname, lwfclearname
 
     # input lwf clear data
     # ====================
@@ -228,10 +228,10 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset
     # input cloud type
     # ====================
     ctset = read_data_field( ctname, tobj, 'CT', region = 'atlantic')
-    dset.update( ctset    
+    dset.update( ctset )
 
 
-)
+
     # select and modify region mask
     # ==============================
     region_mask = dset['mask']
