@@ -321,3 +321,13 @@ There is a second input functionality (collector) that reads allsky together wit
 ```
 ilev2.collect_data4cre_sim??
 ```
+
+
+### Average CRE
+The analysis toolset 
+```
+import  nawdex_analysis.analysis.ave_cre as acre
+acre.ave_cre_from_radname
+acre.ave_radfluxes_from_radname
+```
+provides functions to calculate domain-average CRE and radiation fluxes depending on cloud type as function of time. Looping over time index within each radfile is also possible.
