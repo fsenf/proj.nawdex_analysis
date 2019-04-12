@@ -132,6 +132,31 @@ def roundTime(dt = None, roundTo = 60):
 ######################################################################
 ######################################################################
 
+def round2day(t):
+    
+    '''
+    Rounds a np.datetime64 object to one day.
+    
+    
+    Parameters
+    ----------
+    t : numpy datetime64 object
+        input time
+        
+    
+    Returns
+    --------
+    tout : numpy datetime64 object
+        rounded output time
+     
+    '''
+    
+    dt = np.timedelta64(12, 'h')
+    
+    return (t + dt).astype(dtype = 'datetime64[D]')
+
+######################################################################
+######################################################################
 
 def lonlat2azizen(lon, lat):
 
