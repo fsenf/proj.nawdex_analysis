@@ -1,5 +1,5 @@
 # Simulated TOA Radiation and Cloud-Radiative Effects
-## Simulation Data (on mistral)
+## Original Simulation Data (on mistral)
 ### General File Location
 All simulation files are saved on mistral under
 ```
@@ -80,6 +80,24 @@ find /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP -type d -iname 'nawdexnwp*mis*'
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0010
 ```
 
+### Radiation Variables
+The simulation data provide allsky radiation variable for up- and downwelling shortwave as well as longwave at TOA. Variable keys are  
+```
+['sod_t', 'sou_t', 'thb_t']       
+```
+
+
+Moreover, access to __net__ clearsky variables is possible. 
+```
+['swtoaclr', 'lwtoaclr']
+```
+
+The lev1 functions provide direct access to the data:
+```
+>>> import nawdex_analysis.io.input_sim as isim
+>>> isim.read_icon_rad_vector??
+```
+
 
 ### Georeference Mapping 
 A mapper has been written that generates the georeference file name based on the forecast / simulation filename. All ICON geo-ref files are collected at
@@ -90,7 +108,7 @@ A mapper has been written that generates the georeference file name based on the
 
 
 ### Data Regridding
-For regridding of synsat data, two steps are needed.
+The simulation data will be regridded onto MSG grid for easy analysis and comparison. For regridding, two steps are needed.
 
 1. Model Georeference is input and satellite zenith mask is calculated.
 2. Model grid is mapped to SEVIRI grid.
