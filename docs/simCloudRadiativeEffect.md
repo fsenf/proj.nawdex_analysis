@@ -155,3 +155,161 @@ The box averaging only fills grid boxes of the target grid that contain values f
 >>>dset_inter = reproj.combined_reprojection( dset, ind, rparam )
 ```
 
+### Final Regridding Loops
+The final regridding is done on mistral via the script:
+```
+cd /pf/b/b380352/proj/2017-07_nawdex_analysis/inout/
+./save_reproj_sim_raddata.py /pf/b/b380352/data/synsat/nawdex/nawdexnwp-80km-mis-0001
+```
+The simulation path is the input argument and the final regridded data are saved under:
+```
+ls -1 /pf/b/b380352/data/nawdex/sim-toarad/
+toa_clear_radflux-nawdexnwp-10km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0010.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0011.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0012.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0010.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0010.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0011.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0012.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0010.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0010.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0011.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0012.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0010.nc
+toa_radflux-nawdexnwp-10km-mis-0001.nc
+toa_radflux-nawdexnwp-10km-mis-0002.nc
+toa_radflux-nawdexnwp-10km-mis-0003.nc
+toa_radflux-nawdexnwp-10km-mis-0004.nc
+toa_radflux-nawdexnwp-10km-mis-0005.nc
+toa_radflux-nawdexnwp-10km-mis-0006.nc
+toa_radflux-nawdexnwp-10km-mis-0007.nc
+toa_radflux-nawdexnwp-10km-mis-0008.nc
+toa_radflux-nawdexnwp-10km-mis-0009.nc
+toa_radflux-nawdexnwp-10km-mis-0010.nc
+toa_radflux-nawdexnwp-10km-mis-0011.nc
+toa_radflux-nawdexnwp-10km-mis-0012.nc
+toa_radflux-nawdexnwp-20km-mis-0001.nc
+toa_radflux-nawdexnwp-20km-mis-0002.nc
+toa_radflux-nawdexnwp-20km-mis-0003.nc
+toa_radflux-nawdexnwp-20km-mis-0004.nc
+toa_radflux-nawdexnwp-20km-mis-0005.nc
+toa_radflux-nawdexnwp-20km-mis-0006.nc
+toa_radflux-nawdexnwp-20km-mis-0007.nc
+toa_radflux-nawdexnwp-20km-mis-0008.nc
+toa_radflux-nawdexnwp-20km-mis-0009.nc
+toa_radflux-nawdexnwp-20km-mis-0010.nc
+toa_radflux-nawdexnwp-2km-mis-0001.nc
+toa_radflux-nawdexnwp-2km-mis-0002.nc
+toa_radflux-nawdexnwp-2km-mis-0003.nc
+toa_radflux-nawdexnwp-2km-mis-0004.nc
+toa_radflux-nawdexnwp-2km-mis-0005.nc
+toa_radflux-nawdexnwp-2km-mis-0006.nc
+toa_radflux-nawdexnwp-2km-mis-0007.nc
+toa_radflux-nawdexnwp-2km-mis-0008.nc
+toa_radflux-nawdexnwp-2km-mis-0009.nc
+toa_radflux-nawdexnwp-2km-mis-0010.nc
+toa_radflux-nawdexnwp-2km-mis-0011.nc
+toa_radflux-nawdexnwp-2km-mis-0012.nc
+toa_radflux-nawdexnwp-40km-mis-0001.nc
+toa_radflux-nawdexnwp-40km-mis-0002.nc
+toa_radflux-nawdexnwp-40km-mis-0003.nc
+toa_radflux-nawdexnwp-40km-mis-0004.nc
+toa_radflux-nawdexnwp-40km-mis-0005.nc
+toa_radflux-nawdexnwp-40km-mis-0006.nc
+toa_radflux-nawdexnwp-40km-mis-0007.nc
+toa_radflux-nawdexnwp-40km-mis-0008.nc
+toa_radflux-nawdexnwp-40km-mis-0009.nc
+toa_radflux-nawdexnwp-40km-mis-0010.nc
+toa_radflux-nawdexnwp-5km-mis-0001.nc
+toa_radflux-nawdexnwp-5km-mis-0002.nc
+toa_radflux-nawdexnwp-5km-mis-0003.nc
+toa_radflux-nawdexnwp-5km-mis-0004.nc
+toa_radflux-nawdexnwp-5km-mis-0005.nc
+toa_radflux-nawdexnwp-5km-mis-0006.nc
+toa_radflux-nawdexnwp-5km-mis-0007.nc
+toa_radflux-nawdexnwp-5km-mis-0008.nc
+toa_radflux-nawdexnwp-5km-mis-0009.nc
+toa_radflux-nawdexnwp-5km-mis-0010.nc
+toa_radflux-nawdexnwp-5km-mis-0011.nc
+toa_radflux-nawdexnwp-5km-mis-0012.nc
+toa_radflux-nawdexnwp-80km-mis-0001.nc
+toa_radflux-nawdexnwp-80km-mis-0002.nc
+toa_radflux-nawdexnwp-80km-mis-0003.nc
+toa_radflux-nawdexnwp-80km-mis-0004.nc
+toa_radflux-nawdexnwp-80km-mis-0005.nc
+toa_radflux-nawdexnwp-80km-mis-0006.nc
+toa_radflux-nawdexnwp-80km-mis-0007.nc
+toa_radflux-nawdexnwp-80km-mis-0008.nc
+toa_radflux-nawdexnwp-80km-mis-0009.nc
+toa_radflux-nawdexnwp-80km-mis-0010.nc
+```
+
+Output is splitted between all- and clear-sky.
+
+## Regridded Simulation Data (altair / TROPOS store)
+Data have been transfered to TROPOS and are actually saved at
+```
+ /vols/talos/home/fabian/data/icon/nawdex/sim-toarad/
+```
+
+The level2 function
+```
+import nawdex_analysis.io.input_lev2 as ilev2
+ilev2.read_data_field??
+```
+
+provides the functionality to input these data together with georef and regional masks.
