@@ -306,6 +306,7 @@ Data have been transfered to TROPOS and are actually saved at
  /vols/talos/home/fabian/data/icon/nawdex/sim-toarad/
 ```
 
+### Generic Input
 The level2 function
 ```
 import nawdex_analysis.io.input_lev2 as ilev2
@@ -313,3 +314,10 @@ ilev2.read_data_field??
 ```
 
 provides the functionality to input these data together with georef and regional masks.
+
+
+### Input for CRE analysis
+There is a second input functionality (collector) that reads allsky together with clearsky together with cloud type. This helps for the CRE calculations
+```
+ilev2.collect_data4cre_sim??
+```
