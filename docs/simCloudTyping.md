@@ -36,7 +36,7 @@ cd ~/proj/2017-07_nawdex_analysis/inout
 ```
 
 ## Applying Cloud Typing to the Synthetic Sat Data (TROPOS)
-### Synsat@TROPOS
+### Synsat @ TROPOS
 The synsat data have been transfered to TROPOS and are stored under
 ```
 ls -1 /vols/talos/home/fabian/data/icon/nawdex/synsat/synsat*nc
