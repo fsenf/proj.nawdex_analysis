@@ -1,5 +1,5 @@
-# Typical Workflow
-## Simulation Data (on mistral)
+# Simulated TOA Radiation and Cloud-Radiative Effects
+## Original Simulation Data (on mistral)
 ### General File Location
 All simulation files are saved on mistral under
 ```
@@ -80,6 +80,24 @@ find /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP -type d -iname 'nawdexnwp*mis*'
 /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-80km-mis-0010
 ```
 
+### Radiation Variables
+The simulation data provide allsky radiation variable for up- and downwelling shortwave as well as longwave at TOA. Variable keys are  
+```
+['sod_t', 'sou_t', 'thb_t']       
+```
+
+
+Moreover, access to __net__ clearsky variables is possible. 
+```
+['swtoaclr', 'lwtoaclr']
+```
+
+The lev1 functions provide direct access to the data:
+```
+>>> import nawdex_analysis.io.input_sim as isim
+>>> isim.read_icon_rad_vector??
+```
+
 
 ### Georeference Mapping 
 A mapper has been written that generates the georeference file name based on the forecast / simulation filename. All ICON geo-ref files are collected at
@@ -88,34 +106,9 @@ A mapper has been written that generates the georeference file name based on the
 /work/bm0834/b380459/NAWDEX/grids
 ```
 
-### Synthetic Satellite Data Calculation
-The ICON simulation data have been transfered to DKRZ Mistral by Aiko Voigt. The "Synsat" forward operator has been applied to the simulation data using the script 
-```
-/pf/b/b380352/proj/2015-12_synsat/synsats4icon_nawdex/synsat_icon-nawdex.py
-```
-The script takes the `fg` filename as argument. The calculation are restricted to a satellite zenith angle of <75 degrees. The synsat data are saved as brightness temperatures for several infrared SEVIRI bands into hdf5 files. They are vectors using the mask = zen < 75 and are discretized as 0.01 Kelvin. Hence, the georeference and the masking condition is needed to recover the synsat data on the native model grid (which is also a vector in our case).
 
-One example is e.g.
-```
-cd data/synsat/nawdex/nawdexnwp-20km-mis-0001/
-
-h5ls -r synsat_nawdexnwp-20km-mis-0001_2016092200_fg_DOM01_ML_0001_0_88576.h5
-```
-giving the output
-```
-/                        Group
-/mcfarq_rescale_noccthresh Group
-/mcfarq_rescale_noccthresh/IR_087 Dataset {1, 88576}
-/mcfarq_rescale_noccthresh/IR_108 Dataset {1, 88576}
-/mcfarq_rescale_noccthresh/IR_120 Dataset {1, 88576}
-/mcfarq_rescale_noccthresh/IR_134 Dataset {1, 88576}
-/mcfarq_rescale_noccthresh/WV_062 Dataset {1, 88576}
-/mcfarq_rescale_noccthresh/WV_073 Dataset {1, 88576}
-```
-Thus, six different channels are included.
-
-### SynSat Data Regridding
-For regridding of synsat data, two steps are needed.
+### Data Regridding
+The simulation data will be regridded onto MSG grid for easy analysis and comparison. For regridding, two steps are needed.
 
 1. Model Georeference is input and satellite zenith mask is calculated.
 2. Model grid is mapped to SEVIRI grid.
@@ -162,46 +155,179 @@ The box averaging only fills grid boxes of the target grid that contain values f
 >>>dset_inter = reproj.combined_reprojection( dset, ind, rparam )
 ```
 
-
-
-
-## Observational Data (on TROPOS altair)
-### TOA Radiation fluxes
-TOA Radiation fluxes have been provided by Nicola Clerbaux (Belgium) as hdf5 files. The data are saved as `H5T_STD_I16BE` which means signed 16-bit integer (big endian). On TROPOS altair, TOA radiation data are saved under
+### Final Regridding Loops
+The final regridding is done on mistral via the script:
 ```
-/vols/talos/home/fabian/data/gerb-like
+cd /pf/b/b380352/proj/2017-07_nawdex_analysis/inout/
+./save_reproj_sim_raddata.py /pf/b/b380352/data/synsat/nawdex/nawdexnwp-80km-mis-0001
 ```
-A NaN values seems to be set to -32767 (and need to be masked) and all other values have to be multiplied by 0.25 get to radiation fluxes with unit Wm**(-2).
-
-#### Input of Data
-Functions to read and cutout TOA radiation flux data are available under pyhton package `nawdex_analysis.io.input_obs`.
-
-The calls 
+The simulation path is the input argument and the final regridded data are saved under:
 ```
->>>import nawdex_analysis.io.input_obs as ioobs
->>>lwf, swf_net = ioobs.read_radiation_fluxes( t )
-``` 
-read observed long-wave fluxes (`lwf`) and net short-wave flux (`swf_net`) scaled to SEVIRI grid.
-
-#### Cutout of data
-We only use a certain SEVIRI cutout for data analysis. This variable is saved under `nawdex_analysis.config`. An option to input cutted data on-the-fly is incorporated into `ioobs.read_radiation_fluxes( t )`.
-
-#### Output daily stacks to netcdf
-To ease later analysis, daily stacks of TOA radiation flux data have been saved into netcdf format using 
-
+ls -1 /pf/b/b380352/data/nawdex/sim-toarad/
+toa_clear_radflux-nawdexnwp-10km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0010.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0011.nc
+toa_clear_radflux-nawdexnwp-10km-mis-0012.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-20km-mis-0010.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0010.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0011.nc
+toa_clear_radflux-nawdexnwp-2km-mis-0012.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-40km-mis-0010.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0010.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0011.nc
+toa_clear_radflux-nawdexnwp-5km-mis-0012.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0001.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0002.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0003.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0004.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0005.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0006.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0007.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0008.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0009.nc
+toa_clear_radflux-nawdexnwp-80km-mis-0010.nc
+toa_radflux-nawdexnwp-10km-mis-0001.nc
+toa_radflux-nawdexnwp-10km-mis-0002.nc
+toa_radflux-nawdexnwp-10km-mis-0003.nc
+toa_radflux-nawdexnwp-10km-mis-0004.nc
+toa_radflux-nawdexnwp-10km-mis-0005.nc
+toa_radflux-nawdexnwp-10km-mis-0006.nc
+toa_radflux-nawdexnwp-10km-mis-0007.nc
+toa_radflux-nawdexnwp-10km-mis-0008.nc
+toa_radflux-nawdexnwp-10km-mis-0009.nc
+toa_radflux-nawdexnwp-10km-mis-0010.nc
+toa_radflux-nawdexnwp-10km-mis-0011.nc
+toa_radflux-nawdexnwp-10km-mis-0012.nc
+toa_radflux-nawdexnwp-20km-mis-0001.nc
+toa_radflux-nawdexnwp-20km-mis-0002.nc
+toa_radflux-nawdexnwp-20km-mis-0003.nc
+toa_radflux-nawdexnwp-20km-mis-0004.nc
+toa_radflux-nawdexnwp-20km-mis-0005.nc
+toa_radflux-nawdexnwp-20km-mis-0006.nc
+toa_radflux-nawdexnwp-20km-mis-0007.nc
+toa_radflux-nawdexnwp-20km-mis-0008.nc
+toa_radflux-nawdexnwp-20km-mis-0009.nc
+toa_radflux-nawdexnwp-20km-mis-0010.nc
+toa_radflux-nawdexnwp-2km-mis-0001.nc
+toa_radflux-nawdexnwp-2km-mis-0002.nc
+toa_radflux-nawdexnwp-2km-mis-0003.nc
+toa_radflux-nawdexnwp-2km-mis-0004.nc
+toa_radflux-nawdexnwp-2km-mis-0005.nc
+toa_radflux-nawdexnwp-2km-mis-0006.nc
+toa_radflux-nawdexnwp-2km-mis-0007.nc
+toa_radflux-nawdexnwp-2km-mis-0008.nc
+toa_radflux-nawdexnwp-2km-mis-0009.nc
+toa_radflux-nawdexnwp-2km-mis-0010.nc
+toa_radflux-nawdexnwp-2km-mis-0011.nc
+toa_radflux-nawdexnwp-2km-mis-0012.nc
+toa_radflux-nawdexnwp-40km-mis-0001.nc
+toa_radflux-nawdexnwp-40km-mis-0002.nc
+toa_radflux-nawdexnwp-40km-mis-0003.nc
+toa_radflux-nawdexnwp-40km-mis-0004.nc
+toa_radflux-nawdexnwp-40km-mis-0005.nc
+toa_radflux-nawdexnwp-40km-mis-0006.nc
+toa_radflux-nawdexnwp-40km-mis-0007.nc
+toa_radflux-nawdexnwp-40km-mis-0008.nc
+toa_radflux-nawdexnwp-40km-mis-0009.nc
+toa_radflux-nawdexnwp-40km-mis-0010.nc
+toa_radflux-nawdexnwp-5km-mis-0001.nc
+toa_radflux-nawdexnwp-5km-mis-0002.nc
+toa_radflux-nawdexnwp-5km-mis-0003.nc
+toa_radflux-nawdexnwp-5km-mis-0004.nc
+toa_radflux-nawdexnwp-5km-mis-0005.nc
+toa_radflux-nawdexnwp-5km-mis-0006.nc
+toa_radflux-nawdexnwp-5km-mis-0007.nc
+toa_radflux-nawdexnwp-5km-mis-0008.nc
+toa_radflux-nawdexnwp-5km-mis-0009.nc
+toa_radflux-nawdexnwp-5km-mis-0010.nc
+toa_radflux-nawdexnwp-5km-mis-0011.nc
+toa_radflux-nawdexnwp-5km-mis-0012.nc
+toa_radflux-nawdexnwp-80km-mis-0001.nc
+toa_radflux-nawdexnwp-80km-mis-0002.nc
+toa_radflux-nawdexnwp-80km-mis-0003.nc
+toa_radflux-nawdexnwp-80km-mis-0004.nc
+toa_radflux-nawdexnwp-80km-mis-0005.nc
+toa_radflux-nawdexnwp-80km-mis-0006.nc
+toa_radflux-nawdexnwp-80km-mis-0007.nc
+toa_radflux-nawdexnwp-80km-mis-0008.nc
+toa_radflux-nawdexnwp-80km-mis-0009.nc
+toa_radflux-nawdexnwp-80km-mis-0010.nc
 ```
->>>import nawdex_analysis.io.output_obs as oobs
->>>oobs.save_radflux_tstack( date )
+
+Output is splitted between all- and clear-sky.
+
+## Regridded Simulation Data (altair / TROPOS store)
+Data have been transfered to TROPOS and are actually saved at
+```
+ /vols/talos/home/fabian/data/icon/nawdex/sim-toarad/
+```
+
+### Generic Input
+The level2 function
+```
+import nawdex_analysis.io.input_lev2 as ilev2
+ilev2.read_data_field??
+```
+
+provides the functionality to input these data together with georef and regional masks.
+
+
+### Input for CRE analysis
+There is a second input functionality (collector) that reads allsky together with clearsky together with cloud type. This helps for the CRE calculations
+```
+ilev2.collect_data4cre_sim??
 ```
 
 
-### SEVIRI BT data
-SEVIRI BT are directly read out of the TROPOS archive at altair using the `ioobs.read_msevi(t1,t2)` where `t1` and `t2` are start and end time of the BT data stack.
-
-The finally daily BT fields are output into netcdf files which are generated by 
-
+### Average CRE
+The analysis toolset 
 ```
->>>import nawdex_analysis.io.output_obs as oobs
->>>oobs.save_meteosat_tstack( date )
+import  nawdex_analysis.analysis.ave_cre as acre
+acre.ave_cre_from_radname
+acre.ave_radfluxes_from_radname
 ```
-where `date` is a date string.
+provides functions to calculate domain-average CRE and radiation fluxes depending on cloud type as function of time. Looping over time index within each radfile is also possible.
