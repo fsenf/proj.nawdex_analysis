@@ -131,6 +131,74 @@ cd /pf/b/b380352/proj/2017-07_nawdex_analysis/inout
 ./save_retrieved_clearsky_SWF.py $EXPNAME
 ```
 
+## Calculation of Average CRE
+A general script exists to calculate the average CRE depending on cloud type (hence cloud type has be input as well). It can be run at TROPOS via
+```
+cd /vols/talos/home/fabian/proj/2017-07_icon-nawdex/inout
+./save_ave_cre.py /vols/talos/home/fabian/data/icon/nawdex/gerb-like/toa_radflux-nawdex-20160922.nc -scaled
+```
 
+The script generates netcdf files which are stored under
+```
+ls -1 /vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled*nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160915.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160916.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160917.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160918.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160919.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160920.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160921.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160922.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160923.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160924.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160925.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160926.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160927.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160928.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160929.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160930.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161001.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161002.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161003.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161004.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161005.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161006.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161007.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161008.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161009.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161010.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161011.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161012.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161013.nc
+/vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20161014.nc
+``` 
+
+Example content:
+```
+ncdump -h /vols/talos/home/fabian/data/icon/nawdex/statistics/ave_cre-scaled_meteosat-nawdex-20160922.nc
+netcdf ave_cre-scaled_meteosat-nawdex-20160922 {
+dimensions:
+	time = 24 ;
+	ct = 11 ;
+	string18 = 18 ;
+variables:
+	int64 time(time) ;
+		time:units = "hours since 2016-09-22 00:00:00" ;
+		time:calendar = "proleptic_gregorian" ;
+	double lcre_ave(time, ct) ;
+		lcre_ave:_FillValue = NaN ;
+		lcre_ave:units = "W m^{-2}" ;
+		lcre_ave:longname = "area-average longwave CRE " ;
+	double afrac(time, ct) ;
+		afrac:_FillValue = NaN ;
+		afrac:units = "%" ;
+		afrac:longname = "relative area fractions per cloud type" ;
+	double scre_ave(time, ct) ;
+		scre_ave:_FillValue = NaN ;
+		scre_ave:units = "W m^{-2}" ;
+		scre_ave:longname = "area-average shortwave CRE " ;
+	char ct(ct, string18) ;
+}
+```
 
 
