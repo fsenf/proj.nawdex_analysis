@@ -3,11 +3,11 @@
 ######################################################################
 '''
 This is a collection of output scripts to rewrite 
-observational data.
+simulated data.
 
 Esp. for
-* Meteosat BTs
-* Meteosat-based "GERB-like" radiation fluxes
+* Synsat BTs
+* Simulated radiation fluxes
 '''
 ######################################################################
 
@@ -284,7 +284,7 @@ def save_rad2nc( outname, dset, fill_val = 0, use_clear = False ):
     rad = {}
 
     for vname in dset.keys():
-        if  vname in ['lwf', 'swf_net']:
+        if  vname in ['lwf', 'swf_up', 'swf_net']:
         
             # interpolation
             v = dset[vname]
@@ -350,6 +350,19 @@ def save_rad2nc( outname, dset, fill_val = 0, use_clear = False ):
     # SHORT-WAVE ------------------------------------------------------
     vname = 'swf_net'
     long_name = 'TOA %s short-wave net radiation flux' % clear_attrib
+    
+    atts = copy.copy( att_rad ) 
+    atts['long_name'] = copy.copy( long_name )
+    outset[vname] = (['time', 'rows', 'cols'], rad[vname], atts)
+    encoding[vname] = {'zlib': True, 
+                       '_FillValue': fill_val,
+                       'dtype': 'int16', 
+                       'scale_factor': 0.25}
+
+
+    # SHORT-WAVE ------------------------------------------------------
+    vname = 'swf_up'
+    long_name = 'TOA %s short-wave upwelling radiation flux' % clear_attrib
     
     atts = copy.copy( att_rad ) 
     atts['long_name'] = copy.copy( long_name )

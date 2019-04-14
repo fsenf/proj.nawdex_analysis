@@ -381,7 +381,7 @@ def read_icon_rad_vector( fname, map_varnames = True, use_clear = False ):
     if not use_clear:
         vlist =  ['sod_t', 'sou_t', 'thb_t']       
     else:
-        vlist = ['swtoaclr', 'lwtoaclr']
+        vlist = ['sod_t', 'swtoaclr', 'lwtoaclr']
     
     input_set = read_iconvar_vector(fname, vlist)
 
@@ -392,13 +392,23 @@ def read_icon_rad_vector( fname, map_varnames = True, use_clear = False ):
 
         # signs convention
         if not use_clear:
-            swf_up   = input_set['sou_t']
-            swf_down = input_set['sod_t']
-        
-            radset['swf_net'] = swf_up  -  swf_down
+
+            # down is negative !!!
+            swf_up   =   input_set['sou_t']
+            swf_down = - input_set['sod_t']
+       
+            radset['swf_up'] = swf_up
+            radset['swf_net'] = swf_up  +  swf_down
+            
             radset['lwf'] = - input_set['thb_t']
+
         else:
-            radset['swf_net'] = - input_set['swtoaclr']
+            swf_down = - input_set['sod_t']
+            swf_net  = - input_set['swtoaclr']
+            swf_up   =   swf_net  - swf_down
+
+            radset['swf_up'] = swf_up
+            radset['swf_net'] = swf_net
             radset['lwf']     = - input_set['lwtoaclr']
 
         radset['lon'] = input_set['lon']
@@ -609,7 +619,7 @@ def read_radiation_flux_flist( flist,
 
 
     # set input parameters -------------------------------------------
-    variable_list = ['lwf', 'swf_net']
+    variable_list = ['lwf', 'swf_up', 'swf_net']
     reader_function =  read_icon_rad_vector
     reader_kwargs = dict(use_clear = use_clear)
 
