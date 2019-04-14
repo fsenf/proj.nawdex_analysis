@@ -27,6 +27,13 @@ To ease later analysis, daily stacks of TOA radiation flux data have been saved 
 >>>oobs.save_radflux_tstack( date )
 ```
 
+### Run Script for Regridding and NetCDF Output
+A python script on TROPOS is used for regridding and output of observed radiation fluxes:
+```
+cd /pf/b/b380352/proj/2017-07_nawdex_analysis/inout/
+./save_toa_radflux4nawdex.py 20160930
+```
+
 ### Final Allsky Radiation Data
 These daily data stacks are saved under:
 ```
@@ -65,13 +72,19 @@ toa_radflux-nawdex-20161014.nc
 
 An example is
 ```
-ncdump -h /vols/talos/home/fabian/data/icon/nawdex/gerb-like/toa_radflux-nawdex-20160929.nc
-netcdf toa_radflux-nawdex-20160929 {
+ncdump -h /vols/talos/home/fabian/data/icon/nawdex/gerb-like/toa_radflux-nawdex-20160930.nc
+netcdf toa_radflux-nawdex-20160930 {
 dimensions:
-	time = 24 ;
 	rows = 1004 ;
 	cols = 2776 ;
+	time = 24 ;
 variables:
+	short swf_up(time, rows, cols) ;
+		swf_up:_FillValue = 0s ;
+		swf_up:units = "W m**(-2)" ;
+		swf_up:long_name = "TOA short-wave upwelling radiation flux" ;
+		swf_up:coordinates = "lat lon" ;
+		swf_up:scale_factor = 0.25 ;
 	short swf_net(time, rows, cols) ;
 		swf_net:_FillValue = 0s ;
 		swf_net:units = "W m**(-2)" ;
@@ -104,6 +117,7 @@ variables:
 		:institution = "Leibniz Institute for Tropospheric Research" ;
 		:author = "Fabian Senf (senf@tropos.de)" ;
 }
+
 ```
 
 
@@ -130,6 +144,9 @@ Python scripts are located on mistral and can be run via
 cd /pf/b/b380352/proj/2017-07_nawdex_analysis/inout
 ./save_retrieved_clearsky_SWF.py $EXPNAME
 ```
+
+### Bias Correction for Longwave
+Bias correction for the longwave is done on the fly (at the moment - for simplicity). An offset of-2 W/m**2 is substracted from the simulation bases estimate. That is, simulaiton is slightly too warm. 
 
 ## Calculation of Average CRE
 A general script exists to calculate the average CRE depending on cloud type (hence cloud type has be input as well). It can be run at TROPOS via
