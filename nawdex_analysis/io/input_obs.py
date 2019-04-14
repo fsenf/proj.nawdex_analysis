@@ -211,9 +211,9 @@ def read_radiation_fluxes(t,
     swf_net = swf_up  -  swf_down
 
     if do_cutout:
-        return gi.cutout_fields([lwf, swf_net], SEVIRI_cutout)
+        return gi.cutout_fields([lwf, swf_net, swf_up], SEVIRI_cutout)
     else:
-        return lwf, swf_net
+        return lwf, swf_net, swf_up
 
 ######################################################################
 ######################################################################
@@ -366,9 +366,9 @@ def read_radiation_flux_tstack(date,
     n = 0
     while t <= t2:
         
-        lwf, swf_net = read_radiation_fluxes(t, 
-                                             fdir = fdir, 
-                                             do_cutout = do_cutout)
+        lwf, swf_net, swf_up = read_radiation_fluxes(t, 
+                                                     fdir = fdir, 
+                                                     do_cutout = do_cutout)
 
         # initialize -------------------------------------------------
         if n == 0:
@@ -377,10 +377,13 @@ def read_radiation_flux_tstack(date,
 
             lwf_stack = np.ma.zeros( (ntimes, nrows, ncols) )
             swf_net_stack = np.ma.zeros( (ntimes, nrows, ncols) )
+            swf_up_stack = np.ma.zeros( (ntimes, nrows, ncols) )
         # ============================================================
 
         lwf_stack[n] = lwf[:]
         swf_net_stack[n] = swf_net[:]
+        swf_up_stack[n] = swf_up[:]
+
 
         dset['time'] += [ copy.copy( t ) ]
 
@@ -389,6 +392,7 @@ def read_radiation_flux_tstack(date,
 
     dset['lwf'] = lwf_stack
     dset['swf_net'] = swf_net_stack
+    dset['swf_up'] = swf_up_stack
     # ================================================================
 
 
