@@ -284,7 +284,7 @@ def save_rad2nc( outname, dset, fill_val = 0 ):
     for vname in dset.keys():
 
 
-        if  vname in ['lwf', 'swf_net']:
+        if  vname in ['lwf', 'swf_net', 'swf_up']:
         
             # interpolation
             v = dset[vname]
