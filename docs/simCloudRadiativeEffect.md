@@ -306,6 +306,53 @@ Data have been transfered to TROPOS and are actually saved at
  /vols/talos/home/fabian/data/icon/nawdex/sim-toarad/
 ```
 
+### Example Output
+An example of the TOA radiation file is given here:
+```
+ncdump -h /vols/talos/home/fabian/data/icon/nawdex/sim-toarad/toa_radflux-nawdexnwp-10km-mis-0001.nc
+netcdf toa_radflux-nawdexnwp-10km-mis-0001 {
+dimensions:
+	time = 96 ;
+	rows = 1004 ;
+	cols = 2776 ;
+variables:
+	short swf_up(time, rows, cols) ;
+		swf_up:_FillValue = 0s ;
+		swf_up:units = "W m**(-2)" ;
+		swf_up:long_name = "TOA  short-wave upwelling radiation flux" ;
+		swf_up:coordinates = "lat lon" ;
+		swf_up:scale_factor = 0.25 ;
+	short swf_net(time, rows, cols) ;
+		swf_net:_FillValue = 0s ;
+		swf_net:units = "W m**(-2)" ;
+		swf_net:long_name = "TOA  short-wave net radiation flux" ;
+		swf_net:coordinates = "lat lon" ;
+		swf_net:scale_factor = 0.25 ;
+	short lwf(time, rows, cols) ;
+		lwf:_FillValue = 0s ;
+		lwf:units = "W m**(-2)" ;
+		lwf:long_name = "TOA  long-wave radiation flux" ;
+		lwf:coordinates = "lat lon" ;
+		lwf:scale_factor = 0.25 ;
+	double lat(rows, cols) ;
+		lat:units = "degrees_north" ;
+		lat:long_name = "latitude" ;
+	double lon(rows, cols) ;
+		lon:units = "degrees_east" ;
+		lon:long_name = "longitude" ;
+	double time(time) ;
+		time:units = "day as %Y%m%d.%f" ;
+		time:long_name = "Time" ;
+		time:calendar = "proleptic_gregorian" ;
+
+// global attributes:
+		:description = "instantaneous  TOA radiation fluxes simulated with ICON" ;
+		:title = "TOA  Radiation Fluxes" ;
+		:institution = "Leibniz Institute for Tropospheric Research" ;
+		:author = "Fabian Senf (senf@tropos.de)" ;
+}
+```
+
 ### Generic Input
 The level2 function
 ```
