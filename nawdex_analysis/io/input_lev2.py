@@ -292,15 +292,24 @@ def collect_data4cre_sim( radname, itime ):
     clearname = radname.replace('toa_', 'toa_clear_')
     ctname = radname2ctname( radname, datatype = 'sim' )
 
-    # read data
+    # read radiation data for allsky
     dset = {}
-    for vname in ['lwf', 'swf_net']:
+    for vname in ['lwf', 'swf_net', 'swf_up']:
         radset = read_data_field(radname, itime, vname, region='atlantic')
         dset[vname] = radset[vname]
-        
+
+    dset['swf_down'] = dset['swf_net'] - dset['swf_up']
+
+
+    # read radiation data for clearsky
+    for vname in ['lwf', 'swf_net']:        
         clearset = read_data_field(clearname, itime, vname, region ='atlantic')
         dset['%s_clear' % vname] = clearset[vname]
-    
+
+    # calculate SWF up (clearsky) from allsky downwelling (downwelling is the same...)
+    dset['swf_up_clear'] = dset['swf_net_clear'] - dset['swf_down']
+
+
     ctset = read_data_field( ctname, radset['time_obj'], 'CT', region = 'atlantic')
     dset.update( ctset    )
     # select region mask
