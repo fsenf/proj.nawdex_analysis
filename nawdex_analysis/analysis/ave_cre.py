@@ -160,8 +160,13 @@ def ave_radfluxes_from_radname( radname, itime, **kwargs ):
     attrs['lwf'] = {'units' : 'W m^{-2}', 'longname':'area-average longwave radiation flux (all-sky)'}
     attrs['lwf_clear'] = {'units' : 'W m^{-2}', 'longname':'area-average longwave radiation flux (clearsky)'}
 
-    attrs['swf_net'] = {'units' : 'W m^{-2}', 'longname':'area-average shortwave radiation flux (all-sky)'}
-    attrs['swf_net_clear'] = {'units' : 'W m^{-2}', 'longname':'area-average shortwave radiation flux (clearsky)'}
+    attrs['swf_net'] = {'units' : 'W m^{-2}', 'longname':'area-average net shortwave radiation flux (all-sky)'}
+    attrs['swf_net_clear'] = {'units' : 'W m^{-2}', 'longname':'area-average net shortwave radiation flux (clearsky)'}
+
+    attrs['swf_down'] = {'units' : 'W m^{-2}', 'longname':'area-average downwelling shortwave radiation flux'}
+
+    attrs['swf_up'] = {'units' : 'W m^{-2}', 'longname':'area-average upwelling shortwave radiation flux (all-sky)'}
+    attrs['swf_up_clear'] = {'units' : 'W m^{-2}', 'longname':'area-average upwelling shortwave radiation flux (clearsky)'}
     
 
 
