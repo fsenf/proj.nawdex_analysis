@@ -138,7 +138,7 @@ def ave_radfluxes_from_radname( radname, itime, **kwargs ):
 
     # prepare all variables
     # ======================
-    radflux_namelist = ['lwf', 'lwf_clear', 'swf_net', 'swf_net_clear']
+    radflux_namelist = ['lwf', 'lwf_clear', 'swf_net', 'swf_net_clear', 'swf_down', 'swf_up', 'swf_up_clear']
 
     ave_rflux = {}
     for rname in radflux_namelist:

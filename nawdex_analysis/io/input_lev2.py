@@ -188,9 +188,11 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset
     # read allsky data
     # =================
     dset = {}
-    for vname in ['lwf', 'swf_net']:
+    for vname in ['lwf', 'swf_net', 'swf_up']:
         radset = read_data_field(radname, itime, vname, region='atlantic')
         dset[vname] = radset[vname]
+
+    dset['swf_down'] = dset['swf_net'] - dset['swf_up']
         
         
         
@@ -209,6 +211,8 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset
     clearname = filemap[tobj][0]
     clearset = read_data_field(clearname, tobj, 'swf_net', region ='atlantic')
     dset['swf_net_clear'] = clearset['swf_net']    
+    dset['swf_up_clear'] = dset['swf_net_clear'] - dset['swf_down']
+
 
 
     # long-wave filename
