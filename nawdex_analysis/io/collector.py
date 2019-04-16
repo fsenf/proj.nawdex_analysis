@@ -236,7 +236,7 @@ def get_radflux4set( set_number, allowed_set_range = [1,4] ):
     '''
 
     
-    file_format =  '%s/statistics/ave_radflux%s-%s.nc'
+    file_format =  '%s/statistics/ave_radfluxes%s-%s.nc'
 
     dset = get_stat4set( set_number, 
                          allowed_set_range = allowed_set_range, 
