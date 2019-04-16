@@ -59,7 +59,7 @@ def collect_sim_ave_cre4set( set_number,
 
 
     if file_format == 'default':
-        fformat = '%s/statistics/ave_cre%s_%s.nc' % ('%s', file_part, '%s')
+        fformat = '%s/statistics/ave_cre%s-%s.nc' % ('%s', file_part, '%s')
     else:
         fformat = file_format % ('%s', file_part, '%s')
 
