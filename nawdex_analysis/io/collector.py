@@ -20,6 +20,7 @@ This is a pachake that collects data for different sets.
 ######################################################################
 
 def collect_sim_ave_cre4set( set_number, 
+                             file_part = '',
                              file_format = 'default', 
                              allowed_set_range = [1,4] ):
 
@@ -58,7 +59,9 @@ def collect_sim_ave_cre4set( set_number,
 
 
     if file_format == 'default':
-        file_format = '%s/statistics/ave_cre-%s.nc' 
+        fformat = '%s/statistics/ave_cre%s_%s.nc' % ('%s', file_part, '%s')
+    else:
+        fformat = file_format % ('%s', file_part, '%s')
 
 
     # collect the CRE data 
@@ -67,7 +70,7 @@ def collect_sim_ave_cre4set( set_number,
     for expname in explist:
         
         # open dataset
-        fname = file_format % (nawdex_dir, expname)
+        fname = fformat % (nawdex_dir, expname)
         d = xr.open_dataset( fname )
         
 
@@ -90,7 +93,7 @@ def collect_sim_ave_cre4set( set_number,
 ######################################################################
 
 
-def get_obs_cre4time_list( time, file_part ='-scaled'):
+def get_obs_cre4time_list( time, file_part ='-scaled', file_format = 'default'):
 
 
     '''
@@ -102,8 +105,13 @@ def get_obs_cre4time_list( time, file_part ='-scaled'):
     time : xarray time data
        list of time fow which obs CRE is înput
 
+    file_format : str, optional, default = 'default'
+       a string that defines file format, 
+       restriction: two %s are needed at the moment
+
     file_part : str, optional, default = '-scaled'
        selection of file part that specifies if bias correction of clearsky is used
+       only used if `file_format == 'default`
 
     
     Returns
@@ -123,6 +131,15 @@ def get_obs_cre4time_list( time, file_part ='-scaled'):
     timeobj_lists = np.array( timeobj_lists )
 
 
+
+    if file_format == 'default':
+        fformat = '%s/statistics/ave_cre%s_%s.nc' % ('%s', file_part, '%s')
+    else:
+        fformat = file_format % ('%s', file_part, '%s')
+
+
+
+
     # read daily stacks of obs data
     # ==============================
     t1, t2 = timeobj_lists.min(), timeobj_lists.max()
@@ -134,8 +151,8 @@ def get_obs_cre4time_list( time, file_part ='-scaled'):
 
     while t <= t2: 
     
-        obsname = 'meteosat-nawdex-%s' % t.strftime('%Y%m%d')
-        fname = '%s/statistics/ave_cre%s_%s.nc' % (nawdex_dir, file_part, obsname)
+        # open dataset
+        fname = fformat % (nawdex_dir, expname)
         obsdat += [ xr.open_dataset( fname ), ]
         
         t += dt
@@ -171,6 +188,10 @@ def get_cre4set( set_number, allowed_set_range = [1,4] ):
     allowed_set_range : list, optional, default = [1, 4]
        min & max of the allow set range
 
+    file_part : str, optional, default = '-scaled'
+       selection of file part that specifies if bias correction of clearsky is used
+       only used if `file_format == 'default`
+
     
     Returns
     --------
@@ -179,19 +200,111 @@ def get_cre4set( set_number, allowed_set_range = [1,4] ):
 
     '''
 
+    
+
+    dset = get_stat4set( set_number, 
+                         allowed_set_range = allowed_set_range, 
+                         file_format = 'default')
+                         
+    return dset
+
+
+######################################################################
+######################################################################
+
+def get_radflux4set( set_number, allowed_set_range = [1,4] ):
+
+
+    '''
+    Collects average radiation flux data for a selected set.
+
+
+    Parameters
+    ----------
+    set_number : int
+       numeric identifier of a selected experiment set.
+
+    allowed_set_range : list, optional, default = [1, 4]
+       min & max of the allow set range
+
+    
+    Returns
+    --------
+    dset : xarray Dataset
+       set that contains time series of simulated and observed CRE effects.
+
+    '''
+
+    
+    file_format =  '%s/statistics/ave_radflux%s_%s.nc'
+
+    dset = get_stat4set( set_number, 
+                         allowed_set_range = allowed_set_range, 
+                         file_format = file_format)
+                         
+    return dset
+
+
+######################################################################
+######################################################################
+
+def get_stat4set( set_number, allowed_set_range = [1,4], file_format = 'default' ):
+
+
+    '''
+    Collects average CRE data for a selected set.
+
+
+    Parameters
+    ----------
+    set_number : int
+       numeric identifier of a selected experiment set.
+
+    allowed_set_range : list, optional, default = [1, 4]
+       min & max of the allow set range
+
+    file_format : str, optional, default = 'default'
+       a string that defines file format, 
+       restriction: two %s are needed at the moment
+
+    
+    Returns
+    --------
+    dset : xarray Dataset
+       set that contains time series of simulated and observed CRE effects.
+
+    '''
+
+    dlist = []
+
     # get simulated CRE
     # ====================
     dsim = collect_sim_ave_cre4set( set_number, 
+                                    file_format = file_format,
                                     allowed_set_range = allowed_set_range )
 
+    dlist +=[ dsim, ]
     
     # get the two observation variants
     # ========================================
-    dobs_scaled = get_obs_cre4time_list( dsim.time, file_part ='-scaled')
-    dobs_not_scaled = get_obs_cre4time_list( dsim.time, file_part ='-not_scaled')
+    try: 
+        dobs_scaled = get_obs_cre4time_list( dsim.time, 
+                                             file_format = file_format,
+                                             file_part ='-scaled')
+        dlist += [ dobs_scaled, ]
+    except:
+        pass
+
+    try:
+        dobs_not_scaled = get_obs_cre4time_list( dsim.time, 
+                                                 file_format = file_format,
+                                                 file_part ='-not_scaled')
+        dlist += [ dobs_not_scaled, ]
+    except:
+        pass
 
 
-    return xr.merge( [dsim, dobs_scaled, dobs_not_scaled] )
+    return xr.merge( dlist )
 
 ######################################################################
 ######################################################################
