@@ -339,8 +339,17 @@ def get_plotting_order( vlist, direct_id_input = True ):
     else:
         idlist = vlist
     
-    index_list = [idlist.index( 'msevi-scaled' ),]
-    index_list += [idlist.index( 'msevi-not_scaled' ),]
+    index_list = []
+    
+    try:
+        index_list += [idlist.index( 'msevi-scaled' ),]
+    except:
+        pass
+
+    try:
+        index_list += [idlist.index( 'msevi-not_scaled' ),]
+    except:
+        pass
     
     for res in ['2km', '5km', '10km', '20km', '40km', '80km']:
         for muphys in ['oneMom', 'twoMom']:
