@@ -133,7 +133,7 @@ def get_obs_cre4time_list( time, file_part ='-scaled', file_format = 'default'):
 
 
     if file_format == 'default':
-        fformat = '%s/statistics/ave_cre%s_%s.nc' % ('%s', file_part, '%s')
+        fformat = '%s/statistics/ave_cre%s-%s.nc' % ('%s', file_part, '%s')
     else:
         fformat = file_format % ('%s', file_part, '%s')
 
@@ -236,7 +236,7 @@ def get_radflux4set( set_number, allowed_set_range = [1,4] ):
     '''
 
     
-    file_format =  '%s/statistics/ave_radflux%s_%s.nc'
+    file_format =  '%s/statistics/ave_radflux%s-%s.nc'
 
     dset = get_stat4set( set_number, 
                          allowed_set_range = allowed_set_range, 
