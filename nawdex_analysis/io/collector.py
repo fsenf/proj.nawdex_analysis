@@ -152,7 +152,9 @@ def get_obs_cre4time_list( time, file_part ='-scaled', file_format = 'default'):
     while t <= t2: 
     
         # open dataset
-        fname = fformat % (nawdex_dir, expname)
+        obsname = 'meteosat-nawdex-%s' % t.strftime('%Y%m%d')
+
+        fname = fformat % (nawdex_dir, obsname)
         obsdat += [ xr.open_dataset( fname ), ]
         
         t += dt
