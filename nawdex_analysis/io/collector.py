@@ -175,7 +175,7 @@ def get_obs_cre4time_list( time, file_part ='-scaled', file_format = 'default'):
 ######################################################################
 ######################################################################
 
-def get_cre4set( set_number, allowed_set_range = [1,4] ):
+def get_cre4set( set_number, allowed_set_range = [1,4], **kwargs ):
 
 
     '''
@@ -206,7 +206,7 @@ def get_cre4set( set_number, allowed_set_range = [1,4] ):
 
     dset = get_stat4set( set_number, 
                          allowed_set_range = allowed_set_range, 
-                         file_format = 'default')
+                         file_format = 'default', **kwargs)
                          
     return dset
 
@@ -214,7 +214,7 @@ def get_cre4set( set_number, allowed_set_range = [1,4] ):
 ######################################################################
 ######################################################################
 
-def get_radflux4set( set_number, allowed_set_range = [1,4] ):
+def get_radflux4set( set_number, allowed_set_range = [1,4], **kwargs ):
 
 
     '''
@@ -242,7 +242,7 @@ def get_radflux4set( set_number, allowed_set_range = [1,4] ):
 
     dset = get_stat4set( set_number, 
                          allowed_set_range = allowed_set_range, 
-                         file_format = file_format)
+                         file_format = file_format, **kwargs)
                          
     return dset
 
