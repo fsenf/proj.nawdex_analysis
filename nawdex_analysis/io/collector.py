@@ -310,3 +310,54 @@ def get_stat4set( set_number, allowed_set_range = [1,4], file_format = 'default'
 
 ######################################################################
 ######################################################################
+
+def get_stat4all( set_range = range(1, 5), file_format = 'default', method = 'all' ):
+        
+    '''
+    Read and stack all input sets (CRE or Radiation Fluxes).
+    
+    
+    Parameters
+    ----------
+    set_range : list, optional, default = range(1,5)
+        list of set number to be input
+        
+    file_format : str, optional, default = 'default'
+        file format defintion which is forwarded to the function 'get_stat4set`
+        
+    method : str, optional, default = 'all'
+        selects if all data are input (`all`) 
+        or if only data with no-nan clearsky are input (`strict`)
+        
+        
+    Returns
+    --------
+    dset : xarray Dataset
+        the dataset which contains average CRE or radfluxes
+    '''
+    
+    dlist = []
+    for iset in set_range:
+        dlist += [get_stat4set( iset, file_format = file_format ), ]
+    
+    
+    if method == 'all':
+        # all data are stacked in time
+        dset = xr.concat( dlist, dim = 'time' )
+        
+    elif method == 'strict':
+        # only data if no nans in average clearsky are stacked
+        
+        # 1st stack all data
+        dall = xr.concat( dlist, dim = 'time' )
+    
+        # 2nd contain included data
+        dclear = dall.sel(ct = 'clear_ocean').dropna('idname')
+
+        idnames = dclear.idname.data
+        dset = dall.sel( idname = idnames )
+        
+    return dset
+
+######################################################################
+######################################################################
