@@ -250,7 +250,7 @@ def get_radflux4set( set_number, allowed_set_range = [1,4] ):
 ######################################################################
 ######################################################################
 
-def get_stat4set( set_number, allowed_set_range = [1,4], file_format = 'default' ):
+def get_stat4set( set_number, allowed_set_range = [1,4], file_format = 'default', method = 'all' ):
 
 
     '''
@@ -269,6 +269,11 @@ def get_stat4set( set_number, allowed_set_range = [1,4], file_format = 'default'
        a string that defines file format, 
        restriction: two %s are needed at the moment
 
+    method : str, optional, default = 'all'
+        selects if all data are input (`all`) 
+        or if only data with no-nan clearsky are input (`strict`)
+        
+
     
     Returns
     --------
@@ -276,6 +281,17 @@ def get_stat4set( set_number, allowed_set_range = [1,4], file_format = 'default'
        set that contains time series of simulated and observed CRE effects.
 
     '''
+
+    # a small wrapper to get 'all' input inlcuded
+    if set_number == 'all':
+
+        set_range = range( allowed_set_range[0], allowed_set_range[1] + 1)
+
+        dset = get_stat4all( set_range = set_range, file_format = file_format, method = method )
+
+        return dset
+    # --------------------------------------------------
+
 
     dlist = []
 
