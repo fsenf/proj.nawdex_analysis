@@ -188,6 +188,85 @@ def get_exp_kws_points( idname ):
 ######################################################################
 
 
+def get_exp_kws_bars( idname ):
+
+    '''
+    Plotting keywords for different experiments - lines.
+
+    
+    Parameters
+    ----------
+    idname : str
+        configuration ID name
+
+
+    Returns
+    --------
+    kws : dict
+        collected keywords
+    '''
+    
+    kws = dict()
+
+
+    # set color
+    # =========
+    
+    clist = ['#2d7ec6', '#227f7e', '#7d8111', '#ef823b', '#e01950', '#7c0011' ]
+    # clist = ['#2D7EC6', '#227F7E', '#7D8111', '#EF823B', '#E019050', '#7C0011' ]
+    resolutions = ['2km', '5km', '10km', '20km', '40km', '80km']
+    
+    if idname == 'msevi-scaled':
+        kws['color'] = 'k'
+        kws['linewidth'] = 4
+        kws['linestyle'] = '-'
+        kws['zorder'] = 10
+
+    elif idname == 'msevi-not_scaled':
+        kws['color'] = 'gray'
+        kws['linewidth'] = 2
+        kws['linestyle'] = '-'
+        kws['zorder'] = 9
+
+    else:
+        for i, res in enumerate(resolutions):
+            if res in idname:
+            
+                if '_Conv' in idname:
+                    kws['color'] = clist[i]
+                elif '_noConv' in idname:
+                    kws['edgecolor'] = clist[i]
+                    kws['color'] = 'w'
+                    
+                kws['linewidth'] = 2
+
+
+
+    # set linestyle
+    # =============
+    if 'twoMom' in idname:
+        kws['linestyle'] = '-'
+        kws['alpha'] = 1.
+    elif 'oneMom' in idname:
+        kws['linestyle'] = '-'
+        kws['alpha'] = 0.3
+        
+        
+
+#        if '_Conv' in idname:
+#            kws['fillstyle'] = 'full'
+#        elif '_noConv' in idname:
+#            kws['fillstyle'] = 'none'
+#            kws['markeredgewidth'] = 1.5
+
+
+    return kws
+
+######################################################################
+######################################################################
+
+
+
 def get_exp_kws_lines_expname( expname ):
 
     '''

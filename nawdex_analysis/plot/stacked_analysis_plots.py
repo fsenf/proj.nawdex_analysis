@@ -20,7 +20,7 @@ abc = string.ascii_lowercase
 # --------------------------------------------------------------------
 
 import nawdex_analysis.io.collector
-from exp_layout import get_plotting_order, get_exp_kws
+from exp_layout import get_plotting_order, get_exp_kws, get_exp_kws_bars
 from nawdex_analysis.io.tools import round2day
 
 
@@ -321,6 +321,114 @@ def plot_net_cre_contrib4set( set_number, dset = None, plot_legend = True, plot_
             fontweight = 'bold', fontsize = 'large')
 
     
+    return
+
+######################################################################
+######################################################################
+
+def hor_barplot_exp_plot( dset, vname, idlist = 'all', catlist = 'all', iddim = 'idname', catdim = 'ct', 
+                           obsref_name = 'msevi-scaled', doffset = 0.05, offset0 = -0.4, icount0 = 0,
+                           make_labels = True):
+
+    '''
+    A generic function that makes a colorful plot with categories stacked in the vertical.
+    In each category, the different IDs are also stacked.
+    
+    
+    Parameters
+    ----------
+    dset : xarray Dataset
+        dataset object containing variables for different IDs and categories
+    
+    vname : str
+        variable to be plotted
+    
+    idlist : list, optional, default = 'all'
+        list of IDnames to be stacked and compared
+        if 'all': all IDs will be used
+
+    catlist : list, optional, default = 'all'
+        list of categories to be stacked and compared
+        if 'all': all categories will be used
+
+    iddim : str, optional, default = 'idname'
+        name of the dimension that contains IDnames
+
+    catdim : str, optional, default = 'idname'
+        name of the dimension that contains category names
+
+    
+    Returns
+    --------
+    ax : pylab axis object
+        axis instance which contains the plot
+    
+    '''
+    
+    # preparation of plotting variables
+    # ==================================
+    
+    # get ID list
+    if idlist == 'all':
+        idlist = list( dset[iddim].data )
+        
+    # get the plotting order (pre-defined)
+    order = get_plotting_order( idlist )
+    
+    # get category list
+    if catlist == 'all':
+        catlist = list( dset[catdim].data )
+        
+    # extract variable
+    var = dset[vname]
+    
+    cindex = []
+    icount = icount0
+    for catname in catlist:
+        
+        # get variables for categories
+        vc = var.sel({catdim : catname})
+    
+        cindex += [ 1 * icount, ]
+        
+        yobs = icount
+        offset = offset0
+        
+        for n, idname in enumerate( np.array(idlist)[order] ):
+
+            
+            # select variables
+            x = vc.sel({iddim : idname})
+            xo = vc.sel({iddim : obsref_name})
+                
+            # select place
+            if idname == obsref_name:
+                y = yobs
+            else:
+                y = yobs + offset
+                
+            
+            # get plotting style
+            kws = get_exp_kws_bars( idname )
+            kws['linewidth'] = 2
+            
+            if icount == 0:
+                label = idname
+            else:
+                label = None
+                
+            pl.bar( y, x - xo, doffset / 1.2, xo,  label = label, **kws )
+
+
+            offset += doffset
+
+        icount += 1
+
+    pl.plot( [icount0 + offset0, icount0 + offset], [xo,xo],  color = 'k')
+
+    pl.xticks( cindex, catlist )
+    
+
     return
 
 ######################################################################
