@@ -433,3 +433,134 @@ def hor_barplot_exp_plot( dset, vname, idlist = 'all', catlist = 'all', iddim = 
 
 ######################################################################
 ######################################################################
+
+def stacker4flamingo( dv, vlist, scal = 0.1, offset = 0, output_stacked_vars = True ):
+    
+    '''
+    Makes a cumulative data stack for flamingo plot.
+    
+    
+    Parameters
+    ----------
+    dv : xarray dataset
+        radiation flux deviations
+        
+    vlist : list
+        list of radiation variable to be stacked
+        
+    scal : float, optional
+        scaling of the x-variable (x is counter)
+
+    offset : float, optional
+        offset of the x-variable (x is counter)
+    
+    output_stacked_vars : bool, optional
+        if True: the output is stacked (two values for each deviation)
+        
+        
+    Returns
+    --------
+    x : numpy array
+        counter variable
+    
+    y : numpy array
+        cumulative deviaitons
+    '''
+    
+    nvar = len( vlist )
+    
+    xi = np.arange( nvar ) * scal + offset
+    
+    
+    yval = []
+    for i in range( nvar ):    
+        vname = vlist[i]
+        yval.append( dv[vname].data )
+    yval = np.array( yval )
+    
+    yi = yval.cumsum()
+    
+        
+    x = []
+    y = [0, ]
+    
+    for i in range( nvar ):
+        x.append( xi[i] )
+        x.append( xi[i] )
+        y.append( yi[i] )
+        y.append( yi[i] )
+    y.pop(-1)
+    
+    x = np.array( x )
+    y = np.array( y )
+    
+    if output_stacked_vars:
+        return x, y
+    else:
+        return xi, yi
+
+######################################################################
+######################################################################
+
+def hor_flamingo_plots(cset2, id1_list, id2_list, vlist = ['swf_up', 'swf_down', 'lwf'], scale = 0.2):
+
+    '''
+    Make a horizontal flamingo / snake plot.
+    
+    
+    Parameters
+    ----------
+    cset2 : xarray dataset
+        radiation data
+        
+    id1_list : list
+        list for variable IDs that are used as reference (for deviation calculation)
+
+    id2_list : list
+        list for variable IDs from which reference is subtracted
+        
+    vlist : list, optional
+        list of radiation variables
+        
+    scale : float, optional
+        optional scaling of x-range (for variable stack)
+        
+        
+    Returns
+    -------
+    None
+        
+    
+    '''
+    order = get_plotting_order( id2_list )
+
+    for i, id2 in enumerate( np.array(id2_list)[order] ):
+
+        # get reference ID
+        id1 = np.array(id1_list)[order][i]
+        
+        # get variable fields
+        v1 = cset2.sel(idname = id1)
+        v2 = cset2.sel(idname = id2)
+
+        # calculate difference
+        dv = v2 - v1 
+
+        # point plots
+        x, y =  stacker4flamingo(dv, vlist, offset = scale * i)
+        kws = get_exp_kws(id2, ptype='points')
+        pl.plot( [ x[-1]], [ y[-1]], **kws )
+
+        # line plots
+        kws = get_exp_kws(id2, ptype='lines')
+        pl.plot( x, y, **kws )
+
+    pl.xticks([], [])
+
+    sns.despine()
+    pl.ylabel('$\Delta F_\mathrm{net} \;(\mathrm{W\,m^{-2}})$')
+    pl.axhline(0, color = 'gray', alpha = 0.3, lw = 3)
+    return 
+
+######################################################################
+######################################################################
