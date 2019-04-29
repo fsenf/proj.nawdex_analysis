@@ -240,3 +240,60 @@ def ave_cre_from_radname_tloop( radname, **kwargs ):
 
 ######################################################################
 ######################################################################
+
+def radflux2cre( dset, scaling = False, new_factor = 0.88, old_factor = 0.9 ):
+    
+    '''
+    Converts radiation fluxes to CRE.
+    
+    
+    Parameters
+    ----------
+    dset : xarray
+        radiation flux dataset (incl. clearsky fluxes)
+        
+        also used for output
+        
+    
+    Returns
+    --------
+    None
+        
+    '''
+    
+    # if needed do scaling
+    if scaling:
+        
+        # get position for re-scaling
+        idlist = list( rset.idname.data )
+        index4rescaling = idlist.index('msevi-scaled')
+        
+        # scaling array
+        scaling = xr.DataArray( np.ones( len(idlist) ), dims = 'idname')
+        scaling[index4rescaling] = new_factor / old_factor
+        
+        dset['swf_net_clear'] = scaling * dset['swf_net_clear']
+        
+
+    
+    # net flux
+    dset['fnet'] = dset['swf_net'] +  dset['lwf']
+    dset['fnet_clear'] = dset['swf_net_clear'] +  dset['lwf_clear']
+    
+    
+    # CREs
+    dset['scre_ave'] = dset['swf_net_clear'] - dset['swf_net']
+    dset['lcre_ave'] = dset['lwf_clear'] - dset['lwf']
+    dset['net_cre_ave'] = dset['scre_ave'] + dset['lcre_ave']
+    
+    
+    # CRE contributions (weighted by cloud fraction)
+    weight =  dset['afrac'] / 100.
+    dset['scre_contrib']    = weight * dset['scre_ave']
+    dset['lcre_contrib']    = weight * dset['lcre_ave']
+    dset['net_cre_contrib'] = weight * dset['net_cre_ave']
+    
+    return 
+
+######################################################################
+######################################################################

@@ -156,6 +156,7 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset
     '''
     Collects a set of observed data fields for cloud-radiative effect analysis.  
     
+
     Parameters
     ----------
     radname : str
@@ -172,6 +173,7 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset
        due to the bias in the simulated LWF, we might use an predefined offset
        to correct this issue
        i.e. LWF_clear_simulated += lwf_clear_offset
+
 
     Returns
     --------
