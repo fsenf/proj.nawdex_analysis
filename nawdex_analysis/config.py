@@ -27,6 +27,23 @@ if 'altair' in os.environ['HOSTNAME'] :
     nawdex_regions_file = '%s/region_masks_for_msevi_nawdex.h5' % nawdex_dir
     
 
+
+elif 'gauss' in os.environ['HOSTNAME'] :
+
+    # Dirs 
+    # ==========
+    data_dir = '/vols/fs1/store/senf/data'
+    nawdex_dir = '%s/icon/nawdex/' % data_dir
+    nawdex_meteosat_dir = '%s/meteosat/' % nawdex_dir
+    gerb_like_dir =  '%s/gerb-like/' % data_dir
+    simulation_dir = ''
+
+    # Files
+    # ==========
+    meteosat_georef_file = '%s/msevi-nawdex-20160923.nc' % nawdex_meteosat_dir    
+    nawdex_regions_file = '%s/region_masks_for_msevi_nawdex.h5' % nawdex_dir
+    
+
 else:  # assume mistral 
 
     # Dirs
