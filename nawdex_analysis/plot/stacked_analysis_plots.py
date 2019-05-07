@@ -27,7 +27,7 @@ from nawdex_analysis.io.tools import round2day
 ######################################################################
 ######################################################################
 
-def vert_stacked_exp_plot( dset, vname, idlist = 'all', catlist = 'all', iddim = 'idname', catdim = 'ct', 
+def vert_stacked_exp_plot( dset, vname, var_err = None, idlist = 'all', catlist = 'all', iddim = 'idname', catdim = 'ct', 
                            obsref_name = 'msevi-scaled', doffset = 0.05, offset0 = -0.4, connect2obs = True,
                            make_labels = True):
 
@@ -43,6 +43,10 @@ def vert_stacked_exp_plot( dset, vname, idlist = 'all', catlist = 'all', iddim =
     
     vname : str
         variable to be plotted
+
+    var_err : xarray Dataset
+        dataset containing error information to be plotted 
+        (having similar dimensions as dset)
     
     idlist : list, optional, default = 'all'
         list of IDnames to be stacked and compared
@@ -119,6 +123,13 @@ def vert_stacked_exp_plot( dset, vname, idlist = 'all', catlist = 'all', iddim =
                 label = None
                 
             pl.plot(x, y, label = label, **kws )
+            
+            # functionality for errobars
+            if var_err is not None:
+                dx = var_err.sel({catdim : catname, iddim : idname})[vname]
+                
+                kws = get_exp_kws( idname, ptype = 'lines' )
+                pl.errorbar( x, y, xerr = dx, **kws)
 
             if connect2obs: 
                     pl.plot( [xo, x], [yobs, y], color = 'gray', lw = 1, alpha = 0.5)
