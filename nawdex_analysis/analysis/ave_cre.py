@@ -257,6 +257,15 @@ def radflux2cre( dset, scaling = False, new_factor = 0.88, old_factor = 0.9 ):
         
         also used for output
         
+    scaling : bool, optional
+        if True: re-scaling of clear observed SWF is applied
+
+    new_factor :  float, optional
+        only used if scaling == True, new factor to be used for clearsky scaling
+
+    old_factor :  float, optional
+        only used if scaling == True, old factor that was applied to scale the clearsky
+
     
     Returns
     --------
@@ -268,7 +277,7 @@ def radflux2cre( dset, scaling = False, new_factor = 0.88, old_factor = 0.9 ):
     if scaling:
         
         # get position for re-scaling
-        idlist = list( rset.idname.data )
+        idlist = list( dset.idname.data )
         index4rescaling = idlist.index('msevi-scaled')
         
         # scaling array
