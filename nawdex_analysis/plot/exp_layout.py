@@ -420,16 +420,7 @@ def get_plotting_order( vlist, direct_id_input = True ):
     
     index_list = []
     
-    try:
-        index_list += [idlist.index( 'msevi-scaled' ),]
-    except:
-        pass
-
-    try:
-        index_list += [idlist.index( 'msevi-not_scaled' ),]
-    except:
-        pass
-    
+   
     for res in ['2km', '5km', '10km', '20km', '40km', '80km']:
         for muphys in ['oneMom', 'twoMom']:
             for cpar in ['noConv', 'Conv']:
@@ -440,7 +431,21 @@ def get_plotting_order( vlist, direct_id_input = True ):
                     index_list +=[idlist.index(idtest)]
                 except:
                     pass
-                
+
+
+    nlength = len( index_list ) + 2
+    
+
+    try:
+        index_list.insert(nlength / 2, idlist.index( 'msevi-not_scaled' ))
+    except:
+        pass
+
+    try:
+        index_list.insert(nlength / 2, idlist.index( 'msevi-scaled' ))
+    except:
+        pass    
+
     return np.array( index_list )
 
 ######################################################################

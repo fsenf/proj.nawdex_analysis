@@ -95,23 +95,31 @@ def vert_stacked_exp_plot( dset, vname, var_err = None, idlist = 'all', catlist 
         vc = var.sel({catdim : catname})
     
         cindex += [ 1 * icount, ]
-        
-        yobs = icount
+        # yobs = icount
         offset = offset0
-        
+       
+
+        # get y-position of obs data 
+        for n, idname in enumerate( np.array(idlist)[order] ):
+            y = icount + offset
+                
+            # select place
+            if idname == obsref_name:
+                yobs = y
+            offset += doffset
+
+
+        # do the plotting 
+        offset = offset0
+
         for n, idname in enumerate( np.array(idlist)[order] ):
 
             
             # select variables
             x = vc.sel({iddim : idname})
             xo = vc.sel({iddim : obsref_name})
-                
-            # select place
-            if idname == obsref_name:
-                y = yobs
-            else:
-                y = yobs + offset
-                
+            y = icount + offset
+ 
             
             # get plotting style
             kws = get_exp_kws( idname, ptype = 'points' )
