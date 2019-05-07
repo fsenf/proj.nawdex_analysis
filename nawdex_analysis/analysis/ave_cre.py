@@ -284,7 +284,8 @@ def radflux2cre( dset, scaling = False, new_factor = 0.88, old_factor = 0.9 ):
         scaling = xr.DataArray( np.ones( len(idlist) ), dims = 'idname')
         scaling[index4rescaling] = new_factor / old_factor
         
-        dset['swf_net_clear'] = scaling * dset['swf_net_clear']
+        dset['swf_up_clear'] = scaling * dset['swf_up_clear']
+        dset['swf_net_clear'] = dset['swf_down'] + dset['swf_up_clear']
         
 
     
