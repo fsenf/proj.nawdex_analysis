@@ -144,7 +144,10 @@ def ave_radfluxes_from_radname( radname, itime, **kwargs ):
     for rname in radflux_namelist:
         
         v = dset[rname][m].copy()
-        v[np.isnan(v)] = 0.
+
+        # dirty bugfix: set missing SWF to zero
+        if 'swf' in rname:
+            v[np.isnan(v)] = 0.
 
         ave_rflux[ rname ] = area_weighted_binwise_averages(v, a, ct, ctbins)
         
