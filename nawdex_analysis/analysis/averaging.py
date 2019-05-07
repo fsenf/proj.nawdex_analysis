@@ -109,7 +109,7 @@ def area_weighted_binwise_averages( v, a, selector, bins ):
         b1 = bins[i]
         b2 = bins[i + 1]
     
-        mask = (selector >= b1) & (selector < b2) 
+        mask = (selector >= b1) & (selector < b2) & np.isfinite( va ) & ~va.mask 
         
         v_ave[i] = va[mask].sum() / a[mask].sum()
 
