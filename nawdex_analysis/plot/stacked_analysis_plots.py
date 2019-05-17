@@ -135,7 +135,9 @@ def vert_stacked_exp_plot( dset, vname, var_err = None, idlist = 'all', catlist 
             # functionality for errobars
             if var_err is not None:
                 dx = var_err.sel({catdim : catname, iddim : idname})[vname].data
-                
+                if np.size( dx ) == 2:
+                    dx = dx.reshape(2, 1)
+
                 kws = get_exp_kws( idname, ptype = 'lines' )
                 pl.errorbar( x, y, xerr = dx, **kws)
 
