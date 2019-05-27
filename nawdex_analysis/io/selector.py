@@ -386,7 +386,7 @@ def expname2conf_str( expname ):
     res = expname.split('-')[1]
 
     
-    if np.mod(mis_number, 2) == 0:
+    if np.mod(mis_number, 2) != 0:
         muphys = 'oneMom'
     else:
         muphys = 'twoMom'
