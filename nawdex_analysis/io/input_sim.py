@@ -513,7 +513,7 @@ def read_generic_sim_data_flist( flist,
     reader_function = input_param.get('reader_function', None)
     reader_kwargs   = input_param.get('reader_kwargs', None)
     variable_list   = input_param.get('variable_list', None)
-
+    reprojection_kwargs = input_param.get('reprojection_kwargs', {} )
 
 
     # init data set
@@ -542,7 +542,8 @@ def read_generic_sim_data_flist( flist,
             for k in variable_list:
                 dpart[k] = din[k]
 
-            dset_inter = nawdex_analysis.io.reproj.combined_reprojection( dpart, ind, rparam )
+            dset_inter = nawdex_analysis.io.reproj.combined_reprojection( dpart, ind, rparam, 
+                                                                          **reprojection_kwargs )
             
 
             # get also new georef
