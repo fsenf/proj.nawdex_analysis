@@ -547,7 +547,7 @@ def read_generic_sim_data_flist( flist,
             
 
             # get also new georef
-            geo = nawdex_analysis.io.reproj.msevi_lonlat(return_azi_zen = True)
+            geo = nawdex_analysis.io.reproj.msevi_lonlat(return_azi_zen = True, region = SEVIRI_cutout)
             dset_inter.update( geo )
 
             # and rewrite final dataset
