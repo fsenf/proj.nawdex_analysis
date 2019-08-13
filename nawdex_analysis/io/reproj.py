@@ -394,7 +394,7 @@ def nwcsaf_region2slice(icenter, ndims):
 ######################################################################
 
 
-def get_vector2msevi_index( vgeo ):
+def get_vector2msevi_index( vgeo, region = SEVIRI_cutout ):
 
     '''
     Calculates nearest neighbor index for the conversion between 
@@ -417,8 +417,8 @@ def get_vector2msevi_index( vgeo ):
     nmax = 3712
 
     irow_all, icol_all = gi.make_index_set( nmax, nmax )
-    irow = gi.cutout_fields( irow_all, SEVIRI_cutout)
-    icol = gi.cutout_fields( icol_all, SEVIRI_cutout)
+    irow = gi.cutout_fields( irow_all, region)
+    icol = gi.cutout_fields( icol_all, region)
 
 
     # and projection co-ordinates

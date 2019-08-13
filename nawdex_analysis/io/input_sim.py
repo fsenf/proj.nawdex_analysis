@@ -533,8 +533,8 @@ def read_generic_sim_data_flist( flist,
 
             # get reprojection parameters
             if ifile == 0:
-                ind = nawdex_analysis.io.reproj.get_vector2msevi_index( din )
-                rparam = nawdex_analysis.io.reproj. get_vector2msevi_rparam( din )
+                ind = nawdex_analysis.io.reproj.get_vector2msevi_index( din, region = SEVIRI_cutout )
+                rparam = nawdex_analysis.io.reproj. get_vector2msevi_rparam( din, region = SEVIRI_cutout )
 
 
             # interpolate partial dataset
