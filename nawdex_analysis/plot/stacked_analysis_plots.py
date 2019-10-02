@@ -425,6 +425,7 @@ def hor_barplot_exp_plot( dset, vname, idlist = 'all', catlist = 'all', iddim = 
             # select place
             if idname == obsref_name:
                 y = yobs
+                continue
             else:
                 y = yobs + offset
                 
