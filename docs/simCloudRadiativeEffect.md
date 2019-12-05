@@ -159,7 +159,8 @@ The box averaging only fills grid boxes of the target grid that contain values f
 The final regridding is done on mistral via the script:
 ```
 cd /pf/b/b380352/proj/2017-07_nawdex_analysis/inout/
-./save_reproj_sim_raddata.py /pf/b/b380352/data/synsat/nawdex/nawdexnwp-80km-mis-0001
+./save_reproj_sim_raddata.py /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0001
+
 ```
 The simulation path is the input argument and the final regridded data are saved under:
 ```
