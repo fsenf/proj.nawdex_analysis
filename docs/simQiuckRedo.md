@@ -68,12 +68,17 @@ scp -r b380352@mistralpp.dkrz.de:/pf/b/b380352/data/nawdex/sim-toarad/*shcon.nc 
 ## Cloud Typing (Gauss)
 
 ### Transfer of Synsats to Gauss
-
+Copy data to Gauss
 ```
+cd  /vols/fs1/store/senf/data/icon/nawdex/synsat/
+scp -r b380352@mistralpp.dkrz.de:/pf/b/b380352/data/nawdex/synsat/*shcon.nc .
 ```
 
 ### Run Cloud Typing
-
+```
+cd /vols/fs1/store/senf/proj/2019-08_NWCSAF/synNWCSAF/scripts
+./run_NWCSAF4synsat /vols/fs1/store/senf/data/icon/nawdex/synsat/synsat-nawdexnwp-2km-mis-0001.nc
+```
 
 ## CRE (Gauss)
 If regridded Radflux files & Synsat files are complete, then derived average rad-fluxes per CT (level3 data)
