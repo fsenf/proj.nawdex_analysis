@@ -36,7 +36,7 @@ screen -S synsat
 
 ### Regridding
 
-* After all synsat runs are finished (change the path to the synsats...)
+After all synsat runs are finished (change the path to the synsats...)
 ```
 cd ~/proj/2017-07_nawdex_analysis/inout
 ./save_reproj_synsat.py /pf/b/b380352/data/synsat/nawdex/nawdexnwp-80km-mis-0001
