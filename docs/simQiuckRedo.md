@@ -4,7 +4,7 @@ This document should help to quickly redo all analysis steps when new simulation
 ## Synsats (Mistral)
 ### Calculation
 
-* Go to the synsat directory
+* Go to the synsat scripts directory
 ```
 cd /pf/b/b380352/proj/2015-12_synsat/synsats4icon_nawdex
 ```
@@ -46,3 +46,25 @@ cd ~/proj/2017-07_nawdex_analysis/inout
 
 
 ## Combined Radiation Fluxes (Mistral)
+
+* Go to the nawdex scripts directory
+```
+cd /pf/b/b380352/proj/2017-07_nawdex_analysis/inout/
+```
+
+* Run Rad Flux regridding (!!!no trailing '/' in the path name!!!)
+
+```
+./save_reproj_sim_raddata.py /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0001
+``` 
+
+## CRE (Gauss)
+* Copy data to Gauss
+```
+cd /vols/fs1/store/senf/data/icon/nawdex/sim-toarad
+scp -r b380352@mistralpp.dkrz.de:/pf/b/b380352/data/nawdex/sim-toarad/*shcon.nc .
+```
+
+
+
+## Cloud Typing (Gauss)
