@@ -45,7 +45,8 @@ cd ~/proj/2017-07_nawdex_analysis/inout
 
 
 
-## Combined Radiation Fluxes (Mistral)
+## Combined Radiation Fluxes
+### Regridding (Mistral)
 
 * Go to the nawdex scripts directory
 ```
@@ -53,18 +54,67 @@ cd /pf/b/b380352/proj/2017-07_nawdex_analysis/inout/
 ```
 
 * Run Rad Flux regridding (!!!no trailing '/' in the path name!!!)
-
 ```
 ./save_reproj_sim_raddata.py /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0001
 ``` 
 
-## CRE (Gauss)
-* Copy data to Gauss
+### Transfer to Gauss
+Copy data to Gauss
 ```
 cd /vols/fs1/store/senf/data/icon/nawdex/sim-toarad
 scp -r b380352@mistralpp.dkrz.de:/pf/b/b380352/data/nawdex/sim-toarad/*shcon.nc .
 ```
 
-
-
 ## Cloud Typing (Gauss)
+
+### Transfer of Synsats to Gauss
+
+```
+```
+
+### Run Cloud Typing
+
+
+## CRE (Gauss)
+If regridded Radflux files & Synsat files are complete, then derived average rad-fluxes per CT (level3 data)
+
+```
+cd /vols/fs1/store/senf/proj/2017-07_icon-nawdex/inout
+./save_ave_radfluxes.py /vols/fs1/store/senf/data/icon/nawdex/sim-toarad/toa_radflux-nawdexnwp-2km-mis-0001-shcon.nc
+```
+
+where the full filename refers to the regidded radflux file.
+
+
+## Adjusting the Naming Scheme
+
+The new expermients might have new names, e.g. `nawdexnwp-2km-mis-0001-shcon`. The new experiment need to be mapped into experiment categories.
+
+`nawdex_analysis.io.selector` has to be modified.
+
+
+* Go to the `nawdex_analysis` package development path
+```
+cd /vols/fs1/store/senf/proj/2018-05_pypackage_devel/nawdex_analysis/nawdex_analysis/io
+```
+
+* Modify `selector.py`
+```
+emacs selector.py
+```
+
+* Change Version Number
+```
+cd /vols/fs1/store/senf/proj/2018-05_pypackage_devel/nawdex_analysis/nawdex_analysis
+vim _version.py
+```
+
+* Install new package version into thew system
+```
+cd ..
+pip install --upgrade .
+```
+ 
+
+
+
