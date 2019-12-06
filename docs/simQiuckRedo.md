@@ -33,10 +33,15 @@ screen -S synsat
 
 * Wait 
 
-### Regridding
-* After all synsat runs are finished
-```
 
+### Regridding
+
+* * After all synsat runs are finished
 ```
+cd ~/proj/2017-07_nawdex_analysis/inout
+./save_reproj_synsat.py /pf/b/b380352/data/synsat/nawdex/nawdexnwp-80km-mis-0001
+```
+change the path to the synsats...
+
 
 ## Combined Radiation Fluxes (Mistral)
