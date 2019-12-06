@@ -42,7 +42,7 @@ cd ~/proj/2017-07_nawdex_analysis/inout
 ./save_reproj_synsat.py /pf/b/b380352/data/synsat/nawdex/nawdexnwp-80km-mis-0001
 ```
 
-* 
+
 
 
 ## Combined Radiation Fluxes (Mistral)
