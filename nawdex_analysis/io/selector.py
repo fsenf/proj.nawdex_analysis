@@ -275,7 +275,7 @@ def set_initdate( set_number ):
 
 
 
-def gather_simset( set_number ):
+def gather_simset( set_number, add_extra = True ):
 
     '''
     Collects a list of experiment names based on a selected set.
@@ -312,12 +312,44 @@ def gather_simset( set_number ):
         
         
             simset += [ expname, ]
-            
+        
+    if add_extra:
+        simset +=  extra_experiments( set_number )
+
     return simset
 
 ######################################################################
 ######################################################################
 
+def extra_experiments( set_number ):
+
+    '''
+    Add extra sets.
+
+
+    Parameters
+    ----------
+    set_number : int
+        numerical ID for experiment set (1 ... 4)
+
+
+    Returns
+    --------
+    simset : list
+        list of extra experiment names
+
+    '''
+
+    extra_list = []
+    if set_number == 2:
+        extra_list += ['nawdexnwp-2km-mis-0001-shcon', 'nawdexnwp-2km-mis-0002-shcon' ]
+
+    return extra_list
+
+
+
+######################################################################
+######################################################################
 
 def set_dateslices( set_number ):
 
@@ -382,16 +414,23 @@ def expname2conf_str( expname ):
         return expname
     
     # ELSE
-    mis_number = int(expname.split('-')[-1])
+
+    # Resolution
+    # ==========
     res = expname.split('-')[1]
 
-    
+
+    # Microphysics
+    # ============
+    mis_number = int(expname.split('-')[3])
     if np.mod(mis_number, 2) != 0:
         muphys = 'oneMom'
     else:
         muphys = 'twoMom'
 
-    
+        
+    # Convection
+    # ==========
     cpar = 'Conv'
     
     # now select conv vs. noConv
@@ -406,6 +445,11 @@ def expname2conf_str( expname ):
  
     if c5 or c10:
         cpar = 'noConv'
+
+    # introduce a new Con attribute 'shConv'
+    if expname.split('-')[-1] == 'shcon':
+        cpar = 'shConv'
+        
     
     id_string = '%s_%s_%s' % (res, muphys, cpar)
     

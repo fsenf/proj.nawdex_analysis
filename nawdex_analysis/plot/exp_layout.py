@@ -178,6 +178,12 @@ def get_exp_kws_points( idname ):
         elif '_noConv' in idname:
             kws['fillstyle'] = 'none'
             kws['markeredgewidth'] = 1.5
+        elif '_shConv' in idname:
+            kws['fillstyle'] = 'top'
+            kws['markeredgewidth'] = 1.5
+            kws['markerfacecoloralt'] = 'white'
+            kws['markersize'] = 10
+
 
     
     kws['linewidth'] = 0
@@ -423,7 +429,7 @@ def get_plotting_order( vlist, direct_id_input = True ):
    
     for res in ['2km', '5km', '10km', '20km', '40km', '80km']:
         for muphys in ['oneMom', 'twoMom']:
-            for cpar in ['noConv', 'Conv']:
+            for cpar in ['noConv', 'shConv', 'Conv']:
                 
                 idtest = '%s_%s_%s' % (res, muphys, cpar)
                 
