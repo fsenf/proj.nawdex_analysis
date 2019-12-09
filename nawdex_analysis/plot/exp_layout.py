@@ -240,6 +240,10 @@ def get_exp_kws_bars( idname ):
             
                 if '_Conv' in idname:
                     kws['color'] = clist[i]
+                elif '_shConv' in idname:
+                    kws['color'] = 'white'
+                    kws['edgecolor'] = clist[i]
+                    kws['hatch'] = '//'
                 elif '_noConv' in idname:
                     kws['edgecolor'] = clist[i]
                     kws['color'] = 'w'
