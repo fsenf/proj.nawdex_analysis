@@ -36,11 +36,41 @@ screen -S synsat
 
 ### Regridding
 
-After all synsat runs are finished (change the path to the synsats...)
+After all synsat runs are finished: Regridding is done in parts (memory and speed issue)
+
+* go to the dir
 ```
 cd ~/proj/2017-07_nawdex_analysis/inout
-./save_reproj_synsat.py /pf/b/b380352/data/synsat/nawdex/nawdexnwp-80km-mis-0001
 ```
+
+* make a list file that looks like this (default: 6 lines = 6 chunks):
+```
+pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 0 
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 1
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 2
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 3
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 4
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 5
+```
+
+* open a screen
+
+* run 
+```
+start_proc_from_list -n 6 ./save_reproj_synsat_in_parts.py regrid_synsat10.lst
+```
+
+* goto the parts output dir
+```
+cd ~/data/nawdex/synsat-parts/
+```
+
+* combine file parts with cdo
+```
+cdo -z zip_4 cat synsat-nawdexnwp-2km-mis-0010-shcon-part?.nc synsat-nawdexnwp-2km-mis-0010-shcon.nc
+```
+
+* move the combine into the `../synsat` directory
 
 
 
