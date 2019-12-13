@@ -43,9 +43,9 @@ After all synsat runs are finished: Regridding is done in parts (memory and spee
 cd ~/proj/2017-07_nawdex_analysis/inout
 ```
 
-* make a list file that looks like this (default: 6 lines = 6 chunks):
+* make a list file that looks like this (default: 6 lines = 6 chunks). `vim regrid_synsat10.lst`
 ```
-pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 0 
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 0 
 /pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 1
 /pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 2
 /pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 3
@@ -53,7 +53,7 @@ pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 0
 /pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 5
 ```
 
-* open a screen
+* open a screen `screen -S regrid_synsat10`
 
 * run 
 ```
