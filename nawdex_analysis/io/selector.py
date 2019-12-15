@@ -339,10 +339,16 @@ def extra_experiments( set_number ):
         list of extra experiment names
 
     '''
-
+    fine_set, coarse_set = set_selector( set_number )
+    
+    res = '2km'
     extra_list = []
-    if set_number == 2:
-        extra_list += ['nawdexnwp-2km-mis-0001-shcon', 'nawdexnwp-2km-mis-0002-shcon' ]
+    for mis in fine_set:
+
+        expname = 'nawdexnwp-%s-mis-%s-shcon' % (res, str(mis).zfill(4))
+   
+   
+        extra_list += [ expname, ]
 
     return extra_list
 
