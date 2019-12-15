@@ -342,7 +342,7 @@ def extra_experiments( set_number ):
     fine_set, coarse_set = set_selector( set_number )
 
     # only take the last two
-    mis_set = fine_set[-2:]
+    mis_set = fine_set[:2]
 
     res = '2km'
     extra_list = []
