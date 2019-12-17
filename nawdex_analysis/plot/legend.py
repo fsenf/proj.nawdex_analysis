@@ -12,28 +12,29 @@ import pylab as pl
 def legend_renamer( labels ):
     
     '''
-    Renames labels for the legend. 
-    
-    The function specifies a fixed renaming map.
+    A function to rename labels for plotting them into a legend.
     
     
     Parameters
     ----------
     labels : list
-        list of legend labels
+        list of labels
         
         
     Returns
     -------
     newlabels : list
-        list of newlegend labels
+        list of new label name that have been replaced by a 
+        map defined within the function
     '''
         
     newnames = {'msevi-not_scaled': 'OBS (uncalibrated)',
                 'msevi-scaled' : 'OBS',
                 "2km_oneMom_noConv" : "ICON( 2.5km, * )",
+                "2km_oneMom_shConv" : "ICON( 2.5km, *,  sCP )",
                 "2km_oneMom_Conv" : "ICON( 2.5km, *,  CP )",
                 "2km_twoMom_noConv" : "ICON( 2.5km, ** )",
+                "2km_twoMom_shConv" : "ICON( 2.5km, **, sCP )",
                 "2km_twoMom_Conv" : "ICON( 2.5km, **, CP )",
                 "5km_oneMom_noConv" : "ICON( 5km, * )",
                 "5km_oneMom_Conv" : "ICON( 5km, *,  CP )",
@@ -55,11 +56,16 @@ def legend_renamer( labels ):
 
     newlabels = labels[:]
     
-    for vname in labels: #newnames.keys():
-        mindex = labels.index( vname )
-        newlabels[mindex] = newnames[vname]
+    for vname in labels:
+        try:
+            mindex = labels.index( vname )
+            newlabels[mindex] = newnames[vname]
+        except:
+            # label not in label map
+            pass
         
     return newlabels
+
 
 ######################################################################
 ######################################################################
