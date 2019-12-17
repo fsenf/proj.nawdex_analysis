@@ -508,8 +508,12 @@ def legend_renamer( labels ):
 
     newlabels = labels[:]
     
-    for vname in newnames.keys():
-        mindex = labels.index( vname )
-        newlabels[mindex] = newnames[vname]
+    for vname in labels:
+        try:
+            mindex = labels.index( vname )
+            newlabels[mindex] = newnames[vname]
+        except:
+            # label not in label map
+            pass
         
     return newlabels
