@@ -259,7 +259,7 @@ def get_exp_kws_bars( idname ):
         kws['alpha'] = 1.
     elif 'oneMom' in idname:
         kws['linestyle'] = '-'
-        kws['alpha'] = 0.3
+        kws['alpha'] = 0.5
         
         
 
