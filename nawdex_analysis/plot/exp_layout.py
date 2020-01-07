@@ -155,7 +155,7 @@ def get_exp_kws_points( idname ):
     # set marker
     # =========
     if idname == 'msevi-scaled':
-        kws['marker'] = 'o'
+        kws['marker'] = 'D'
         kws['zorder'] = 10
         kws['markersize'] = 10
 
@@ -258,7 +258,7 @@ def get_exp_kws_bars( idname ):
         kws['linestyle'] = '-'
         kws['alpha'] = 1.
     elif 'oneMom' in idname:
-        kws['linestyle'] = '-'
+        kws['linestyle'] = '--'
         kws['alpha'] = 0.5
         
         
