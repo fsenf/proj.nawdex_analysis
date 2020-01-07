@@ -28,7 +28,7 @@ def legend_renamer( labels ):
         map defined within the function
     '''
         
-    newnames = {'msevi-not_scaled': 'OBS (uncalibrated)',
+    newnames = {'msevi-not_scaled': 'OBS (uncorrected)',
                 'msevi-scaled' : 'OBS',
                 "2km_oneMom_noConv" : "ICON( 2.5km, * )",
                 "2km_oneMom_shConv" : "ICON( 2.5km, *,  sCP )",
@@ -89,7 +89,9 @@ def plegend(**kwargs):
         list of legend labels
     
     '''
-    default_kwargs = dict(  loc='center right', bbox_to_anchor=(1.5, 0.5), fontsize = 'small' )
+    default_kwargs = dict( frameon = False, loc='center right', 
+                           bbox_to_anchor=(1.5, 0.5), fontsize = 'small' )
+
     merged_kwargs = default_kwargs.copy()
     merged_kwargs.update( kwargs )
     
