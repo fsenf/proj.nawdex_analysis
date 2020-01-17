@@ -11,7 +11,7 @@ The simulation data will be transfered to observation space. Thereafter, synthet
 ## Paper
 The paper 
 
-Senf, F., A. Voigt, N. Clerbaux, A. Hünerbein, and H. Deneke, Does increasing resolution and resolving convection improve simulated cloud-radiative effects over the North Atlantic?, J. Geophys. Res. Atmos., submitted in Jan. 2020
+Senf, F., A. Voigt, N. Clerbaux, A. Hünerbein, and H. Deneke, **Does increasing resolution and resolving convection improve simulated cloud-radiative effects over the North Atlantic?**, J. Geophys. Res. Atmos., submitted in Jan. 2020
 
 uses the package `nawdex_analysis` 
 
