@@ -19,7 +19,7 @@ abc = string.ascii_lowercase
 
 # --------------------------------------------------------------------
 
-import nawdex_analysis.io.collector
+from ..io import collector
 from exp_layout import get_plotting_order, get_exp_kws, get_exp_kws_bars
 from nawdex_analysis.io.tools import round2day
 
@@ -198,7 +198,7 @@ def plot_scre_lcre4set( set_number, dset = None, fig = None, ax = None, plot_leg
     
     # input if needed
     if dset is None:
-        dset = nawdex_analysis.io.collector.get_cre4set( set_number )
+        dset = collector.get_cre4set( set_number )
 
     if set_number == 2:
         figsize = (12,15)
@@ -292,7 +292,7 @@ def plot_net_cre_contrib4set( set_number, dset = None, plot_legend = True, plot_
     
     # input if needed
     if dset is None:
-        dset = nawdex_analysis.io.collector.get_cre4set( set_number )
+        dset = collector.get_cre4set( set_number )
 
     if set_number == 2:
         figsize = (12,15)
