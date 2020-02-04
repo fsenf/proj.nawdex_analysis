@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+'''
+The module calculates domain-average cloud-radiative
+effects.
+
+* typically 2d fields of TOA clearsky and allsky fluxes 
+are input and then used together with a cloud classification.
+
+'''
 import numpy as np
 import xarray as xr
 
