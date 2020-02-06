@@ -8,7 +8,7 @@
    :maxdepth: 1
    :caption: Intro
 
-    content/Intro.md
+   content/Intro.md
 
 
 .. toctree::
