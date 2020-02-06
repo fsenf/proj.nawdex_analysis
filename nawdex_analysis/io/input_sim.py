@@ -697,7 +697,7 @@ def read_simulated_clearsky_flux(itime, expname, ind = None, do_regrid = True):
     Reads simulated solar clearsky fluxes.
 
 
-    Paramaters
+    Parameters
     ----------
     itime : int
         time index in the input file
