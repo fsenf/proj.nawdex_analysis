@@ -1,4 +1,5 @@
 sphinx>=1.4
+m2rr
 sphinx_rtd_theme
 numpy
 matplotlib
