@@ -185,7 +185,7 @@ def read_georef( expname, mask_with_zen = True, zen_max = 75. ):
     if mask_with_zen:
         mask = (geo['zen'] <= zen_max)
 
-        for vname in geo.keys():
+        for vname in list(geo.keys()):
             geo[vname] = geo[vname][mask]
 
     return geo
@@ -256,7 +256,7 @@ def read_synsat_vector( fname, bt_generation_mode = 'mcfarq_rescale_noccthresh' 
 
     # read brightness temperatures
     # =============================
-    print '... read data from ', fname
+    print(('... read data from ', fname))
     dset = hio.read_dict_from_hdf(fname)
     bts = dset[ bt_generation_mode ]
 
@@ -313,7 +313,7 @@ def read_iconvar_vector( fname, vlist ):
 
     # read variables
     # =============================
-    print '... read data from ', fname
+    print(('... read data from ', fname))
     dset = ncio.read_icon_4d_data(fname, vlist, itime = None)
 
 
@@ -334,7 +334,7 @@ def read_iconvar_vector( fname, vlist ):
     outset = dset.copy()
     outset.update( geo )
     
-    for vname in outset.keys():
+    for vname in list(outset.keys()):
         outset[vname] = outset[vname].squeeze()[mask]
 
 
@@ -503,7 +503,7 @@ def read_generic_sim_data_flist( flist,
                              'variable_list']
 
     for k in mandatory_input_keys:
-        if not k in input_param.keys():
+        if not k in list(input_param.keys()):
             raise ValueError('%s should be defined in input_param' % k)
     # ================================================================
 

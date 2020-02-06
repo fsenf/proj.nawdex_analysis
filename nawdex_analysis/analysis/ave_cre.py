@@ -13,8 +13,8 @@ import xarray as xr
 
 import tropy.io_tools.netcdf as ncio
 
-from averaging import area_weighted_binwise_averages, area_fractions
-import nawdex_analysis.io.input_lev2
+from .averaging import area_weighted_binwise_averages, area_fractions
+from ..io import input_lev2
 
 ######################################################################
 ######################################################################
@@ -97,7 +97,7 @@ def ave_cre_from_radname( radname, itime, factor = -1, **kwargs ):
 def ave_radfluxes_from_radname( radname, itime, **kwargs ):
        
     '''
-    Calculate Cloud-radiative effect (CRE) for different cloud types.
+    Calculate average radiation fluxes for different cloud types.
 
     
     Parameters
@@ -245,7 +245,7 @@ def ave_cre_from_radname_tloop( radname, **kwargs ):
         try:
             outset += [calculate_average_function(radname, itime, **kwargs), ]
         except:
-            print 'error at %d' %  itime
+            print(('error at %d' %  itime))
         
     return xr.merge( outset )
 

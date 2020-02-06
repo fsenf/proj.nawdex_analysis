@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# encoding: utf-8
 
 import os, sys, glob, copy
 import numpy as np
@@ -8,11 +9,11 @@ import xarray as xr
 import pandas as pd
 
 from nawdex_analysis.config import nawdex_dir
-from selector import  gather_simset, expname2conf_str, set_dateslices
+from .selector import  gather_simset, expname2conf_str, set_dateslices
 
 
 '''
-This is a pachake that collects data for different sets.
+This is a package that collects data for different sets.
 '''
 
 
@@ -103,7 +104,7 @@ def get_obs_cre4time_list( time, file_part ='-scaled', file_format = 'default'):
     Parameters
     ----------
     time : xarray time data
-       list of time fow which obs CRE is înput
+       list of time fow which obs CRE is input
 
     file_format : str, optional, default = 'default'
        a string that defines file format, 
@@ -111,14 +112,14 @@ def get_obs_cre4time_list( time, file_part ='-scaled', file_format = 'default'):
 
     file_part : str, optional, default = '-scaled'
        selection of file part that specifies if bias correction of clearsky is used
-       only used if `file_format == 'default`
+       only used if `file_format == 'default'`
 
     
     Returns
     --------
     dset_obs : xarray Dataset
        set that contains time series of observed CRE effects.
-
+    
     '''
 
 
@@ -285,7 +286,7 @@ def get_stat4set( set_number, allowed_set_range = [1,4], file_format = 'default'
     # a small wrapper to get 'all' input inlcuded
     if set_number == 'all':
 
-        set_range = range( allowed_set_range[0], allowed_set_range[1] + 1)
+        set_range = list(range( allowed_set_range[0], allowed_set_range[1] + 1))
 
         dset = get_stat4all( set_range = set_range, file_format = file_format, method = method )
 
@@ -327,7 +328,7 @@ def get_stat4set( set_number, allowed_set_range = [1,4], file_format = 'default'
 ######################################################################
 ######################################################################
 
-def get_stat4all( set_range = range(1, 5), file_format = 'default', method = 'all' ):
+def get_stat4all( set_range = list(range(1, 5)), file_format = 'default', method = 'all' ):
         
     '''
     Read and stack all input sets (CRE or Radiation Fluxes).

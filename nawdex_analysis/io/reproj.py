@@ -540,7 +540,7 @@ def nn_reproj_with_index( dset, ind,
 
     # prepare variable list
     if vnames == 'all':
-        vlist = dset.keys()
+        vlist = list(dset.keys())
 
     elif type( vnames ) == type( '' ):
         vlist = [ vnames, ]
@@ -799,7 +799,7 @@ def combined_reprojection( dset, ind, rparam,
     # (ii) Box-averaging Interpolation and combination 
     # TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
     
-    vlist = dset_nn.keys()
+    vlist = list(dset_nn.keys())
 
     # apply interpolation index
     dset_inter = {}

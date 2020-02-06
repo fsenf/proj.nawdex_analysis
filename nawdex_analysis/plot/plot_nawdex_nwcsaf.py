@@ -81,7 +81,7 @@ def plot_prods(fname, itime, prodname, pics_dir = '../pics'):
                                                  mode,
                                                  prodname,
                                                  time_obj.strftime('%Y-%m-%d_%H%M'))
-    print '... save image to %s' % picname
+    print(('... save image to %s' % picname))
     if not os.path.isdir(full_pics_dir):
         os.makedirs( full_pics_dir )
 

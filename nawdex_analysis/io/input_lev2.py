@@ -222,7 +222,7 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset
     lwfclearname = clearname.replace('retrieved_clearsky_netswf/clearsky_netswf-', 'sim-toarad/toa_clear_radflux-' )
     lwfclearname = lwfclearname.replace(filepart,'')
 
-    print radname, clearname, lwfclearname
+    print((radname, clearname, lwfclearname))
 
 
     # input lwf clear data

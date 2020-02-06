@@ -20,7 +20,7 @@ abc = string.ascii_lowercase
 # --------------------------------------------------------------------
 
 import nawdex_analysis.io.collector
-from exp_layout import get_plotting_order, get_exp_kws, get_exp_kws_bars
+from .exp_layout import get_plotting_order, get_exp_kws, get_exp_kws_bars
 from nawdex_analysis.io.tools import round2day
 
 
@@ -172,7 +172,7 @@ def plot_scre_lcre4set( set_number, dset = None, fig = None, ax = None, plot_leg
         to make fast plots input of data could be made externally
         and provide through this keyword
     
-     fig : pylab figure object, optional, default = None
+    fig : pylab figure object, optional, default = None
          to provide an already existing figure where the plot is placed in
          if None: as new figure is created
     
