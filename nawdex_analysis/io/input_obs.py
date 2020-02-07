@@ -17,7 +17,16 @@ import tropy.analysis_tools.grid_and_interpolation as gi
 try:
     from tropy.l15_msevi.msevi import MSevi
 except:
-    pass
+        print('''
+    Warning: MSevi from tropy is not available. 
+
+    Get it from
+        https://github.com/fsenf/proj.tropy
+
+    and follow install instructions.
+    ''')
+
+
 
 from nawdex_analysis.config import SEVIRI_cutout, NWCSAF_region
 from nawdex_analysis.config import meteosat_georef_file, gerb_like_dir
@@ -30,6 +39,21 @@ from nawdex_analysis.io.tools import lonlat2azizen
 
 
 def msevi_setting(t):
+    '''
+    Create a set of standard keywords for MSG SEVIRI input.
+
+    
+    Parameters
+    ----------
+    t : datetime object
+        time
+
+    
+    Returns
+    -------
+    sett : dict
+        settings used for MSG SEVIRI input
+    '''
 
     sett = {}
     sett['time'] = t
@@ -45,6 +69,43 @@ def msevi_setting(t):
 
 
 def read_msevi(t1, t2, dt = 60., zen_max = 75.):
+
+    '''
+    Reads a time stack of MSG SEVIRI infrared channels.
+
+    
+    Parameters
+    ----------
+    t1 : datetime object
+        start time in the loop
+
+    t2 : datetime object
+        end time in the loop (included, i.e. t1 <= time <= t2)
+
+    dt : float, optional
+        time step in minutes
+
+    zen_max : float, optional
+        maximum satellite zenith angle 
+    
+        higher zenith angle are set to invalid
+    
+
+    Returns
+    -------
+    d : dict
+        datastack containing 
+       
+        * infrared BTs stacked in time (i.e. 3d fields, time at axis = 0)
+        * georeference
+        * meta data
+
+
+    Notes
+    -----
+    It heavily uses the `MSevi` class from `tropy.l15_msevi.msevi`. If
+    you don't have `tropy` installed, this function can not be used.
+    '''
 
     
     # read msevi georef ----------------------------------------------
