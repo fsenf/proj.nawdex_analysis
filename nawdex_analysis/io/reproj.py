@@ -15,8 +15,8 @@ import warnings
 import tropy.analysis_tools.grid_and_interpolation as gi
 import tropy.io_tools.hdf as hio
 
-from nawdex_analysis.config import SEVIRI_cutout, nawdex_regions_file 
-from nawdex_analysis.io.tools import  lonlat2azizen
+from ..config import SEVIRI_cutout, nawdex_regions_file 
+from ..io.tools import  lonlat2azizen
 
 ######################################################################
 # (1) SEVIRI projection and co-ordinate transformations

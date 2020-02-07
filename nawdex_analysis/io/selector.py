@@ -6,8 +6,8 @@ import numpy as np
 import xarray as xr
 import netCDF4
 
-from nawdex_analysis.config import nawdex_dir
-from nawdex_analysis.io.tools import convert_time
+from ..config import nawdex_dir
+from ..io.tools import convert_time
 
 
 '''

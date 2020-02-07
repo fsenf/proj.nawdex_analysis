@@ -14,10 +14,10 @@ import tropy.io_tools.hdf as hio
 import tropy.io_tools.netcdf as ncio
 import tropy.analysis_tools.grid_and_interpolation as gi
 
-from nawdex_analysis.config import nawdex_dir
-from nawdex_analysis.config import nawdex_regions_file
-from nawdex_analysis.io.tools import convert_time
-import nawdex_analysis.io.selector
+from ..config import nawdex_dir
+from ..config import nawdex_regions_file
+from ..io.tools import convert_time
+from ..io import selector
 
 ######################################################################
 # (1) Regridded Data for Further Analysis
@@ -202,7 +202,7 @@ def collect_data4cre_obs( radname, itime, filepart = '-scaled', lwf_clear_offset
     # find the right short-wave clear file
     # ===================================
     tobj = radset['time_obj']
-    filemap = nawdex_analysis.io.selector.make_filetime_index('swf_net', tobj, 
+    filemap = selector.make_filetime_index('swf_net', tobj, 
                                                 filepart = filepart, 
                                                 subdirs=['retrieved_clearsky_netswf'])
 

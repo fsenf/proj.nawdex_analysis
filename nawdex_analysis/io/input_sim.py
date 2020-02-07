@@ -15,9 +15,9 @@ import tropy.io_tools.hdf as hio
 import tropy.io_tools.netcdf as ncio
 import tropy.analysis_tools.grid_and_interpolation as gi
 
-from nawdex_analysis.io.tools import lonlat2azizen
-import nawdex_analysis.io.reproj
-from nawdex_analysis.config import simulation_dir, SEVIRI_cutout, NWCSAF_region, nawdex_regions_file
+from ..io.tools import lonlat2azizen
+import ..io import reproj
+from ..config import simulation_dir, SEVIRI_cutout, NWCSAF_region, nawdex_regions_file
 
 ######################################################################
 # (1) Variable Vectors
@@ -533,8 +533,8 @@ def read_generic_sim_data_flist( flist,
 
             # get reprojection parameters
             if ifile == 0:
-                ind = nawdex_analysis.io.reproj.get_vector2msevi_index( din, region = SEVIRI_cutout )
-                rparam = nawdex_analysis.io.reproj. get_vector2msevi_rparam( din, region = SEVIRI_cutout )
+                ind = reproj.get_vector2msevi_index( din, region = SEVIRI_cutout )
+                rparam = reproj. get_vector2msevi_rparam( din, region = SEVIRI_cutout )
 
 
             # interpolate partial dataset
@@ -542,12 +542,12 @@ def read_generic_sim_data_flist( flist,
             for k in variable_list:
                 dpart[k] = din[k]
 
-            dset_inter = nawdex_analysis.io.reproj.combined_reprojection( dpart, ind, rparam, 
+            dset_inter = reproj.combined_reprojection( dpart, ind, rparam, 
                                                                           **reprojection_kwargs )
             
 
             # get also new georef
-            geo = nawdex_analysis.io.reproj.msevi_lonlat(return_azi_zen = True, region = SEVIRI_cutout)
+            geo = reproj.msevi_lonlat(return_azi_zen = True, region = SEVIRI_cutout)
             dset_inter.update( geo )
 
             # and rewrite final dataset
@@ -734,7 +734,7 @@ def read_simulated_clearsky_flux(itime, expname, ind = None, do_regrid = True):
     
     # nearest neighbor regridding
     if do_regrid and ind is not None:
-        swf_sim_regrid = nawdex_analysis.io.reproj.nn_reproj_with_index(swf_sim, ind, 
+        swf_sim_regrid = reproj.nn_reproj_with_index(swf_sim, ind, 
                                                                     vnames=['swf_up', 'sod_t', 'swtoaclr'], 
                                                                     apply_mask=True, 
                                                                     Nan=0)

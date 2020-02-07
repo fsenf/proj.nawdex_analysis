@@ -15,8 +15,8 @@ import tropy.io_tools.netcdf as ncio
 import tropy.io_tools.hdf as hio
 from tropy.standard_config import *
 
-import nawdex_analysis.plot.nawdex_map as nawdex_map
-from nawdex_analysis.io.input_lev2 import  read_data_field
+from ..plot import nawdex_map
+from ..io.input_lev2 import  read_data_field
 
 
 ######################################################################

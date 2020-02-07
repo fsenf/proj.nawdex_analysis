@@ -20,7 +20,7 @@ abc = string.ascii_lowercase
 # --------------------------------------------------------------------
 from ..io import collector
 from .exp_layout import get_plotting_order, get_exp_kws, get_exp_kws_bars
-from nawdex_analysis.io.tools import round2day
+from ..io.tools import round2day
 
 
 ######################################################################

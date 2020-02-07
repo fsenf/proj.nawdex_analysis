@@ -20,8 +20,8 @@ import datetime
 import tropy.analysis_tools.grid_and_interpolation as gi
 from tropy.standard_config import local_data_path
 
-from nawdex_analysis.io.tools import convert_time
-from nawdex_analysis.io.input_sim import read_radiation_flux_flist, read_synsat_flist
+from ..io.tools import convert_time
+from ..io.input_sim import read_radiation_flux_flist, read_synsat_flist
 
 
 ######################################################################
