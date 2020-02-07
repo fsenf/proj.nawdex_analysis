@@ -10,3 +10,4 @@ seaborn
 netCDF4
 h5py
 pyproj
+git+https://github.com/fsenf/proj.tropy.git
