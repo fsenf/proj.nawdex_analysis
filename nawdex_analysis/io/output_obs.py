@@ -18,15 +18,11 @@ import xarray as xr
 import datetime
 
 # a little hack for readthedocs
-try:
-    from tropy.standard_config import local_data_path
-except:
-    pass
+from tropy.standard_config import local_data_path
+import tropy.analysis_tools.grid_and_interpolation as gi
 
-if True:
-    import tropy.analysis_tools.grid_and_interpolation as gi
-    from .tools import convert_time
-    from .input_obs import read_msevi, read_radiation_flux_tstack
+from .tools import convert_time
+from .input_obs import read_msevi, read_radiation_flux_tstack
 
 
 
