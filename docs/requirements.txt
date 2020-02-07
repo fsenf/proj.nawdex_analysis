@@ -3,3 +3,10 @@ m2rr
 sphinx_rtd_theme
 numpy
 matplotlib
+scipy
+xarray
+pandas
+seaborn
+netCDF4
+h5py
+pyproj
