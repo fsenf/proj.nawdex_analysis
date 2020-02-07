@@ -15,8 +15,8 @@ import tropy.io_tools.hdf as hio
 import tropy.io_tools.netcdf as ncio
 import tropy.analysis_tools.grid_and_interpolation as gi
 
-from ..io.tools import lonlat2azizen
-import ..io import reproj
+from .tools import lonlat2azizen
+import .reproj
 from ..config import simulation_dir, SEVIRI_cutout, NWCSAF_region, nawdex_regions_file
 
 ######################################################################
