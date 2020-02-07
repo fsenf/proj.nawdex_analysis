@@ -1,6 +1,0 @@
-nawdex\_analysis.io.output\_obs.save\_meteosat\_bt2nc
-=====================================================
-
-.. currentmodule:: nawdex_analysis.io.output_obs
-
-.. autofunction:: save_meteosat_bt2nc
