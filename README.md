@@ -1,4 +1,5 @@
-# NAWDEX Analysis Toolset
+# NAWDEX Analysis Toolset 
+[![DOI](https://zenodo.org/badge/149758943.svg)](https://zenodo.org/badge/latestdoi/149758943)
 
 A toolset of analysis of scientific data. 
 
