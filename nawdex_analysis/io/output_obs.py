@@ -21,11 +21,14 @@ import datetime
 try:
     import tropy.analysis_tools.grid_and_interpolation as gi
     from tropy.standard_config import local_data_path
-
-    from .tools import convert_time
-    from .input_obs import read_msevi, read_radiation_flux_tstack
 except:
     pass
+
+if True:
+    from .tools import convert_time
+    from .input_obs import read_msevi, read_radiation_flux_tstack
+#except:
+#    pass
 
 
 ######################################################################
