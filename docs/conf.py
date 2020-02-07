@@ -26,7 +26,7 @@ author = 'Fabian Senf'
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = 'v0.2.8'
+release = 'v1.0.0-alpha'
 
 
 # -- General configuration ---------------------------------------------------
