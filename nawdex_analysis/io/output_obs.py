@@ -17,12 +17,15 @@ import numpy as np
 import xarray as xr
 import datetime
 
-import tropy.analysis_tools.grid_and_interpolation as gi
-from tropy.standard_config import local_data_path
+# a little hack for readthedocs
+try:
+    import tropy.analysis_tools.grid_and_interpolation as gi
+    from tropy.standard_config import local_data_path
 
-from .tools import convert_time
-from .input_obs import read_msevi, read_radiation_flux_tstack
-
+    from .tools import convert_time
+    from .input_obs import read_msevi, read_radiation_flux_tstack
+except:
+    pass
 
 
 ######################################################################
