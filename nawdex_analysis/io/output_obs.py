@@ -20,8 +20,8 @@ import datetime
 import tropy.analysis_tools.grid_and_interpolation as gi
 from tropy.standard_config import local_data_path
 
-from ..io.tools import convert_time
-from ..io.input_obs import read_msevi, read_radiation_flux_tstack
+from .tools import convert_time
+from .input_obs import read_msevi, read_radiation_flux_tstack
 
 
 
