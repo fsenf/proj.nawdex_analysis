@@ -18,6 +18,7 @@ the `nawdex_analysis.analysis.ave_cre` module.
 .. currentmodule:: nawdex_analysis.analysis.ave_cre
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -35,6 +36,7 @@ the `nawdex_analysis.analysis.averaging` module.
 .. currentmodule:: nawdex_analysis.analysis.averaging
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
    

@@ -58,6 +58,7 @@ source_suffix = ['.rst', '.md']
 m2rr_parse_relative_links = True
 m2rr_anonymous_references = False
 m2rr_disable_inline_math = False
+autosummary_generate = True
 
 # The master toctree document.
 master_doc = 'index'

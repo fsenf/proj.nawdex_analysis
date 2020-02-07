@@ -23,6 +23,7 @@ the `nawdex_analysis.plot.exp_layout` module.
 .. currentmodule:: nawdex_analysis.plot.exp_layout
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -43,6 +44,7 @@ the `nawdex_analysis.plot.legend` module.
 .. currentmodule:: nawdex_analysis.plot.legend
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -58,6 +60,7 @@ the `nawdex_analysis.plot.nawdex_map` module.
 .. currentmodule:: nawdex_analysis.plot.nawdex_map
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -76,6 +79,7 @@ the `nawdex_analysis.plot.plot_nawdex_nwcsaf` module.
 .. currentmodule:: nawdex_analysis.plot.plot_nawdex_nwcsaf
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -91,6 +95,7 @@ the `nawdex_analysis.plot.stacked_analysis_plots` module.
 .. currentmodule:: nawdex_analysis.plot.stacked_analysis_plots
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 

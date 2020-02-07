@@ -21,6 +21,7 @@ the `nawdex_analysis.io.collector` module.
 .. currentmodule:: nawdex_analysis.io.collector
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -40,6 +41,7 @@ the `nawdex_analysis.io.input_lev2` module.
 .. currentmodule:: nawdex_analysis.io.input_lev2
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -59,6 +61,7 @@ the `nawdex_analysis.io.input_obs` module.
 .. currentmodule:: nawdex_analysis.io.input_obs
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -79,6 +82,7 @@ the `nawdex_analysis.io.input_sim` module.
 .. currentmodule:: nawdex_analysis.io.input_sim
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -105,6 +109,7 @@ the `nawdex_analysis.io.output_obs` module.
 .. currentmodule:: nawdex_analysis.io.output_obs
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -122,6 +127,7 @@ the `nawdex_analysis.io.output_sim` module.
 .. currentmodule:: nawdex_analysis.io.output_sim
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -140,6 +146,7 @@ the `nawdex_analysis.io.reproj` module.
 .. currentmodule:: nawdex_analysis.io.reproj
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -168,6 +175,7 @@ the `nawdex_analysis.io.selector` module.
 .. currentmodule:: nawdex_analysis.io.selector
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
@@ -192,6 +200,7 @@ the `nawdex_analysis.io.tools` module.
 .. currentmodule:: nawdex_analysis.io.tools
 
 .. autosummary::
+   :template: base.rst
    :toctree: generated/
    :nosignatures:
 
