@@ -15,8 +15,8 @@ import warnings
 import tropy.analysis_tools.grid_and_interpolation as gi
 import tropy.io_tools.hdf as hio
 
-from nawdex_analysis.config import SEVIRI_cutout, nawdex_regions_file 
-from nawdex_analysis.io.tools import  lonlat2azizen
+from ..config import SEVIRI_cutout, nawdex_regions_file 
+from ..io.tools import  lonlat2azizen
 
 ######################################################################
 # (1) SEVIRI projection and co-ordinate transformations
@@ -540,7 +540,7 @@ def nn_reproj_with_index( dset, ind,
 
     # prepare variable list
     if vnames == 'all':
-        vlist = dset.keys()
+        vlist = list(dset.keys())
 
     elif type( vnames ) == type( '' ):
         vlist = [ vnames, ]
@@ -799,7 +799,7 @@ def combined_reprojection( dset, ind, rparam,
     # (ii) Box-averaging Interpolation and combination 
     # TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
     
-    vlist = dset_nn.keys()
+    vlist = list(dset_nn.keys())
 
     # apply interpolation index
     dset_inter = {}

@@ -1,4 +1,4 @@
-# Typical Workflow
+# Observed Cloud Typing
 ## Simulation Data (on mistral)
 ### General File Location
 All simulation files are saved on mistral under

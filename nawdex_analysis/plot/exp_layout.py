@@ -6,7 +6,7 @@ Definitions for plotting layout of different experiments.
 
 import numpy as np
 
-from nawdex_analysis.io.selector import convert_explist2idlist
+from ..io.selector import convert_explist2idlist
 
 ######################################################################
 ######################################################################

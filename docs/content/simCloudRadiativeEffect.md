@@ -158,13 +158,13 @@ The box averaging only fills grid boxes of the target grid that contain values f
 ### Final Regridding Loops
 The final regridding is done on mistral via the script:
 ```
-cd /pf/b/b380352/proj/2017-07_nawdex_analysis/inout/
+cd ${HOME}/proj/2017-07_nawdex_analysis/inout/
 ./save_reproj_sim_raddata.py /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0001
 
 ```
 The simulation path is the input argument and the final regridded data are saved under:
 ```
-ls -1 /pf/b/b380352/data/nawdex/sim-toarad/
+ls -1 ${HOME}/data/nawdex/sim-toarad/
 toa_clear_radflux-nawdexnwp-10km-mis-0001.nc
 toa_clear_radflux-nawdexnwp-10km-mis-0002.nc
 toa_clear_radflux-nawdexnwp-10km-mis-0003.nc
@@ -301,16 +301,16 @@ toa_radflux-nawdexnwp-80km-mis-0010.nc
 
 Output is splitted between all- and clear-sky.
 
-## Regridded Simulation Data (altair / TROPOS store)
+## Regridded Simulation Data (TROPOS store)
 Data have been transfered to TROPOS and are actually saved at
 ```
- /vols/talos/home/fabian/data/icon/nawdex/sim-toarad/
+ ${LHOME}/data/icon/nawdex/sim-toarad/
 ```
 
 ### Example Output
 An example of the TOA radiation file is given here:
 ```
-ncdump -h /vols/talos/home/fabian/data/icon/nawdex/sim-toarad/toa_radflux-nawdexnwp-10km-mis-0001.nc
+ncdump -h ${LHOME}/data/icon/nawdex/sim-toarad/toa_radflux-nawdexnwp-10km-mis-0001.nc
 netcdf toa_radflux-nawdexnwp-10km-mis-0001 {
 dimensions:
 	time = 96 ;

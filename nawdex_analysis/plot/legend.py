@@ -99,7 +99,7 @@ def plegend(**kwargs):
     
 
     # put msevi on top
-    order = range(len(labels))
+    order = list(range(len(labels)))
 
     
     for vname in ['msevi-not_scaled', 'msevi-scaled', ]:

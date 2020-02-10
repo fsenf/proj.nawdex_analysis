@@ -17,11 +17,12 @@ import numpy as np
 import xarray as xr
 import datetime
 
-import tropy.analysis_tools.grid_and_interpolation as gi
+# a little hack for readthedocs
 from tropy.standard_config import local_data_path
+import tropy.analysis_tools.grid_and_interpolation as gi
 
-from nawdex_analysis.io.tools import convert_time
-from nawdex_analysis.io.input_obs import read_msevi, read_radiation_flux_tstack
+from .tools import convert_time
+from .input_obs import read_msevi, read_radiation_flux_tstack
 
 
 
@@ -95,7 +96,7 @@ def save_meteosat_bt2nc( outname, dset, fill_val = 0 ):
     # Replacing NaN with FillValue
     bts = {}
 
-    for var_name in dset.keys():
+    for var_name in list(dset.keys()):
 
         if 'IR' in var_name or 'WV' in var_name:
             vname = 'bt%s' % var_name[3:]
@@ -152,7 +153,7 @@ def save_meteosat_bt2nc( outname, dset, fill_val = 0 ):
 
     outset = {}
     encoding = {}
-    for vname in bts.keys():
+    for vname in list(bts.keys()):
         nu = np.float(vname[2:]) / 10.
         long_name = 'MSG SEVIRI Brightness Temperatures at %.1f um' % copy.copy( nu )
     
@@ -166,7 +167,7 @@ def save_meteosat_bt2nc( outname, dset, fill_val = 0 ):
 
 
     # if set has satellite zenith angle included
-    if dset.has_key( 'zen' ):
+    if 'zen' in dset:
         outset['zen'] = (['rows', 'cols'], dset['zen'], att_zen)
 
 
@@ -199,7 +200,7 @@ def save_meteosat_bt2nc( outname, dset, fill_val = 0 ):
 
 
 
-    print '... write output to', outname
+    print(('... write output to', outname))
     ds_out.to_netcdf(outname, encoding = encoding)
 
     return 
@@ -281,7 +282,7 @@ def save_rad2nc( outname, dset, fill_val = 0 ):
     # Replacing NaN with FillValue
     rad = {}
 
-    for vname in dset.keys():
+    for vname in list(dset.keys()):
 
 
         if  vname in ['lwf', 'swf_net', 'swf_up']:
@@ -381,7 +382,7 @@ def save_rad2nc( outname, dset, fill_val = 0 ):
 
 
 
-    print '... write output to', outname
+    print(('... write output to', outname))
     ds_out.to_netcdf(outname, encoding = encoding)
 
     return 

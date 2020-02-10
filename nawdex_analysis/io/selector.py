@@ -6,8 +6,8 @@ import numpy as np
 import xarray as xr
 import netCDF4
 
-from nawdex_analysis.config import nawdex_dir
-from nawdex_analysis.io.tools import convert_time
+from ..config import nawdex_dir
+from ..io.tools import convert_time
 
 
 '''
@@ -229,7 +229,7 @@ def set_selector(set_number):
         fine_set = [9,10]
         coarse_set = [7,8]
     else:
-        print 'set not defined'
+        print('set not defined')
             
     return fine_set, coarse_set
 

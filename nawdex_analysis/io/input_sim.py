@@ -15,9 +15,9 @@ import tropy.io_tools.hdf as hio
 import tropy.io_tools.netcdf as ncio
 import tropy.analysis_tools.grid_and_interpolation as gi
 
-from nawdex_analysis.io.tools import lonlat2azizen
-import nawdex_analysis.io.reproj
-from nawdex_analysis.config import simulation_dir, SEVIRI_cutout, NWCSAF_region, nawdex_regions_file
+from .tools import lonlat2azizen
+from . import reproj
+from ..config import simulation_dir, SEVIRI_cutout, NWCSAF_region, nawdex_regions_file
 
 ######################################################################
 # (1) Variable Vectors
@@ -185,7 +185,7 @@ def read_georef( expname, mask_with_zen = True, zen_max = 75. ):
     if mask_with_zen:
         mask = (geo['zen'] <= zen_max)
 
-        for vname in geo.keys():
+        for vname in list(geo.keys()):
             geo[vname] = geo[vname][mask]
 
     return geo
@@ -256,7 +256,7 @@ def read_synsat_vector( fname, bt_generation_mode = 'mcfarq_rescale_noccthresh' 
 
     # read brightness temperatures
     # =============================
-    print '... read data from ', fname
+    print(('... read data from ', fname))
     dset = hio.read_dict_from_hdf(fname)
     bts = dset[ bt_generation_mode ]
 
@@ -313,7 +313,7 @@ def read_iconvar_vector( fname, vlist ):
 
     # read variables
     # =============================
-    print '... read data from ', fname
+    print(('... read data from ', fname))
     dset = ncio.read_icon_4d_data(fname, vlist, itime = None)
 
 
@@ -334,7 +334,7 @@ def read_iconvar_vector( fname, vlist ):
     outset = dset.copy()
     outset.update( geo )
     
-    for vname in outset.keys():
+    for vname in list(outset.keys()):
         outset[vname] = outset[vname].squeeze()[mask]
 
 
@@ -503,7 +503,7 @@ def read_generic_sim_data_flist( flist,
                              'variable_list']
 
     for k in mandatory_input_keys:
-        if not k in input_param.keys():
+        if not k in list(input_param.keys()):
             raise ValueError('%s should be defined in input_param' % k)
     # ================================================================
 
@@ -533,8 +533,8 @@ def read_generic_sim_data_flist( flist,
 
             # get reprojection parameters
             if ifile == 0:
-                ind = nawdex_analysis.io.reproj.get_vector2msevi_index( din, region = SEVIRI_cutout )
-                rparam = nawdex_analysis.io.reproj. get_vector2msevi_rparam( din, region = SEVIRI_cutout )
+                ind = reproj.get_vector2msevi_index( din, region = SEVIRI_cutout )
+                rparam = reproj. get_vector2msevi_rparam( din, region = SEVIRI_cutout )
 
 
             # interpolate partial dataset
@@ -542,12 +542,12 @@ def read_generic_sim_data_flist( flist,
             for k in variable_list:
                 dpart[k] = din[k]
 
-            dset_inter = nawdex_analysis.io.reproj.combined_reprojection( dpart, ind, rparam, 
+            dset_inter = reproj.combined_reprojection( dpart, ind, rparam, 
                                                                           **reprojection_kwargs )
             
 
             # get also new georef
-            geo = nawdex_analysis.io.reproj.msevi_lonlat(return_azi_zen = True, region = SEVIRI_cutout)
+            geo = reproj.msevi_lonlat(return_azi_zen = True, region = SEVIRI_cutout)
             dset_inter.update( geo )
 
             # and rewrite final dataset
@@ -697,7 +697,7 @@ def read_simulated_clearsky_flux(itime, expname, ind = None, do_regrid = True):
     Reads simulated solar clearsky fluxes.
 
 
-    Paramaters
+    Parameters
     ----------
     itime : int
         time index in the input file
@@ -734,7 +734,7 @@ def read_simulated_clearsky_flux(itime, expname, ind = None, do_regrid = True):
     
     # nearest neighbor regridding
     if do_regrid and ind is not None:
-        swf_sim_regrid = nawdex_analysis.io.reproj.nn_reproj_with_index(swf_sim, ind, 
+        swf_sim_regrid = reproj.nn_reproj_with_index(swf_sim, ind, 
                                                                     vnames=['swf_up', 'sod_t', 'swtoaclr'], 
                                                                     apply_mask=True, 
                                                                     Nan=0)

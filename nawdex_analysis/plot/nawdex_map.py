@@ -1,9 +1,21 @@
 #!/usr/bin/env python
 
 
-from mpl_toolkits.basemap import Basemap
+
 import numpy as np
 import pylab as pl
+
+# basemap
+try:
+    from mpl_toolkits.basemap import Basemap
+except:
+    print('''
+    Warning: Basemap is not available. Use
+    
+    conda install basemap
+    
+    to get it into your system.
+    ''')
 
 
 from tropy.plotting_tools.colormaps import enhanced_colormap, enhanced_wv62_cmap
@@ -20,13 +32,13 @@ def nawdex_map( region = 'zenith75' , color = 'black'):
     
     Parameters
     ----------
-    region : str, optional, default = 'zenith75'
-         region selection
+    region : {'max-extent', 'zenith75', 'atlantic'}, optional
+         name of a selected region
 
-         possible arguments:
-         'max-extent' : full NAWDEX simulations region
-         'zenith75' : cutout of the NAWDEX region where zenith_angle < 75 degree fits in
-         'atlantic' : cutout of the North Atlantic
+         * 'max-extent' : full NAWDEX simulations region
+         * 'zenith75'   : cutout of the NAWDEX region where 
+           zenith_angle < 75 degree fits in
+         * 'atlantic' : cutout of the North Atlantic
 
     color : str, optional, default = 'black'
          color of the coastlines and country borders
@@ -48,7 +60,38 @@ def nawdex_map( region = 'zenith75' , color = 'black'):
 ######################################################################
 
 def nawdex_bt_plot(dset, region = 'zenith75', vname = 'bt108', plot_colorbar = True):
-        
+
+    '''
+    Plots Brightness Temperature (BT) for NAWDEX Analysis.
+
+    
+    Parameters
+    ----------
+    dset : dict
+        collection of 2d fields
+
+        it should at least contain {'lon', 'lat', 'mask', vname}
+
+    region : {'max-extent', 'zenith75', 'atlantic'}, optional
+        name of a selected region
+
+        * 'max-extent' : full NAWDEX simulations region
+        * 'zenith75'   : cutout of the NAWDEX region where 
+          zenith_angle < 75 degree fits in
+        * 'atlantic' : cutout of the North Atlantic
+
+    vname : {'bt062', 'bt108'}, optional
+        name of BT field to be plotted (MSG channel)
+
+    plot_colorbar : {True, False}, optional
+        switch if colorbar is also plotted
+
+
+    Returns
+    -------
+    mp : basemap map instance
+        the map objetc which contains the plotted fields
+    '''
 
     mp = nawdex_map( region = region, color = 'gold' )
     
@@ -81,6 +124,40 @@ def nawdex_bt_plot(dset, region = 'zenith75', vname = 'bt108', plot_colorbar = T
 
 def nawdex_rad_plot(dset, region = 'zenith75', vname = 'lwf', is_clear = True):
         
+    '''
+    Plots TOA Radiation Fluxes for NAWDEX Analysis.
+
+    
+    Parameters
+    ----------
+    dset : dict
+        collection of 2d fields
+
+        it should at least contain {'lon', 'lat', 'mask', vname}
+
+    region : {'max-extent', 'zenith75', 'atlantic'}, optional
+        name of a selected region
+
+        * 'max-extent' : full NAWDEX simulations region
+        * 'zenith75'   : cutout of the NAWDEX region where 
+          zenith_angle < 75 degree fits in
+        * 'atlantic' : cutout of the North Atlantic
+
+    vname : {'lwf', 'swf_net'}, optional
+        name of radiation field to be plotted
+
+        * 'lwf'     : longwave flux
+        * 'swf_net' : shortwave net flux (incoming - outgoing)
+
+    is_clear : {True, False}, optional
+        switch for clearsky (NOT IMPLEMENTED SO FAR)
+
+
+    Returns
+    -------
+    mp : basemap map instance
+        the map objetc which contains the plotted fields
+    '''
 
     mp = nawdex_map( region = region, color = 'gold' )
     
@@ -109,11 +186,42 @@ def nawdex_rad_plot(dset, region = 'zenith75', vname = 'lwf', is_clear = True):
 ######################################################################
 
 
-
-
-
 def nawdex_nwcsaf_plot(dset, vname = 'CMa',region = 'zenith75', plot_colorbar = True):
         
+    '''
+    Plots TOA Radiation Fluxes for NAWDEX Analysis.
+
+    
+    Parameters
+    ----------
+    dset : dict
+        collection of 2d fields
+
+        it should at least contain {'lon', 'lat', 'mask', vname}
+
+    region : {'max-extent', 'zenith75', 'atlantic'}, optional
+        name of a selected region
+
+        * 'max-extent' : full NAWDEX simulations region
+        * 'zenith75'   : cutout of the NAWDEX region where 
+          zenith_angle < 75 degree fits in
+        * 'atlantic' : cutout of the North Atlantic
+
+    vname : {'CMa', 'CT'}, optional
+        name of cloud product field to be plotted
+
+        * 'CMa'  : cloud masking
+        * 'CT'   : cloud typing
+
+    plot_colorbar : {True, False}, optional
+        switch if colorbar is also plotted
+
+
+    Returns
+    -------
+    mp : basemap map instance
+        the map objetc which contains the plotted fields
+    '''
         
 
     mp = nawdex_map( region = region, color = 'gold' )
@@ -154,6 +262,29 @@ def nawdex_nwcsaf_plot(dset, vname = 'CMa',region = 'zenith75', plot_colorbar = 
 
 def nwcsaf_product_colorbar( pcm, vname = 'CMa', mp = pl, **kwargs ):
 
+    '''
+    Plots TOA Radiation Fluxes for NAWDEX Analysis.
+
+    
+    Parameters
+    ----------
+    pcm : plt.pcolormesh instance
+        pcolormesh instance from which the colorbar is derived
+
+    vname : {'CMa', 'CT'}, optional
+        name of cloud product field to be plotted
+
+        * 'CMa'  : cloud masking
+        * 'CT'   : cloud typing
+
+    mp : optional, default = pl
+        map onto which colorbar is plotted
+    
+        used as <mp>.colorbar
+
+    **kwargs : dict
+        additonal keyword passed to colorbar function
+    '''
 
 
     if vname == 'CMa':
@@ -171,3 +302,5 @@ def nwcsaf_product_colorbar( pcm, vname = 'CMa', mp = pl, **kwargs ):
                                  'very high opaque', 'semi. thin', 'semi. meanly thick', 
                                  'semi. thick', 'semi. above', 'fractional'
                              ])
+
+    return

@@ -15,8 +15,8 @@ import tropy.io_tools.netcdf as ncio
 import tropy.io_tools.hdf as hio
 from tropy.standard_config import *
 
-import nawdex_analysis.plot.nawdex_map as nawdex_map
-from nawdex_analysis.io.input_lev2 import  read_data_field
+from ..plot import nawdex_map
+from ..io.input_lev2 import  read_data_field
 
 
 ######################################################################
@@ -81,7 +81,7 @@ def plot_prods(fname, itime, prodname, pics_dir = '../pics'):
                                                  mode,
                                                  prodname,
                                                  time_obj.strftime('%Y-%m-%d_%H%M'))
-    print '... save image to %s' % picname
+    print(('... save image to %s' % picname))
     if not os.path.isdir(full_pics_dir):
         os.makedirs( full_pics_dir )
 

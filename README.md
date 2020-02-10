@@ -1,9 +1,11 @@
-# NAWDEX Analysis Toolset
-## General Description
-This is a set of tools developed for the analysis of ICON simulations during the NAWDEX campaign. The study is done together with Aiko Voigt (KIT) and will focus on observed and simulated cloud radiative effects in the Northern Atlantic and their dependence on grid spacing and microphysics parameterization.
+# NAWDEX Analysis Toolset 
+[![DOI](https://zenodo.org/badge/149758943.svg)](https://zenodo.org/badge/latestdoi/149758943)
 
-## Data 
-Two types of data go into the study: (i) observational data derived from Meteosat SEVIRI including cloud mask, cloud typing and long- and short-wave radiative fluxes, and (ii) simulation data obtained from differently configured ICON runs.
+A toolset of analysis of scientific data. 
 
-## Method
-The simulation data will be transfered to observation space. Thereafter, synthetic cloud mask and typing is derived via the NWCSAF software. Cloud radiative effects are calculated. For observations, simulated clear-sky fluxes are used. More details about the workflow are described [here](docs/Workflow.md).
+We investigated cloud-radiative effects over the North Atlantic which are of concern in atmospheric and climate sciences.
+
+* [Introduction](docs/content/Intro.md)
+* [Documentation](https://fsenf-nawdex-analysis.readthedocs.io/en/latest/index.html)
+* [Source Code](https://github.com/fsenf/proj.nawdex_analysis)
+* [Notebooks](https://github.com/fsenf/nbook.2018-11_CRE-Nawdex-Aiko) used the create the plot for the paper of Senf, F., A. Voigt, N. Clerbaux, A. Hünerbein, and H. Deneke, **Does increasing resolution and resolving convection improve simulated cloud-radiative effects over the North Atlantic?**, J. Geophys. Res. Atmos., submitted in Feb. 2020

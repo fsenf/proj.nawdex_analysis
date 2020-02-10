@@ -1,8 +1,13 @@
 #!/usr/bin/env python
-
-
 # coding: utf-8
 
+
+'''
+A module to calculate
+
+* averages under certain selection conditions or binning intervals
+* area-weighted averages of selected interval ranges (bin-wise)
+'''
 ## Binning and averaging
 
 
