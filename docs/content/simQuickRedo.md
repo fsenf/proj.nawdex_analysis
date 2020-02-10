@@ -36,11 +36,42 @@ screen -S synsat
 
 ### Regridding
 
-After all synsat runs are finished (change the path to the synsats...)
+After all synsat runs are finished: Regridding is done in parts (memory and speed issue)
+
+* go to the dir
 ```
 cd ${HOME}/proj/2017-07_nawdex_analysis/inout
 ./save_reproj_synsat.py ${HOME}/data/synsat/nawdex/nawdexnwp-80km-mis-0001
 ```
+
+* make a list file that looks like this (default: 6 lines = 6 chunks). `vim regrid_synsat10.lst`
+```
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 0 
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 1
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 2
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 3
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 4
+/pf/b/b380352/data/synsat/nawdex/nawdexnwp-2km-mis-0010-shcon 5
+```
+
+* open a screen `screen -S regrid_synsat10`
+
+* run 
+```
+start_proc_from_list -n 6 ./save_reproj_synsat_in_parts.py regrid_synsat10.lst
+```
+
+* goto the parts output dir
+```
+cd ~/data/nawdex/synsat-parts/
+```
+
+* combine file parts with cdo
+```
+cdo -z zip_4 cat synsat-nawdexnwp-2km-mis-0010-shcon-part?.nc synsat-nawdexnwp-2km-mis-0010-shcon.nc
+```
+
+* move the combine into the `../synsat` directory
 
 
 
@@ -48,15 +79,46 @@ cd ${HOME}/proj/2017-07_nawdex_analysis/inout
 ## Combined Radiation Fluxes
 ### Regridding (Mistral)
 
-* Go to the nawdex scripts directory
+__Similar to synsat regridding!!!__
+
+Regridding is done in parts (memory and speed issue)
+
+* go to the dir
 ```
 cd ${HOME}/proj/2017-07_nawdex_analysis/inout/
 ```
 
-* Run Rad Flux regridding (!!!no trailing '/' in the path name!!!)
+* make a list file that looks like this (default: 6 lines = 6 chunks). `vim regrid_radflux10.lst`
 ```
-./save_reproj_sim_raddata.py /work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0001
-``` 
+/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0010-shcon 0
+/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0010-shcon 1
+/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0010-shcon 2
+/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0010-shcon 3
+/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0010-shcon 4
+/work/bm0834/b380459/NAWDEX/ICON_OUTPUT_NWP/nawdexnwp-2km-mis-0010-shcon 5
+```
+
+* open a screen `screen -S regrid_radflux10`
+
+* run 
+```
+start_proc_from_list -n 6 ./save_reproj_sim_raddata_in_parts.py regrid_radflux10.lst
+```
+
+* goto the parts output dir
+```
+cd ~/data/nawdex/sim-toarad-parts/
+```
+
+* combine file parts with cdo
+```
+cdo -z zip_4 cat toa_clear_radflux-nawdexnwp-2km-mis-0010-shcon-part?.nc toa_clear_radflux-nawdexnwp-2km-mis-0010-shcon.nc
+cdo -z zip_4 cat toa_radflux-nawdexnwp-2km-mis-0010-shcon-part?.nc toa_radflux-nawdexnwp-2km-mis-0006-shcon.nc
+```
+
+* move the combine into the `../sim-toarad` directory
+
+
 
 ### Transfer to TROPOS (Gauss)
 Copy data to Gauss
